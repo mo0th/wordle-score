@@ -42,11 +42,15 @@ const SyncIndicator: Component = () => {
     <div
       class="flex fixed top-4 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
       classList={{
-        '-translate-y-16': !showIndicator(),
+        '-translate-y-24': !showIndicator(),
         'translate-y-0': showIndicator(),
       }}
+      style={{
+        width: `calc(100% - 8rem)`,
+        'max-width': '16rem',
+      }}
     >
-      <p>{INDICATOR_TEXT[syncStatus()]}</p>
+      <p class="flex-1">{INDICATOR_TEXT[syncStatus()]}</p>
       <button onClick={() => setShowIndicator(false)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
