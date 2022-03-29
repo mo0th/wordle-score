@@ -17,7 +17,7 @@ export const verifyRequest: ApiWrapper = handler => {
   }
 }
 
-const SLUG = '~wordle-scores'
+const SLUG = process.env.VERCEL ? '~wordle-scores' : '~world-scores-dev'
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
