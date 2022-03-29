@@ -1,0 +1,1 @@
+# Cumulative Score for Wordle
