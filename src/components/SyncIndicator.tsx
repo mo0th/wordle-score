@@ -40,7 +40,7 @@ const SyncIndicator: Component = () => {
 
   return (
     <div
-      class="flex fixed top-2 p-2 rounded bg-slate-200 dark:bg-slate-700 shadow left-1/2 -translate-x-1/2 transition-transform items-center space-x-2"
+      class="flex fixed top-4 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
       classList={{
         '-translate-y-16': !showIndicator(),
         'translate-y-0': showIndicator(),
@@ -50,7 +50,7 @@ const SyncIndicator: Component = () => {
       <button onClick={() => setShowIndicator(false)}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="w-3 h-3"
+          class="w-4 h-4"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
