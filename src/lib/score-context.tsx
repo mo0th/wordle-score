@@ -13,12 +13,12 @@ import { debounce } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
 import { ScoreAccessors, ScoreSetters, useScore } from './score-calc'
 
-type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
-type SyncDetails = {
+export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
+export type SyncDetails = {
   user: string
   password: string
 }
-type ScoreContextValue = [
+export type ScoreContextValue = [
   ScoreAccessors &
     AccessorRecord<{
       syncDetails: SyncDetails
@@ -93,9 +93,16 @@ export const ScoreProvider: Component = props => {
     } catch (err) {
       setSyncStatus('failed')
     }
-  }, 250)
+  }, 500)
 
-  createEffect(() => sync())
+  createEffect(() => {
+    console.log({
+      c: canSync(),
+      d: syncDetails(),
+      s: score(),
+    })
+    sync()
+  })
 
   const setSyncDetail = <K extends keyof SyncDetails>(
     k: K,
