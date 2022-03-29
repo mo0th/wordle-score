@@ -29,7 +29,9 @@ const App: Component = () => {
 
         <Show when={isTodayPending()}>
           <div class="">
-            <h2 class="text-2xl mb-8">Add Today's Score</h2>
+            <h2 class="text-2xl mb-8">
+              Add Today's Score <span class="text-base">(Day {today})</span>
+            </h2>
             <DayControl day={today} onScoreSelect={setTodayScore} isBig />
           </div>
         </Show>
