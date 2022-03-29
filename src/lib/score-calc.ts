@@ -9,12 +9,12 @@ import { minmax } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
 import { getCurrentDayOffset } from './wordle-stuff'
 
-type ScoreAccessors = AccessorRecord<{
+export type ScoreAccessors = AccessorRecord<{
   score: CumulativeScores
   record: ScoreRecord
   recordArray: ScoreRecordTuple[]
 }>
-type ScoreSetters = {
+export type ScoreSetters = {
   setTodayScore(score: SingleDayScore): void
   setDayScore(day: number, score: SingleDayScore): void
   deleteDayScore(day: number): void
@@ -33,11 +33,11 @@ export const useScore = (): [ScoreAccessors, ScoreSetters] => {
       .sort(([a], [b]) => a - b)
   )
   const score = createMemo(() => {
-    console.log('hello')
     return calculateCumulativeScores(record())
   })
 
   const setDayScore: ScoreSetters['setDayScore'] = (day, score) => {
+    console.log({ day, score })
     setRecord(record => ({ ...record, [day]: score }))
   }
 
@@ -77,7 +77,6 @@ export const calculateCumulativeScores = (
   const [minDay, maxDay] = minmax(daysPlayed)
   let score = 0
 
-  console.log({ minDay, maxDay })
   for (let i = minDay; i < maxDay + 1; ++i) {
     if (i in record) {
       const dayScore = record[i]
@@ -85,7 +84,6 @@ export const calculateCumulativeScores = (
       if (dayScore === 'X') {
         score *= 3
       } else {
-        console.log(i, record[i])
         score += dayScore
       }
     } else {

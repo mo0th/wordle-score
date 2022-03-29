@@ -1,0 +1,45 @@
+import { Link, Navigate } from 'solid-app-router'
+import { Component, createEffect, For, Show, Suspense } from 'solid-js'
+import { useScoreContext } from '../lib/score-context'
+import { ScoreRecord } from '../types'
+
+const Scores: Component = () => {
+  const [{ canSync, allScores }] = useScoreContext()
+
+  return (
+    <Show when={canSync()} fallback={<Navigate href="/" />}>
+      <div class="text-center space-y-8">
+        <h2 class="text-2xl mb-8">Other People's Scores</h2>
+        <div class="space-y-4">
+          <Show
+            when={Boolean(allScores())}
+            fallback={<p class="text-center">loading</p>}
+          >
+            <For
+              each={
+                Object.entries(allScores() || {}) as [string, ScoreRecord][]
+              }
+            >
+              {([user, record]) => (
+                <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4">
+                  <p class="font-bold text-lg">{user}</p>
+                  <p class="text-2xl mb-1">Score: {record.score}</p>
+                  <p class="text-sm">
+                    {record.daysPlayed} day{record.daysPlayed === 1 ? '' : 's'}{' '}
+                    played
+                  </p>
+                </div>
+              )}
+            </For>
+          </Show>
+        </div>
+
+        <Link class="underline block" href="/">
+          Go Home
+        </Link>
+      </div>
+    </Show>
+  )
+}
+
+export default Scores

@@ -9,27 +9,21 @@ const DayControlButton: Component<{
   name: string
   value: SingleDayScore
 }> = props => (
-  <label class="block aspect-w-1 aspect-h-1 w-full">
-    <input
-      checked={props.selected}
-      name={props.name}
-      value={props.value}
-      type="radio"
-      class="sr-only"
-    />
-    <span
+  <span class="block aspect-w-1 aspect-h-1 w-full focus-within-outline">
+    <button
       class={
-        'border-2 border-slate-400 flex-shrink-0 transition-colors flex items-center justify-center cursor-pointer'
+        'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer'
       }
       classList={{
-        'bg-slate-800 text-white hover:bg-black': props.selected,
-        'hover:bg-slate-300': !props.selected,
+        'bg-slate-800 text-white hover:bg-black dark:hover:bg-white dark:bg-slate-200 dark:text-black':
+          props.selected,
+        'hover:bg-slate-300 dark:hover:bg-slate-600': !props.selected,
       }}
       onClick={props.onClick}
     >
       {props.value}
-    </span>
-  </label>
+    </button>
+  </span>
 )
 
 const scores: SingleDayScore[] = [1, 2, 3, 4, 5, 6, 'X']

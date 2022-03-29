@@ -2,7 +2,7 @@ import { Component } from 'solid-js'
 
 const Footer: Component = () => {
   return (
-    <footer className="py-4 text-center flex flex-col items-center space-y-2">
+    <footer className="py-8 text-center flex flex-col items-center space-y-2">
       <a
         href="https://mooth.tech/?ref=Sizes"
         target="_blank"
