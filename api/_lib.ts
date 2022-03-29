@@ -17,7 +17,7 @@ export const verifyRequest: ApiWrapper = handler => {
   }
 }
 
-const SLUG = process.env.VERCEL ? '~wordle-scores' : '~world-scores-dev'
+const SLUG = process.env.VERCEL ? '~wordle-scores' : '~wordle-scores-dev'
 const supabase = createClient(
   process.env.SUPABASE_URL!,
   process.env.SUPABASE_KEY!
@@ -35,16 +35,14 @@ const ScoreSchema = types.objectWithOnlyTheseProperties({
   daysPlayed: types.number,
 })
 
-const ScoresSchema = types.record(types.string, ScoreSchema)
-
-export const getScores = async (): Promise<Scores | null> => {
+export const getScores = async (): Promise<Scores> => {
   const { data } = await supabase
     .from<Singleton>('singletons')
     .select('*')
     .eq('slug', SLUG)
     .maybeSingle()
 
-  if (!data) return null
+  if (!data) return {}
 
   try {
     const parsed = JSON.parse(data.content)
@@ -56,7 +54,7 @@ export const getScores = async (): Promise<Scores | null> => {
     ) as Scores
     return filtered
   } catch (err) {
-    return null
+    return {}
   }
 }
 
@@ -69,7 +67,7 @@ export const setScore = async (body: unknown): Promise<boolean> => {
     return false
   }
 
-  const current = (await getScores()) || {}
+  const current = await getScores()
   current[body.user] = body.data
 
   const { error } = await supabase

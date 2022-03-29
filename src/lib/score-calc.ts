@@ -37,7 +37,6 @@ export const useScore = (): [ScoreAccessors, ScoreSetters] => {
   })
 
   const setDayScore: ScoreSetters['setDayScore'] = (day, score) => {
-    console.log({ day, score })
     setRecord(record => ({ ...record, [day]: score }))
   }
 

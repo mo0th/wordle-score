@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'solid-app-router'
-import { Component, createEffect, For, Show, Suspense } from 'solid-js'
+import { Component, For, Show } from 'solid-js'
 import { useScoreContext } from '../lib/score-context'
 import { ScoreRecord } from '../types'
 
@@ -19,6 +19,7 @@ const Scores: Component = () => {
               each={
                 Object.entries(allScores() || {}) as [string, ScoreRecord][]
               }
+              fallback={<p>No one's added their scores yet :(</p>}
             >
               {([user, record]) => (
                 <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4">
