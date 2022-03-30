@@ -9,9 +9,9 @@ import { useScoreContext } from '../lib/score-context'
 
 const INDICATOR_TEXT = {
   idle: '',
-  failed: 'Failed to sync. Try reloading.',
+  failed: '❌ Failed to sync - try reloading.',
   loading: 'Syncing your score',
-  success: 'Synced changes ✅',
+  success: '✅ Synced changes',
 } as const
 
 const SyncIndicator: Component = () => {
