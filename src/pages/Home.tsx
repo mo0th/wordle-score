@@ -51,7 +51,10 @@ const Home: Component = () => {
                   day={day}
                   value={dayScore}
                   onScoreSelect={score => setDayScore(day, score)}
-                  onDelete={() => deleteDayScore(day)}
+                  onDelete={() => {
+                    if (confirm(`Are you sure you want to delete Day ${day}?`))
+                      deleteDayScore(day)
+                  }}
                 />
               </div>
             )}
