@@ -16,7 +16,7 @@ export const Settings: Component = () => {
       <AddDay />
 
       <div class="flex justify-between items-center">
-        <p>Theme: </p>
+        <p>Theme</p>
         <button
           class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
           onClick={() => toggleTheme()}
@@ -71,7 +71,7 @@ export const Settings: Component = () => {
       </form>
 
       <div class="flex justify-between items-center">
-        <p>Dev Stuff: </p>
+        <p>Dev Stuff</p>
         <button
           class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
           onClick={() => setIsDev(p => !p)}
