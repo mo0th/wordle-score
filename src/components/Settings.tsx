@@ -1,6 +1,7 @@
 import { Component } from 'solid-js'
 import { useScoreContext } from '../lib/score-context'
 import { useTheme } from '../lib/theme'
+import { getCurrentDayOffset } from '../lib/wordle-stuff'
 
 export const Settings: Component = () => {
   const [theme, toggleTheme] = useTheme()
@@ -42,7 +43,48 @@ export const Settings: Component = () => {
         </div>
       </div>
 
+      <AddDay />
+
       <div class="h-1" />
     </details>
+  )
+}
+
+const AddDay: Component = () => {
+  const [{ record }, { setDayScore }] = useScoreContext()
+
+  let input: HTMLInputElement | undefined
+
+  const handleAdd = () => {
+    const day = input?.valueAsNumber
+    if (!day) return
+
+    if (record()[day]) return
+
+    setDayScore(day, 'X')
+  }
+
+  return (
+    <div class="space-y-4">
+      <label for="day-to-add">Add an older day</label>
+      <div class="flex items-stretch space-x-4">
+        <input
+          ref={input}
+          class="form-input flex-1 block"
+          type="number"
+          id="day-to-add"
+          min={1}
+          // @ts-expect-error no types for solid's attr:__ yet
+          attr:value={1}
+          max={getCurrentDayOffset() - 1}
+        />
+        <button
+          onClick={handleAdd}
+          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+        >
+          Add Day
+        </button>
+      </div>
+    </div>
   )
 }

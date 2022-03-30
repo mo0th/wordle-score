@@ -7,7 +7,7 @@ import { getCurrentDayOffset } from '../lib/wordle-stuff'
 const Home: Component = () => {
   const [
     { score, record, recordArray, canSync },
-    { setDayScore, setTodayScore },
+    { setDayScore, setTodayScore, deleteDayScore },
   ] = useScoreContext()
 
   const today = getCurrentDayOffset()
@@ -51,6 +51,7 @@ const Home: Component = () => {
                   day={day}
                   value={dayScore}
                   onScoreSelect={score => setDayScore(day, score)}
+                  onDelete={() => deleteDayScore(day)}
                 />
               </div>
             )}
