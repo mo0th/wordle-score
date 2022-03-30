@@ -34,7 +34,7 @@ const SyncIndicator: Component = () => {
 
   return (
     <div
-      class="flex fixed top-4 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
+      class="flex z-50 fixed top-4 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
       classList={{
         '-translate-y-24': !showIndicator(),
         'translate-y-0': showIndicator(),

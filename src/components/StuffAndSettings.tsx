@@ -2,7 +2,8 @@ import { Component } from 'solid-js'
 import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { useTheme } from '../lib/theme'
-import { getCurrentDayOffset } from '../lib/wordle-stuff'
+import Button from './Button'
+import Collapse from './Collapse'
 
 export const StuffAndSettings: Component = () => {
   const [theme, toggleTheme] = useTheme()
@@ -10,19 +11,12 @@ export const StuffAndSettings: Component = () => {
   const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
 
   return (
-    <details class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 space-y-4">
-      <summary class="cursor-pointer -my-2 py-2">Stuff and settings</summary>
-
-      <AddDay />
-
+    <Collapse summary="Stuff and Settings">
       <div class="flex justify-between items-center">
         <p>Theme</p>
-        <button
-          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-          onClick={() => toggleTheme()}
-        >
+        <Button onClick={() => toggleTheme()}>
           Switch to {theme() === 'dark' ? 'light' : 'dark'}
-        </button>
+        </Button>
       </div>
 
       <form
@@ -71,59 +65,15 @@ export const StuffAndSettings: Component = () => {
             attr:value={syncDetails().password}
           />
         </div>
-        <button class="block w-full px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors">
-          Save Sync Details
-        </button>
+        <Button block>Save Sync Details</Button>
       </form>
 
       <div class="flex justify-between items-center">
         <p>Dev Stuff</p>
-        <button
-          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
-          onClick={() => setIsDev(p => !p)}
-        >
+        <Button onClick={() => setIsDev(p => !p)}>
           {isDev() ? 'Hide' : 'Show'}
-        </button>
+        </Button>
       </div>
-    </details>
-  )
-}
-
-const AddDay: Component = () => {
-  const [{ record }, { setDayScore }] = useScoreContext()
-
-  let input: HTMLInputElement | undefined
-
-  const handleAdd = () => {
-    const day = input?.valueAsNumber
-    if (!day || typeof day !== 'number' || Number.isNaN(day)) return
-    if (day > getCurrentDayOffset()) return
-    if (record()[day]) return
-
-    setDayScore(day, 'X')
-  }
-
-  return (
-    <div class="space-y-4">
-      <label for="day-to-add">Add an older day</label>
-      <div class="flex items-stretch space-x-4">
-        <input
-          ref={input}
-          class="form-input flex-1 block w-full"
-          type="number"
-          id="day-to-add"
-          min={1}
-          // @ts-expect-error no types for solid's attr:__ yet
-          attr:value={getCurrentDayOffset() - 1}
-          max={getCurrentDayOffset() - 1}
-        />
-        <button
-          onClick={handleAdd}
-          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors flex-shrink-0"
-        >
-          Add Day
-        </button>
-      </div>
-    </div>
+    </Collapse>
   )
 }
