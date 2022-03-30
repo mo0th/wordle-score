@@ -52,9 +52,7 @@ const Home: Component = () => {
       </Show>
 
       <div>
-        <div class="mb-2 flex item-center">
-          <h2 class="text-2xl">History</h2>
-        </div>
+        <h2 class="text-2xl mb-8">History</h2>
         <div class="space-y-8">
           <For
             each={recordsToShow()}
