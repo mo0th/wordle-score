@@ -1,4 +1,4 @@
-import { Component, createMemo, For, Show } from 'solid-js'
+import { Component, For, Show } from 'solid-js'
 import { SingleDayScore } from '../types'
 
 export const getInputNameForDay = (day: number) => `day-${day}-score`

@@ -57,8 +57,8 @@ const AddDay: Component = () => {
 
   const handleAdd = () => {
     const day = input?.valueAsNumber
-    if (!day) return
-
+    if (!day || typeof day !== 'number' || Number.isNaN(day)) return
+    if (day > getCurrentDayOffset()) return
     if (record()[day]) return
 
     setDayScore(day, 'X')
@@ -70,7 +70,7 @@ const AddDay: Component = () => {
       <div class="flex items-stretch space-x-4">
         <input
           ref={input}
-          class="form-input flex-1 block"
+          class="form-input flex-1 block w-full"
           type="number"
           id="day-to-add"
           min={1}
@@ -80,7 +80,7 @@ const AddDay: Component = () => {
         />
         <button
           onClick={handleAdd}
-          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors flex-shrink-0"
         >
           Add Day
         </button>
