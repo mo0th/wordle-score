@@ -5,6 +5,16 @@ import { useScoreContext } from '../lib/score-context'
 import { PersonScore } from '../types'
 import { useLocalStorage } from '../utils/use-local-storage'
 
+const scoreLoaderClassCommon =
+  'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
+const ScoreLoader: Component = () => (
+  <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
+    <div class={`h-7 ${scoreLoaderClassCommon}`} style="width:100px" />
+    <div class={`h-8 ${scoreLoaderClassCommon}`} style="width: 150px" />
+    <div class={`h-5 ${scoreLoaderClassCommon}`} style="width: 250px" />
+  </div>
+)
+
 const Scores: Component = () => {
   const [{ canSync, allScores }] = useScoreContext()
   const [isDev] = useDev()
@@ -32,14 +42,21 @@ const Scores: Component = () => {
         <div class="space-y-4">
           <Show
             when={Boolean(allScores())}
-            fallback={<p class="text-center">loading</p>}
+            fallback={
+              <>
+                <ScoreLoader />
+                <ScoreLoader />
+                <ScoreLoader />
+                <ScoreLoader />
+              </>
+            }
           >
             <For
               each={entries()}
               fallback={<p>No one's added their scores yet :(</p>}
             >
               {([user, record]) => (
-                <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4">
+                <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
                   <p class="font-bold text-lg">{user}</p>
                   <p class="text-2xl mb-1">Score: {record.score}</p>
                   <p class="text-sm">
