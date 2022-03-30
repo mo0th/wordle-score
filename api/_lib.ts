@@ -77,7 +77,7 @@ export const setScore = async (body: unknown): Promise<boolean> => {
 
   const { error } = await supabase
     .from<Singleton>('singletons')
-    .update({ content: JSON.stringify(current) })
+    .update({ content: JSON.stringify(current, null, 2) })
     .eq('slug', SLUG)
     .maybeSingle()
 
