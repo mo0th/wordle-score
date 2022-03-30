@@ -3,15 +3,20 @@ import { Component, createMemo, For, Show } from 'solid-js'
 import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { PersonScore } from '../types'
+import { useLocalStorage } from '../utils/use-local-storage'
 
 const Scores: Component = () => {
   const [{ canSync, allScores }] = useScoreContext()
   const [isDev] = useDev()
+  const [isAscending, setIsAscending] = useLocalStorage(
+    'mooth:wordle-score-asc',
+    false
+  )
 
   const entries = createMemo(() => {
     const sorted = (
       Object.entries(allScores() || {}) as [string, PersonScore][]
-    ).sort(([, a], [, b]) => b.score - a.score)
+    ).sort(([, a], [, b]) => (a.score - b.score) * (isAscending() ? 1 : -1))
 
     if (!isDev()) {
       return sorted.filter(([name]) => !name.endsWith('-testing'))
@@ -44,6 +49,13 @@ const Scores: Component = () => {
                 </div>
               )}
             </For>
+
+            <div>
+              Order:{' '}
+              <button class="underline" onClick={() => setIsAscending(p => !p)}>
+                {isAscending() ? 'ascending' : 'descending'}
+              </button>
+            </div>
           </Show>
         </div>
 

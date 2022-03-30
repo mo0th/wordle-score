@@ -1,4 +1,4 @@
-import { Navigate, Route, Router, Routes } from 'solid-app-router'
+import { Link, Navigate, Route, Router, Routes } from 'solid-app-router'
 import { Component } from 'solid-js'
 import Footer from './components/Footer'
 import { StuffAndSettings } from './components/StuffAndSettings'
@@ -14,7 +14,7 @@ const App: Component = () => {
         class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2"
         style="overflow-wrap: breakw-word"
       >
-        Wordle Score
+        <Link href="/">Wordle Score</Link>
       </h1>
       <div class="max-w-md mx-auto space-y-24 px-8 flex-1 w-full">
         <Routes>
