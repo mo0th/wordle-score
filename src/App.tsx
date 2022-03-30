@@ -10,8 +10,8 @@ const App: Component = () => {
   return (
     <Router>
       <SyncIndicator />
-      <h1 class="text-5xl text-center mt-8 mb-16">Wordle Score</h1>
-      <div class="max-w-sm mx-auto space-y-24 px-8 flex-1 w-full">
+      <h1 class="text-6xl text-center mt-8 mb-16">Wordle Score</h1>
+      <div class="max-w-md mx-auto space-y-24 px-8 flex-1 w-full">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scores" element={<Scores />} />

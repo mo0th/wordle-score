@@ -1,4 +1,4 @@
-import { Component, For, Show } from 'solid-js'
+import { Component, For, mergeProps, Show } from 'solid-js'
 import { SingleDayScore } from '../types'
 
 export const getInputNameForDay = (day: number) => `day-${day}-score`
@@ -6,23 +6,30 @@ export const getInputNameForDay = (day: number) => `day-${day}-score`
 const DayControlButton: Component<{
   onClick?: () => void
   selected: boolean
-}> = props => (
-  <span class="block aspect-w-1 aspect-h-1 w-full focus-within-outline">
-    <button
-      class={
-        'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer'
-      }
-      classList={{
-        'bg-slate-800 text-white hover:bg-black dark:hover:bg-white dark:bg-slate-200 dark:text-black':
-          props.selected,
-        'hover:bg-slate-300 dark:hover:bg-slate-600': !props.selected,
-      }}
-      onClick={props.onClick}
-    >
-      {props.children}
-    </button>
-  </span>
-)
+  variant?: 'red' | 'base'
+}> = _props => {
+  const props = mergeProps({ variant: 'base' }, _props)
+  return (
+    <span class="block aspect-w-1 aspect-h-1 w-full focus-within-outline">
+      <button
+        class={
+          'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer'
+        }
+        classList={{
+          'bg-slate-800 text-white hover:bg-black dark:hover:bg-white dark:bg-slate-200 dark:text-black':
+            props.selected,
+          'hover:bg-red-200 dark:hover:bg-red-700':
+            !props.selected && props.variant === 'red',
+          'hover:bg-slate-300 dark:hover:bg-slate-600':
+            !props.selected && props.variant === 'base',
+        }}
+        onClick={props.onClick}
+      >
+        {props.children}
+      </button>
+    </span>
+  )
+}
 
 const scores: SingleDayScore[] = [1, 2, 3, 4, 5, 6, 'X']
 
@@ -51,7 +58,11 @@ const DayControl: Component<{
         )}
       </For>
       <Show when={Boolean(props.onDelete)}>
-        <DayControlButton selected={false} onClick={() => props.onDelete?.()}>
+        <DayControlButton
+          variant="red"
+          selected={false}
+          onClick={() => props.onDelete?.()}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-10 w-10"
