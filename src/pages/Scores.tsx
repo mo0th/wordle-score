@@ -1,7 +1,7 @@
 import { Link, Navigate } from 'solid-app-router'
 import { Component, For, Show } from 'solid-js'
 import { useScoreContext } from '../lib/score-context'
-import { ScoreRecord } from '../types'
+import { PersonScore } from '../types'
 
 const Scores: Component = () => {
   const [{ canSync, allScores }] = useScoreContext()
@@ -16,9 +16,9 @@ const Scores: Component = () => {
             fallback={<p class="text-center">loading</p>}
           >
             <For
-              each={
-                Object.entries(allScores() || {}) as [string, ScoreRecord][]
-              }
+              each={(
+                Object.entries(allScores() || {}) as [string, PersonScore][]
+              ).sort(([, a], [, b]) => b.score - a.score)}
               fallback={<p>No one's added their scores yet :(</p>}
             >
               {([user, record]) => (
