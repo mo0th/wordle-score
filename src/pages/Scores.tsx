@@ -1,5 +1,5 @@
 import { Link, Navigate } from 'solid-app-router'
-import { Component, createMemo, For, Show } from 'solid-js'
+import { Component, createMemo, For, Show, mapArray } from 'solid-js'
 import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { PersonScore } from '../types'
@@ -42,14 +42,9 @@ const Scores: Component = () => {
         <div class="space-y-4">
           <Show
             when={Boolean(allScores())}
-            fallback={
-              <>
-                <ScoreLoader />
-                <ScoreLoader />
-                <ScoreLoader />
-                <ScoreLoader />
-              </>
-            }
+            fallback={Array.from({ length: 4 }, () => (
+              <ScoreLoader />
+            ))}
           >
             <For
               each={entries()}
