@@ -4,7 +4,7 @@ const Footer: Component = () => {
   return (
     <footer className="py-8 text-center flex flex-col items-center space-y-2">
       <a
-        href="https://mooth.tech/?ref=Sizes"
+        href="https://mooth.tech/?ref=Wordle%20Score"
         target="_blank"
         rel="noopener noreferrer"
         className="group inline-block px-2 hover:underline"

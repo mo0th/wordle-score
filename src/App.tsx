@@ -1,7 +1,7 @@
 import { Navigate, Route, Router, Routes } from 'solid-app-router'
 import { Component } from 'solid-js'
 import Footer from './components/Footer'
-import { Settings } from './components/Settings'
+import { StuffAndSettings } from './components/StuffAndSettings'
 import SyncIndicator from './components/SyncIndicator'
 import Home from './pages/Home'
 import Scores from './pages/Scores'
@@ -10,7 +10,12 @@ const App: Component = () => {
   return (
     <Router>
       <SyncIndicator />
-      <h1 class="text-6xl text-center mt-8 mb-16">Wordle Score</h1>
+      <h1
+        class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2"
+        style="overflow-wrap: breakw-word"
+      >
+        Wordle Score
+      </h1>
       <div class="max-w-md mx-auto space-y-24 px-8 flex-1 w-full">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -18,7 +23,7 @@ const App: Component = () => {
           <Route path="/*all" element={<Navigate href="/" />} />
         </Routes>
         <div class="space-y-12">
-          <Settings />
+          <StuffAndSettings />
           <Footer />
         </div>
       </div>

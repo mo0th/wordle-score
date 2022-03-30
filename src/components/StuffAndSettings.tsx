@@ -4,7 +4,7 @@ import { useScoreContext } from '../lib/score-context'
 import { useTheme } from '../lib/theme'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
 
-export const Settings: Component = () => {
+export const StuffAndSettings: Component = () => {
   const [theme, toggleTheme] = useTheme()
   const [isDev, setIsDev] = useDev()
   const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
@@ -79,7 +79,6 @@ export const Settings: Component = () => {
           {isDev() ? 'Hide' : 'Show'}
         </button>
       </div>
-      <div class="h-1" />
     </details>
   )
 }
@@ -109,7 +108,7 @@ const AddDay: Component = () => {
           id="day-to-add"
           min={1}
           // @ts-expect-error no types for solid's attr:__ yet
-          attr:value={1}
+          attr:value={getCurrentDayOffset() - 1}
           max={getCurrentDayOffset() - 1}
         />
         <button
