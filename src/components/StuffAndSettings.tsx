@@ -25,6 +25,7 @@ export const StuffAndSettings: Component = () => {
           event.preventDefault()
           const data = Object.fromEntries(new FormData(event.currentTarget))
           setSyncDetails(current => {
+            console.log({ data, current })
             if (
               (current.password === data.password &&
                 current.user === data.user) ||
@@ -65,7 +66,9 @@ export const StuffAndSettings: Component = () => {
             attr:value={syncDetails().password}
           />
         </div>
-        <Button block>Save Sync Details</Button>
+        <Button type="submit" block>
+          Save Sync Details
+        </Button>
       </form>
 
       <div class="flex justify-between items-center">
