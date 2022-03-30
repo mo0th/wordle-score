@@ -1,15 +1,19 @@
 import { Component } from 'solid-js'
+import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { useTheme } from '../lib/theme'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
 
 export const Settings: Component = () => {
   const [theme, toggleTheme] = useTheme()
-  const [{ syncDetails }, { setSyncDetail }] = useScoreContext()
+  const [isDev, setIsDev] = useDev()
+  const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
 
   return (
     <details class="px-4 py-2 rounded bg-gray-200 dark:bg-gray-700 space-y-4">
-      <summary class="cursor-pointer -my-2 py-2">Settings and stuff</summary>
+      <summary class="cursor-pointer -my-2 py-2">Stuff and settings</summary>
+
+      <AddDay />
 
       <div class="flex justify-between items-center">
         <p>Theme: </p>
@@ -21,15 +25,34 @@ export const Settings: Component = () => {
         </button>
       </div>
 
-      <div class="space-y-4">
-        <p>Sync</p>
+      <form
+        class="space-y-4"
+        onSubmit={event => {
+          event.preventDefault()
+          const data = Object.fromEntries(new FormData(event.currentTarget))
+          setSyncDetails(current => {
+            if (
+              (current.password === data.password &&
+                current.user === data.user) ||
+              typeof data.password !== 'string' ||
+              typeof data.user !== 'string'
+            ) {
+              return current
+            }
+
+            return { password: data.password, user: data.user }
+          })
+        }}
+      >
+        <p>Sync Details</p>
         <div class="space-y-2 flex flex-col">
           <label class="text-sm">Username</label>
           <input
             type="text"
             class="form-input"
-            value={syncDetails().user}
-            onInput={e => setSyncDetail('user', e.currentTarget.value)}
+            name="user"
+            // @ts-expect-error
+            attr:value={syncDetails().user}
           />
         </div>
         <div class="space-y-2 flex flex-col">
@@ -37,14 +60,25 @@ export const Settings: Component = () => {
           <input
             type="password"
             class="form-input"
-            value={syncDetails().password}
-            onInput={e => setSyncDetail('password', e.currentTarget.value)}
+            name="password"
+            // @ts-expect-error
+            attr:value={syncDetails().password}
           />
         </div>
+        <button class="block w-full px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors">
+          Save Sync Details
+        </button>
+      </form>
+
+      <div class="flex justify-between items-center">
+        <p>Dev Stuff: </p>
+        <button
+          class="px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors"
+          onClick={() => setIsDev(p => !p)}
+        >
+          {isDev() ? 'Hide' : 'Show'}
+        </button>
       </div>
-
-      <AddDay />
-
       <div class="h-1" />
     </details>
   )

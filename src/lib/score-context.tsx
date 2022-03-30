@@ -7,11 +7,17 @@ import {
   createEffect,
   createSignal,
   Resource,
+  Setter,
 } from 'solid-js'
 import { AccessorRecord, AllScores } from '../types'
 import { debounce } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
-import { ScoreAccessors, ScoreSetters, useScore } from './score-calc'
+import {
+  CumulativeScores,
+  ScoreAccessors,
+  ScoreSetters,
+  useScore,
+} from './score-calc'
 
 export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
 export type SyncDetails = {
@@ -28,7 +34,7 @@ export type ScoreContextValue = [
       allScores: Resource<AllScores>
     },
   ScoreSetters & {
-    setSyncDetail<K extends keyof SyncDetails>(k: K, v: SyncDetails[K]): void
+    setSyncDetails: Setter<SyncDetails>
   }
 ]
 
@@ -43,14 +49,15 @@ export const ScoreProvider: Component = props => {
     const d = syncDetails()
     return Boolean(d.user) && Boolean(d.password)
   })
+  const password = createMemo(() => syncDetails().password)
   const [allScores, { refetch }] = createResource(
-    () => [syncDetails(), canSync()] as const,
-    async ([details, canSync]) => {
+    () => [password(), canSync()] as const,
+    async ([password, canSync]) => {
       try {
         if (!canSync) return {}
         const response = await fetch('/api/get-scores', {
           headers: {
-            authorization: `Bearer ${details.password}`,
+            authorization: `Bearer ${password}`,
           },
         })
         const json = await response.json()
@@ -67,49 +74,42 @@ export const ScoreProvider: Component = props => {
 
   const [syncStatus, setSyncStatus] = createSignal<SyncStatus>('idle')
 
-  const sync = debounce(async () => {
-    if (!canSync()) return
+  const sync = debounce(
+    async (
+      canSync: boolean,
+      syncDetails: SyncDetails,
+      score: CumulativeScores
+    ) => {
+      if (!canSync) return
 
-    setSyncStatus('loading')
-    try {
-      const response = await fetch('/api/set-score', {
-        method: 'POST',
-        headers: {
-          authorization: `Bearer ${syncDetails().password}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user: syncDetails().user,
-          data: score(),
-        }),
-      })
-      const json = await response.json()
-      if (json.success) {
-        refetch()
-        setSyncStatus('success')
-      } else {
+      setSyncStatus('loading')
+      try {
+        const response = await fetch('/api/set-score', {
+          method: 'POST',
+          headers: {
+            authorization: `Bearer ${syncDetails.password}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            user: syncDetails.user,
+            data: score,
+          }),
+        })
+        const json = await response.json()
+        if (json.success === true) {
+          refetch()
+          setSyncStatus('success')
+        } else {
+          setSyncStatus('failed')
+        }
+      } catch (err) {
         setSyncStatus('failed')
       }
-    } catch (err) {
-      setSyncStatus('failed')
-    }
-  }, 500)
+    },
+    500
+  )
 
-  createEffect(() => {
-    console.log({
-      c: canSync(),
-      d: syncDetails(),
-      s: score(),
-    })
-    sync()
-  })
-
-  const setSyncDetail = <K extends keyof SyncDetails>(
-    k: K,
-    v: SyncDetails[K]
-  ): void => {
-    setSyncDetails(d => ({ ...d, [k]: v }))
-  }
+  createEffect(() => sync(canSync(), syncDetails(), score()))
 
   const store: ScoreContextValue = [
     {
@@ -121,7 +121,7 @@ export const ScoreProvider: Component = props => {
       canSync,
       syncStatus,
     },
-    { setDayScore, setTodayScore, deleteDayScore, setSyncDetail },
+    { setDayScore, setTodayScore, deleteDayScore, setSyncDetails },
   ]
 
   return (

@@ -1,10 +1,24 @@
 import { Link, Navigate } from 'solid-app-router'
-import { Component, For, Show } from 'solid-js'
+import { Component, createMemo, For, Show } from 'solid-js'
+import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { PersonScore } from '../types'
 
 const Scores: Component = () => {
   const [{ canSync, allScores }] = useScoreContext()
+  const [isDev] = useDev()
+
+  const entries = createMemo(() => {
+    const sorted = (
+      Object.entries(allScores() || {}) as [string, PersonScore][]
+    ).sort(([, a], [, b]) => b.score - a.score)
+
+    if (!isDev()) {
+      return sorted.filter(([name]) => !name.endsWith('-testing'))
+    }
+
+    return sorted
+  })
 
   return (
     <Show when={canSync()} fallback={<Navigate href="/" />}>
@@ -16,9 +30,7 @@ const Scores: Component = () => {
             fallback={<p class="text-center">loading</p>}
           >
             <For
-              each={(
-                Object.entries(allScores() || {}) as [string, PersonScore][]
-              ).sort(([, a], [, b]) => b.score - a.score)}
+              each={entries()}
               fallback={<p>No one's added their scores yet :(</p>}
             >
               {([user, record]) => (
