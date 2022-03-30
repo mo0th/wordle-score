@@ -46,21 +46,27 @@ export const StuffAndSettings: Component = () => {
       >
         <p>Sync Details</p>
         <div class="space-y-2 flex flex-col">
-          <label class="text-sm">Username</label>
+          <label class="text-sm" for="sync-user">
+            Username
+          </label>
           <input
             type="text"
             class="form-input"
             name="user"
+            id="sync-user"
             // @ts-expect-error
             attr:value={syncDetails().user}
           />
         </div>
         <div class="space-y-2 flex flex-col">
-          <label class="text-sm">Password</label>
+          <label class="text-sm" for="sync-password">
+            Password
+          </label>
           <input
             type="password"
             class="form-input"
             name="password"
+            id="sync-password"
             // @ts-expect-error
             attr:value={syncDetails().password}
           />
