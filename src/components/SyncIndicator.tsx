@@ -1,10 +1,4 @@
-import {
-  Component,
-  createEffect,
-  createSignal,
-  onCleanup,
-  Show,
-} from 'solid-js'
+import { Component, createEffect, createSignal, onCleanup } from 'solid-js'
 import { useScoreContext } from '../lib/score-context'
 
 const INDICATOR_TEXT = {
