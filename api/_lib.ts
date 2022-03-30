@@ -68,7 +68,12 @@ export const setScore = async (body: unknown): Promise<boolean> => {
   }
 
   const current = await getScores()
-  current[body.user] = body.data
+
+  if (body.data.daysPlayed === 0) {
+    delete current[body.user]
+  } else {
+    current[body.user] = body.data
+  }
 
   const { error } = await supabase
     .from<Singleton>('singletons')
