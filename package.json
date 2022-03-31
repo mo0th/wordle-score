@@ -24,6 +24,7 @@
     "@vercel/node": "^1.14.0",
     "pheno": "^0.4.2",
     "solid-app-router": "^0.3.2",
+    "solid-headless": "^0.10.12",
     "solid-js": "^1.3.13"
   }
 }

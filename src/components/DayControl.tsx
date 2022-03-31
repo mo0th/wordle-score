@@ -1,4 +1,5 @@
 import { Component, For, mergeProps, Show } from 'solid-js'
+import { scores } from '../lib/score-calc'
 import { SingleDayScore } from '../types'
 
 export const getInputNameForDay = (day: number) => `day-${day}-score`
@@ -30,8 +31,6 @@ const DayControlButton: Component<{
     </span>
   )
 }
-
-const scores: SingleDayScore[] = [1, 2, 3, 4, 5, 6, 'X']
 
 const DayControl: Component<{
   day: number

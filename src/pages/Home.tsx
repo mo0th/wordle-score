@@ -1,8 +1,11 @@
 import { Link } from 'solid-app-router'
 import { Component, createMemo, createSignal, For, Show } from 'solid-js'
 import Button from '../components/Button'
-import Collapse from '../components/Collapse'
 import DayControl from '../components/DayControl'
+import DayHistoryItem, {
+  getDayHistoryItemId,
+} from '../components/DayHistoryItem'
+import ReadScoreFromClipboard from '../components/ReadScoreFromClipboard'
 import { useScoreContext } from '../lib/score-context'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
 
@@ -43,41 +46,28 @@ const Home: Component = () => {
       </div>
 
       <Show when={isTodayPending()}>
-        <div id="current-day-wrapper">
+        <div id="current-day-wrapper" class="space-y-4">
           <h2 class="text-2xl mb-8">
             Add Today's Score <span class="text-base">(Day {today})</span>
           </h2>
+          <ReadScoreFromClipboard />
           <DayControl day={today} onScoreSelect={setTodayScore} isBig />
         </div>
       </Show>
 
       <div>
         <h2 class="text-2xl mb-8">History</h2>
-        <div class="space-y-8">
-          <For
-            each={recordsToShow()}
-            fallback={<p>Record a day's score to see your history here</p>}
-          >
-            {([day, dayScore]) => (
-              <div id={getDayWrapperId(day)}>
-                <p class="mb-4 text-xl">{getDayLabel(day)}</p>
-                <DayControl
-                  day={day}
-                  value={dayScore}
-                  onScoreSelect={score => {
-                    setDayScore(day, score)
-                  }}
-                  onDelete={() => {
-                    if (
-                      confirm(`Are you sure you want to delete Day ${day}?`)
-                    ) {
-                      deleteDayScore(day)
-                    }
-                  }}
-                />
-              </div>
-            )}
-          </For>
+        <div class="space-y-4">
+          <div class="divide-y-2 divide-gray-300 dark:divide-gray-700">
+            <For
+              each={recordsToShow()}
+              fallback={<p>Record a day's score to see your history here</p>}
+            >
+              {([day, dayScore]) => (
+                <DayHistoryItem day={day} dayScore={dayScore} />
+              )}
+            </For>
+          </div>
           <Show when={recordsLength() > NUM_RECORDS_BEFORE_HIDING}>
             <Button
               onClick={() => setShowAll(p => !p)}
@@ -96,7 +86,7 @@ const Home: Component = () => {
             onAdd={day => {
               if (day > getCurrentDayOffset()) return
               if (record()[day]) {
-                const id = getDayWrapperId(day)
+                const id = getDayHistoryItemId(day)
                 let el = document.getElementById(id)
                 if (!el) {
                   setShowAll(true)
@@ -117,15 +107,6 @@ const Home: Component = () => {
 }
 
 export default Home
-
-const getDayLabel = (day: number): string => {
-  const today = getCurrentDayOffset()
-  if (day === today) return `Today - Day ${day}`
-  if (day === today - 1) return `Yesterday - Day ${day}`
-  return `Day ${day}`
-}
-
-const getDayWrapperId = (day: number) => `day-${day}-wrapper`
 
 export const AddDay: Component<{ onAdd?: (day: number) => void }> = props => {
   let input: HTMLInputElement | undefined

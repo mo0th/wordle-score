@@ -19,6 +19,7 @@ export type ScoreSetters = {
   setDayScore(day: number, score: SingleDayScore): void
   deleteDayScore(day: number): void
 }
+export const scores: SingleDayScore[] = [1, 2, 3, 4, 5, 6, 'X']
 
 export const useScore = (): [ScoreAccessors, ScoreSetters] => {
   const [record, setRecord] = useLocalStorage<ScoreRecord>(
