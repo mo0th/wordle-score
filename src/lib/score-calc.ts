@@ -76,15 +76,17 @@ export const calculateCumulativeScores = (
 
   const [minDay, maxDay] = minmax(daysPlayed)
   let score = 0
+  let mult = 1
 
   for (let i = minDay; i < maxDay + 1; ++i) {
     if (i in record) {
       const dayScore = record[i]
 
       if (dayScore === 'X') {
-        score *= 3
+        mult *= 3
       } else {
-        score += dayScore
+        score += mult * dayScore
+        mult = 1
       }
     } else {
       score *= 3
