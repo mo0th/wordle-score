@@ -55,12 +55,17 @@ const Scores: Component = () => {
                   <p class="font-bold text-lg">{user}</p>
                   <p class="text-2xl mb-1">Score: {record.score}</p>
                   <p class="text-sm">
-                    {record.daysPlayed} day{record.daysPlayed === 1 ? '' : 's'}{' '}
-                    played {'• '}
-                    {Math.round(
-                      (record.score / (record.daysPlayed || 1)) * 100
-                    ) / 100}{' '}
-                    average
+                    {[
+                      `${record.daysPlayed} day${
+                        record.daysPlayed === 1 ? '' : 's'
+                      } played`,
+                      `${
+                        Math.round(
+                          (record.score / (record.daysPlayed || 1)) * 100
+                        ) / 100
+                      } average`,
+                      `${record.uncountedFails} uncounted X's`,
+                    ].join(' • ')}
                   </p>
                 </div>
               )}

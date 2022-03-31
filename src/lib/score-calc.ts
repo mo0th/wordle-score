@@ -1,6 +1,7 @@
 import { createMemo } from 'solid-js'
 import {
   AccessorRecord,
+  PersonScore,
   ScoreRecord,
   ScoreRecordTuple,
   SingleDayScore,
@@ -10,7 +11,7 @@ import { useLocalStorage } from '../utils/use-local-storage'
 import { getCurrentDayOffset } from './wordle-stuff'
 
 export type ScoreAccessors = AccessorRecord<{
-  score: CumulativeScores
+  score: PersonScore
   record: ScoreRecord
   recordArray: ScoreRecordTuple[]
 }>
@@ -58,40 +59,33 @@ export const useScore = (): [ScoreAccessors, ScoreSetters] => {
   ]
 }
 
-export type CumulativeScores = {
-  score: number
-  daysPlayed: number
-}
-
-export const calculateCumulativeScores = (
-  record: ScoreRecord
-): CumulativeScores => {
+export const calculateCumulativeScores = (record: ScoreRecord): PersonScore => {
   const daysPlayed = Object.keys(record)
     .map(str => parseInt(str))
     .filter(n => !Number.isNaN(n))
 
   if (daysPlayed.length < 1) {
-    return { score: 0, daysPlayed: 0 }
+    return { score: 0, daysPlayed: 0, uncountedFails: 0 }
   }
 
   const [minDay, maxDay] = minmax(daysPlayed)
   let score = 0
-  let mult = 1
+  let uncountedFails = 0
 
   for (let i = minDay; i < maxDay + 1; ++i) {
     if (i in record) {
       const dayScore = record[i]
 
       if (dayScore === 'X') {
-        mult *= 3
+        uncountedFails++
       } else {
-        score += mult * dayScore
-        mult = 1
+        score += Math.pow(3, uncountedFails) * dayScore
+        uncountedFails = 0
       }
     } else {
       score *= 3
     }
   }
 
-  return { score, daysPlayed: daysPlayed.length }
+  return { score, daysPlayed: daysPlayed.length, uncountedFails }
 }

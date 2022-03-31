@@ -3,7 +3,11 @@ import { Accessor } from 'solid-js'
 export type SingleDayScore = 1 | 2 | 3 | 4 | 5 | 6 | 'X'
 export type ScoreRecordTuple = [number, SingleDayScore]
 export type ScoreRecord = Record<string, SingleDayScore>
-export type PersonScore = { score: number; daysPlayed: number }
+export type PersonScore = {
+  score: number
+  daysPlayed: number
+  uncountedFails: number
+}
 export type AllScores = Record<string, PersonScore>
 
 export type AccessorRecord<T> = {

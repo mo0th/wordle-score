@@ -33,6 +33,7 @@ type Singleton = {
 const ScoreSchema = types.objectWithOnlyTheseProperties({
   score: types.number,
   daysPlayed: types.number,
+  uncountedFails: types.number,
 })
 
 export const getScores = async (): Promise<Scores> => {

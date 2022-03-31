@@ -9,15 +9,10 @@ import {
   Resource,
   Setter,
 } from 'solid-js'
-import { AccessorRecord, AllScores } from '../types'
+import { AccessorRecord, AllScores, PersonScore } from '../types'
 import { debounce } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
-import {
-  CumulativeScores,
-  ScoreAccessors,
-  ScoreSetters,
-  useScore,
-} from './score-calc'
+import { ScoreAccessors, ScoreSetters, useScore } from './score-calc'
 
 export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
 export type SyncDetails = {
@@ -75,11 +70,7 @@ export const ScoreProvider: Component = props => {
   const [syncStatus, setSyncStatus] = createSignal<SyncStatus>('idle')
 
   const sync = debounce(
-    async (
-      canSync: boolean,
-      syncDetails: SyncDetails,
-      score: CumulativeScores
-    ) => {
+    async (canSync: boolean, syncDetails: SyncDetails, score: PersonScore) => {
       if (!canSync) return
 
       setSyncStatus('loading')
