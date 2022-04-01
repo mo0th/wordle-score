@@ -61,12 +61,12 @@ const Scores: Component = () => {
                         record.daysPlayed,
                         'day',
                         'days'
-                      )} played`,
+                      )}`,
                       `${
                         Math.round(
                           (record.score / (record.daysPlayed || 1)) * 100
                         ) / 100
-                      } average`,
+                      } avg`,
                       `${record.uncountedFails} uncounted X's`,
                     ].join(' • ')}
                   </p>
