@@ -97,7 +97,7 @@ const Scores: Component = () => {
             </For>
 
             <div>
-              Sort by:{' '}
+              Sort by{' '}
               <button
                 class="underline"
                 onClick={() => {
