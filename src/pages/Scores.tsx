@@ -16,18 +16,44 @@ const ScoreLoader: Component = () => (
   </div>
 )
 
+type ScoreToRender = PersonScore & {
+  scorePerDay: number
+}
+
+const sortFields: Record<keyof ScoreToRender, string> = {
+  daysPlayed: 'Days Played',
+  score: 'Score',
+  scorePerDay: 'Average Score',
+  uncountedFails: 'Uncounted Fails',
+}
+
 const Scores: Component = () => {
   const [{ canSync, allScores }] = useScoreContext()
   const [isDev] = useDev()
-  const [isAscending, setIsAscending] = useLocalStorage(
-    'mooth:wordle-score-asc',
-    false
-  )
+  const [sortOptions, setSortOptions] = useLocalStorage<{
+    asc: boolean
+    by: keyof ScoreToRender
+  }>('mooth:wordle-score-sorting', { asc: true, by: 'scorePerDay' })
 
   const entries = createMemo(() => {
+    const opts = sortOptions()
+
     const sorted = (
       Object.entries(allScores() || {}) as [string, PersonScore][]
-    ).sort(([, a], [, b]) => (a.score - b.score) * (isAscending() ? 1 : -1))
+    )
+      .map(
+        ([name, record]) =>
+          [
+            name,
+            {
+              ...record,
+              scorePerDay:
+                Math.round((record.score / (record.daysPlayed || 1)) * 100) /
+                100,
+            },
+          ] as [string, ScoreToRender]
+      )
+      .sort(([, a], [, b]) => (a[opts.by] - b[opts.by]) * (opts.asc ? 1 : -1))
 
     if (!isDev()) {
       return sorted.filter(([name]) => !name.endsWith('-testing'))
@@ -62,11 +88,7 @@ const Scores: Component = () => {
                         'day',
                         'days'
                       )}`,
-                      `${
-                        Math.round(
-                          (record.score / (record.daysPlayed || 1)) * 100
-                        ) / 100
-                      } avg`,
+                      `${record.scorePerDay} avg`,
                       `${record.uncountedFails} uncounted X's`,
                     ].join(' • ')}
                   </p>
@@ -75,9 +97,26 @@ const Scores: Component = () => {
             </For>
 
             <div>
-              Order:{' '}
-              <button class="underline" onClick={() => setIsAscending(p => !p)}>
-                {isAscending() ? 'ascending' : 'descending'}
+              Sort by:{' '}
+              <button
+                class="underline"
+                onClick={() => {
+                  const fields = Object.keys(
+                    sortFields
+                  ) as (keyof ScoreToRender)[]
+                  const currIndex = fields.indexOf(sortOptions().by)
+                  const nextIndex = (currIndex + 1) % fields.length
+                  setSortOptions(o => ({ ...o, by: fields[nextIndex] }))
+                }}
+              >
+                {sortFields[sortOptions().by]}
+              </button>
+              {' • '} Order{' '}
+              <button
+                class="underline"
+                onClick={() => setSortOptions(o => ({ ...o, asc: !o.asc }))}
+              >
+                {sortOptions().asc ? 'ascending' : 'descending'}
               </button>
             </div>
           </Show>
