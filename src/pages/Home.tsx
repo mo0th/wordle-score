@@ -116,8 +116,6 @@ const ScoreHistory: Component = () => {
           ref={wrapper}
           style={{
             'transition-property': 'height',
-            outline: '1px solid red',
-            'outline-offset': '-1px',
           }}
         >
           <For
