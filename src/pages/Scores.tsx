@@ -32,7 +32,7 @@ const Scores: Component = () => {
   const [isDev] = useDev()
   const [sortOptions, setSortOptions] = useLocalStorage<{
     asc: boolean
-    by: keyof ScoreToRender
+    by: keyof typeof sortFields
   }>('mooth:wordle-score-sorting', { asc: true, by: 'scorePerDay' })
 
   const entries = createMemo(() => {
