@@ -25,7 +25,6 @@ export const StuffAndSettings: Component = () => {
           event.preventDefault()
           const data = Object.fromEntries(new FormData(event.currentTarget))
           setSyncDetails(current => {
-            console.log({ data, current })
             if (
               (current.password === data.password &&
                 current.user === data.user) ||

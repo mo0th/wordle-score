@@ -15,7 +15,9 @@ const DefaultErrorBoundary: Component<DefaultErrorBoundaryProps> = props => {
             Something broke!
           </h1>
           <Container class="space-y-12">
-            <pre>{error.toString()}</pre>
+            <pre class="whitespace-pre-wrap">
+              {error instanceof Error ? error.stack : error.toString()}
+            </pre>
           </Container>
         </>
       )}

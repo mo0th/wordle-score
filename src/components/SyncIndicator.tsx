@@ -10,11 +10,10 @@ const INDICATOR_TEXT = {
 
 const SyncIndicator: Component = () => {
   const [{ syncStatus }] = useScoreContext()
-  const [showIndicator, setShowIndicator] = createSignal(true)
-
-  let timeout: NodeJS.Timeout
+  const [showIndicator, setShowIndicator] = createSignal(false)
 
   createEffect(() => {
+    let timeout: NodeJS.Timeout
     const status = syncStatus()
 
     if (status === 'idle') {
@@ -23,21 +22,19 @@ const SyncIndicator: Component = () => {
       setShowIndicator(true)
     } else {
       setShowIndicator(true)
-      clearTimeout(timeout)
       timeout = setTimeout(() => setShowIndicator(false), 2000)
     }
-  })
-
-  onCleanup(() => {
-    clearTimeout(timeout)
+    onCleanup(() => {
+      clearTimeout(timeout)
+    })
   })
 
   return (
     <div
-      class="flex z-50 fixed top-4 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
+      class="flex z-50 fixed -top-20 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
       classList={{
-        '-translate-y-24': !showIndicator(),
-        'translate-y-0': showIndicator(),
+        'translate-y-24': showIndicator(),
+        'translate-y-0': !showIndicator(),
       }}
       style={{
         width: `calc(100% - 8rem)`,

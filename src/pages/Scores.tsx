@@ -53,7 +53,11 @@ const Scores: Component = () => {
             },
           ] as [string, ScoreToRender]
       )
-      .sort(([, a], [, b]) => (a[opts.by] - b[opts.by]) * (opts.asc ? 1 : -1))
+      .sort(([nameA, a], [nameB, b]) => {
+        const diff = (a[opts.by] - b[opts.by]) * (opts.asc ? 1 : -1)
+        if (diff !== 0) return diff
+        return nameA.toLowerCase().localeCompare(nameB.toLowerCase())
+      })
 
     if (!isDev()) {
       return sorted.filter(([name]) => !name.endsWith('-testing'))
@@ -111,7 +115,7 @@ const Scores: Component = () => {
               >
                 {sortFields[sortOptions().by]}
               </button>
-              {' • '} Order{' '}
+              {' • '}Order{' '}
               <button
                 class="underline"
                 onClick={() => setSortOptions(o => ({ ...o, asc: !o.asc }))}
