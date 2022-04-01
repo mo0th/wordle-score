@@ -33,3 +33,6 @@ export const debounce = <T extends CallableFunction>(
     }, delay)
   }) as any
 }
+
+export const plural = (n: number, singular: string, pluralised: string) =>
+  n === 1 ? singular : pluralised

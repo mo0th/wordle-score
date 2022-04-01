@@ -1,8 +1,9 @@
 import { Link, Navigate } from 'solid-app-router'
-import { Component, createMemo, For, Show, mapArray } from 'solid-js'
+import { Component, createMemo, For, Show } from 'solid-js'
 import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { PersonScore } from '../types'
+import { plural } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
 
 const scoreLoaderClassCommon =
@@ -56,9 +57,11 @@ const Scores: Component = () => {
                   <p class="text-2xl mb-1">Score: {record.score}</p>
                   <p class="text-sm">
                     {[
-                      `${record.daysPlayed} day${
-                        record.daysPlayed === 1 ? '' : 's'
-                      } played`,
+                      `${record.daysPlayed} ${plural(
+                        record.daysPlayed,
+                        'day',
+                        'days'
+                      )} played`,
                       `${
                         Math.round(
                           (record.score / (record.daysPlayed || 1)) * 100
