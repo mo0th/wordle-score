@@ -94,5 +94,10 @@ export type ScoreRenderData = ReturnType<typeof personScoreToRenderData>
 export const personScoreToRenderData = (record: PersonScore) => ({
   ...record,
   scorePerDay:
-    Math.round((record.score / (record.daysPlayed || 1)) * 100) / 100,
+    Math.round((record.score / daysAccountedForInScore(record)) * 100) / 100,
 })
+const daysAccountedForInScore = (record: PersonScore): number => {
+  const t = record.daysPlayed - record.uncountedFails
+  if (t <= 0) return 1
+  return t
+}
