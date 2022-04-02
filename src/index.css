@@ -1,4 +1,5 @@
 @tailwind base;
+@tailwind components;
 
 h1,
 h2 {
@@ -7,17 +8,19 @@ h2 {
   @apply font-bold;
 }
 
-.focus-outline {
-  @apply focus:outline-2 focus:outline outline-slate-400 outline-offset-2;
+.form-input,
+.form-textarea,
+.form-select,
+.form-multiselect {
+  @apply rounded dark:bg-slate-900 dark:text-white px-2 py-1 focus:ring-0 focus:border-gray-500;
+}
+.focus-outline,
+.form-input {
+  @apply focus:outline-2 focus:outline focus:outline-slate-400 outline-offset-2;
 }
 
 .focus-within-outline {
   @apply focus-within:outline-2 focus-within:outline outline-slate-400 outline-offset-2;
 }
 
-@tailwind components;
 @tailwind utilities;
-
-.form-input {
-  @apply rounded dark:bg-slate-900 dark:text-white px-2 py-1;
-}

@@ -7,7 +7,7 @@ const Footer: Component = () => {
         href="https://mooth.tech/?ref=Wordle%20Score"
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-block px-2 hover:underline"
+        className="group inline-block px-2 hover:underline focus-outline rounded"
       >
         Made with ❤ by{' '}
         <span className="underline group-hover:no-underline">Soorria</span>
@@ -16,7 +16,7 @@ const Footer: Component = () => {
         href="https://github.com/mo0th/wordle-score"
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-block px-2 hover:underline"
+        className="group inline-block px-2 hover:underline focus-outline rounded"
       >
         <span className="underline group-hover:no-underline hover:underline">
           Source

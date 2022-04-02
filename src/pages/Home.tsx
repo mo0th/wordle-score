@@ -6,9 +6,12 @@ import {
   createSignal,
   For,
   on,
+  onCleanup,
   Show,
 } from 'solid-js'
 import Button from '../components/Button'
+import CountUp from '../components/CountUp'
+import useCountUp from '../components/CountUp'
 import DayControl from '../components/DayControl'
 import DayHistoryItem, {
   getDayHistoryItemId,
@@ -32,22 +35,25 @@ const Home: Component = () => {
   return (
     <>
       <div class="text-center space-y-2">
-        <h2 className="text-xl">Your score so far</h2>
-        <p class="text-8xl font-mono">{score().score}</p>
-        <SecondaryScoreDetails record={personScoreToRenderData(score())} />
-
-        <Show when={canSync()}>
-          <p>
-            <Link href="/scores" class="underline">
-              See other people's scores
-            </Link>
+        <Show when={score().daysPlayed > 0}>
+          <h2 className="text-xl">Your score so far</h2>
+          <p class="text-8xl font-mono">
+            <CountUp to={score().score} />
           </p>
+          <SecondaryScoreDetails record={personScoreToRenderData(score())} />
+          <Show when={canSync()}>
+            <p>
+              <Link href="/scores" class="px-2 underline focus-outline rounded">
+                See other people's scores
+              </Link>
+            </p>
+          </Show>
         </Show>
       </div>
 
       <Show when={isTodayPending()}>
-        <div id="current-day-wrapper" class="space-y-4">
-          <h2 class="text-2xl mb-8">
+        <div id="current-day-wrapper" class="space-y-6">
+          <h2 class="text-2xl">
             Add Today's Score <span class="text-base">(Day {today})</span>
           </h2>
           <ReadScoreFromClipboard />
@@ -64,48 +70,33 @@ export default Home
 
 const ScoreHistory: Component = () => {
   const [{ recordArray, record }, { setDayScore }] = useScoreContext()
-  const [isDev] = useDev()
 
   const [showAll, setShowAll] = createSignal(false)
   const recordsLength = createMemo(() => recordArray().length)
-  const [animating, setAnimating] = createSignal(false)
   const recordsToShow = createMemo(() => {
     const records = [...recordArray()].reverse()
-    if (animating() || showAll()) {
+    if (showAll()) {
       return records
     }
     return records.slice(0, NUM_RECORDS_BEFORE_HIDING)
-  })
-
-  let wrapper: HTMLDivElement | undefined
-
-  const resizeWrapper = useResizeContainer({
-    ref: () => wrapper,
-    onResizeStart: () => {
-      setAnimating(true)
-    },
-    onResizeEnd: () => {
-      setAnimating(false)
-    },
   })
 
   const toggle = () => {
     setShowAll(s => !s)
   }
 
-  createEffect(
-    on(showAll, () => {
-      resizeWrapper(!isDev())
-    })
-  )
+  createEffect(() => {
+    if (recordsLength() <= NUM_RECORDS_BEFORE_HIDING) {
+      setShowAll(false)
+    }
+  })
 
   return (
-    <div>
-      <h2 class="text-2xl mb-8">History</h2>
+    <div class="space-y-6">
+      <h2 class="text-2xl">History</h2>
       <div class="space-y-4">
         <div
           class="divide-y-2 divide-gray-300 dark:divide-gray-700 overflow-y-hidden overflow-x-visible ease-in-out px-4 -mx-4"
-          ref={wrapper}
           style={{
             'transition-property': 'height',
           }}
@@ -115,13 +106,7 @@ const ScoreHistory: Component = () => {
             fallback={<p>Record a day's score to see your history here</p>}
           >
             {([day, dayScore]) => (
-              <DayHistoryItem
-                onHeightChange={() => {
-                  resizeWrapper(true)
-                }}
-                day={day}
-                dayScore={dayScore}
-              />
+              <DayHistoryItem day={day} dayScore={dayScore} />
             )}
           </For>
         </div>

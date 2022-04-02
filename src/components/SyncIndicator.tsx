@@ -42,7 +42,10 @@ const SyncIndicator: Component = () => {
       }}
     >
       <p class="flex-1">{INDICATOR_TEXT[syncStatus()]}</p>
-      <button onClick={() => setShowIndicator(false)}>
+      <button
+        class="focus-outline rounded"
+        onClick={() => setShowIndicator(false)}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           class="w-4 h-4"

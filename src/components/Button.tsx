@@ -12,7 +12,7 @@ const Button: Component<
   return (
     <button
       class={cx(
-        'px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors',
+        'px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors focus-outline',
         local.class
       )}
       classList={{

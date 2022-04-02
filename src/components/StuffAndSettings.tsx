@@ -1,4 +1,5 @@
-import { Component } from 'solid-js'
+import { dequal } from 'dequal'
+import { Component, Show } from 'solid-js'
 import { useDev } from '../lib/dev-context'
 import { useScoreContext } from '../lib/score-context'
 import { useTheme } from '../lib/theme'
@@ -26,8 +27,7 @@ export const StuffAndSettings: Component = () => {
           const data = Object.fromEntries(new FormData(event.currentTarget))
           setSyncDetails(current => {
             if (
-              (current.password === data.password &&
-                current.user === data.user) ||
+              dequal(data, current) ||
               typeof data.password !== 'string' ||
               typeof data.user !== 'string'
             ) {
@@ -70,11 +70,16 @@ export const StuffAndSettings: Component = () => {
         </Button>
       </form>
 
-      <div class="flex justify-between items-center">
-        <p>Dev Stuff</p>
-        <Button onClick={() => setIsDev(p => !p)}>
-          {isDev() ? 'Disable' : 'Enable'}
-        </Button>
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <p>Dev Stuff</p>
+          <Button onClick={() => setIsDev(p => !p)}>
+            {isDev() ? 'Disable' : 'Enable'}
+          </Button>
+        </div>
+        <Show when={isDev()}>
+          <p class="text-sm">Some stuff might be broken so be careful!</p>
+        </Show>
       </div>
     </Collapse>
   )

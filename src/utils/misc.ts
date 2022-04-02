@@ -1,3 +1,5 @@
+import { JSXElement, mapArray } from 'solid-js'
+
 export const minmax = <T>(arr: T[]): [min: T, max: T] => {
   if (arr.length < 1) {
     throw new Error('Array must have at least 1 item')
@@ -36,3 +38,17 @@ export const debounce = <T extends CallableFunction>(
 
 export const plural = (n: number, singular: string, pluralised: string) =>
   n === 1 ? singular : pluralised
+
+export const jsxJoin = (arr: JSXElement[], sep: () => JSXElement) => {
+  if (arr.length === 0) return []
+  const result: JSXElement[] = [arr[0]]
+
+  for (let i = 1; i < arr.length; i++) {
+    result.push(sep, arr[i])
+  }
+
+  return mapArray(
+    () => result,
+    e => e
+  )
+}

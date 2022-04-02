@@ -1,3 +1,4 @@
+import { dequal } from 'dequal'
 import {
   Component,
   createContext,
@@ -26,7 +27,7 @@ export type ScoreContextValue = [
       canSync: boolean
       syncStatus: SyncStatus
     }> & {
-      allScores: Resource<AllScores>
+      allScores: Resource<AllScores | undefined>
     },
   ScoreSetters & {
     setSyncDetails: Setter<SyncDetails>
@@ -45,9 +46,12 @@ export const ScoreProvider: Component = props => {
     return Boolean(d.user) && Boolean(d.password)
   })
   const password = createMemo(() => syncDetails().password)
-  const [allScores, { refetch }] = createResource(
+  const [allScores, { refetch }] = createResource<
+    AllScores,
+    readonly [string, boolean]
+  >(
     () => [password(), canSync()] as const,
-    async ([password, canSync]) => {
+    async ([password, canSync], { value, refetching }) => {
       try {
         if (!canSync) return {}
         const response = await fetch('/api/get-scores', {
@@ -55,7 +59,11 @@ export const ScoreProvider: Component = props => {
             authorization: `Bearer ${password}`,
           },
         })
+        if (!response.ok) return {}
         const json = await response.json()
+        if (refetching && dequal(value, json)) {
+          return value as AllScores
+        }
         return json
       } catch (err) {
         return {}
