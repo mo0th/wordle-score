@@ -1,4 +1,4 @@
-import { Accessor, createEffect, Setter } from 'solid-js'
+import { Accessor, createEffect } from 'solid-js'
 import { useLocalStorage } from '../utils/use-local-storage'
 
 type Theme = 'light' | 'dark'
