@@ -12,7 +12,26 @@ import { toFixedOrLess } from '../utils/misc'
 interface CountUpProps {
   start?: number
   to: number
+  duration?: number
   children?: (count: Accessor<number>) => JSXElement
+}
+
+const easeCos = (t: number) => 1 - (Math.cos(Math.PI * t) + 1) / 2
+const ease2 = (t: number) => {
+  t /= 0.5
+  if (t < 1) return 0.5 * t * t
+  t--
+  return -0.5 * (t * (t - 2) - 1)
+}
+const ease3 = (t: number) =>
+  t > 0.5 ? 4 * Math.pow(t - 1, 3) + 1 : 4 * Math.pow(t, 3)
+
+const ease4 = (t: number) =>
+  t < 0.5 ? +8.0 * Math.pow(t, 4.0) : -8.0 * Math.pow(t - 1.0, 4.0) + 1.0
+
+const ease5 = (t: number) => {
+  if ((t *= 2) < 1) return 0.5 * t * t * t * t * t
+  return 0.5 * ((t -= 2) * t * t * t * t + 2)
 }
 
 const CountUp = (_props: CountUpProps): JSXElement => {
@@ -20,6 +39,7 @@ const CountUp = (_props: CountUpProps): JSXElement => {
     {
       start: 0,
       step: 1,
+      duration: 2500,
       children: (n: Accessor<number>) => <>{toFixedOrLess(n(), 0)}</>,
     },
     _props
@@ -27,7 +47,6 @@ const CountUp = (_props: CountUpProps): JSXElement => {
 
   // yoinked from https://github.com/solidjs-community/solid-primitives/blob/main/packages/tween/src/index.ts
   // since using the primitive directly didn't work
-  const duration = 500
   const target = () => props.to
   const [start, setStart] = createSignal(document.timeline.currentTime)
   const [current, setCurrent] = createSignal(0)
@@ -41,8 +60,8 @@ const CountUp = (_props: CountUpProps): JSXElement => {
       const cancelId = requestAnimationFrame(t => {
         const elapsed = t - (start() || 0) + 1
         setCurrent(c =>
-          elapsed < duration
-            ? (target() - c) * (elapsed / duration) + c
+          elapsed < props.duration
+            ? (target() - c) * ease2(elapsed / props.duration) + c
             : target()
         )
       })
