@@ -1,6 +1,6 @@
 import { Component } from 'solid-js'
 import { ScoreRenderData } from '../lib/score-calc'
-import { cx, plural } from '../utils/misc'
+import { cx, plural, toFixedOrLess } from '../utils/misc'
 import CountUp from './CountUp'
 
 interface SecondaryScoreDetailsProps {
@@ -30,19 +30,18 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
       </span>
       <span> • </span>
       <span>
-        <CountUp
-          to={props.record.scorePerDay}
-          render={count => (
+        <CountUp to={props.record.scorePerDay}>
+          {count => (
             <span
               class={cx(
                 'font-mono',
                 avgScoreColors[getAverageScoreRating(count())]
               )}
             >
-              {count()}
+              {toFixedOrLess(count(), 2)}
             </span>
           )}
-        />{' '}
+        </CountUp>{' '}
         avg
       </span>
       <span> • </span>
@@ -50,7 +49,7 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
         <span class="font-mono">
           <CountUp to={props.record.uncountedFails} />
         </span>{' '}
-        uncounted X's
+        uncounted {plural(props.record.uncountedFails, 'X', "X's")}
       </span>
     </p>
   )

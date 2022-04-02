@@ -28,12 +28,15 @@ const sortFields: Record<keyof ScoreRenderData, string> = {
 }
 
 const Scores: Component = () => {
-  const [{ canSync, allScores, syncDetails }] = useScoreContext()
+  const [{ canSync, allScores, syncDetails }, { refetchAllScores }] =
+    useScoreContext()
   const [isDev] = useDev()
   const [sortOptions, setSortOptions] = useLocalStorage<{
     asc: boolean
     by: keyof typeof sortFields
   }>('mooth:wordle-score-sorting', { asc: true, by: 'scorePerDay' })
+
+  onMount(() => refetchAllScores())
 
   const unsortedEntries = createMemo(() =>
     (Object.entries(allScores() || {}) as [string, PersonScore][]).map(
@@ -75,7 +78,6 @@ const Scores: Component = () => {
               fallback={<p>No one's added their scores yet :(</p>}
             >
               {([user, record]) => {
-                onMount(() => console.log({ user, record }))
                 return (
                   <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
                     <p class="font-bold text-lg">{user}</p>

@@ -5,23 +5,18 @@ import {
   createMemo,
   createSignal,
   For,
-  on,
-  onCleanup,
   Show,
 } from 'solid-js'
 import Button from '../components/Button'
 import CountUp from '../components/CountUp'
-import useCountUp from '../components/CountUp'
 import DayControl from '../components/DayControl'
 import DayHistoryItem, {
   getDayHistoryItemId,
 } from '../components/DayHistoryItem'
 import ReadScoreFromClipboard from '../components/ReadScoreFromClipboard'
 import SecondaryScoreDetails from '../components/SecondaryScoreDetails'
-import { useDev } from '../lib/dev-context'
 import { personScoreToRenderData } from '../lib/score-calc'
 import { useScoreContext } from '../lib/score-context'
-import { useResizeContainer } from '../lib/use-resize-container'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
 
 const NUM_RECORDS_BEFORE_HIDING = 3

@@ -31,10 +31,13 @@ export type ScoreContextValue = [
     },
   ScoreSetters & {
     setSyncDetails: Setter<SyncDetails>
+    refetchAllScores: () => void
   }
 ]
 
 const ScoreContext = createContext<ScoreContextValue | null>(null)
+
+let lastFetchedAt: number | null = null
 
 export const ScoreProvider: Component = props => {
   const [syncDetails, setSyncDetails] = useLocalStorage(
@@ -52,6 +55,10 @@ export const ScoreProvider: Component = props => {
   >(
     () => [password(), canSync()] as const,
     async ([password, canSync], { value, refetching }) => {
+      if (lastFetchedAt && Date.now() - lastFetchedAt < 10_000 && value) {
+        return value
+      }
+
       try {
         if (!canSync) return {}
         const response = await fetch('/api/get-scores', {
@@ -59,13 +66,15 @@ export const ScoreProvider: Component = props => {
             authorization: `Bearer ${password}`,
           },
         })
-        if (!response.ok) return {}
+        if (!response.ok) throw new Error('Request not 2XX')
         const json = await response.json()
+        lastFetchedAt = Date.now()
         if (refetching && dequal(value, json)) {
           return value as AllScores
         }
         return json
       } catch (err) {
+        lastFetchedAt = null
         return {}
       }
     }
@@ -120,7 +129,13 @@ export const ScoreProvider: Component = props => {
       canSync,
       syncStatus,
     },
-    { setDayScore, setTodayScore, deleteDayScore, setSyncDetails },
+    {
+      setDayScore,
+      setTodayScore,
+      deleteDayScore,
+      setSyncDetails,
+      refetchAllScores: refetch,
+    },
   ]
 
   return (
