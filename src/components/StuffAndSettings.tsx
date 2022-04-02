@@ -73,7 +73,7 @@ export const StuffAndSettings: Component = () => {
       <div class="flex justify-between items-center">
         <p>Dev Stuff</p>
         <Button onClick={() => setIsDev(p => !p)}>
-          {isDev() ? 'Hide' : 'Show'}
+          {isDev() ? 'Disable' : 'Enable'}
         </Button>
       </div>
     </Collapse>

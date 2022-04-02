@@ -1,9 +1,10 @@
 import { Link, Navigate } from 'solid-app-router'
 import { Component, createMemo, For, Show } from 'solid-js'
+import SecondaryScoreDetails from '../components/SecondaryScoreDetails'
 import { useDev } from '../lib/dev-context'
+import { personScoreToRenderData, ScoreRenderData } from '../lib/score-calc'
 import { useScoreContext } from '../lib/score-context'
 import { PersonScore } from '../types'
-import { plural } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
 
 const scoreLoaderClassCommon =
@@ -16,11 +17,7 @@ const ScoreLoader: Component = () => (
   </div>
 )
 
-type ScoreToRender = PersonScore & {
-  scorePerDay: number
-}
-
-const sortFields: Record<keyof ScoreToRender, string> = {
+const sortFields: Record<keyof ScoreRenderData, string> = {
   daysPlayed: 'Days Played',
   score: 'Score',
   scorePerDay: 'Average Score',
@@ -43,15 +40,7 @@ const Scores: Component = () => {
     )
       .map(
         ([name, record]) =>
-          [
-            name,
-            {
-              ...record,
-              scorePerDay:
-                Math.round((record.score / (record.daysPlayed || 1)) * 100) /
-                100,
-            },
-          ] as [string, ScoreToRender]
+          [name, personScoreToRenderData(record)] as [string, ScoreRenderData]
       )
       .sort(([nameA, a], [nameB, b]) => {
         const diff = (a[opts.by] - b[opts.by]) * (opts.asc ? 1 : -1)
@@ -85,17 +74,7 @@ const Scores: Component = () => {
                 <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
                   <p class="font-bold text-lg">{user}</p>
                   <p class="text-2xl mb-1">Score: {record.score}</p>
-                  <p class="text-sm">
-                    {[
-                      `${record.daysPlayed} ${plural(
-                        record.daysPlayed,
-                        'day',
-                        'days'
-                      )}`,
-                      `${record.scorePerDay} avg`,
-                      `${record.uncountedFails} uncounted X's`,
-                    ].join(' • ')}
-                  </p>
+                  <SecondaryScoreDetails record={record} />
                 </div>
               )}
             </For>
@@ -107,7 +86,7 @@ const Scores: Component = () => {
                 onClick={() => {
                   const fields = Object.keys(
                     sortFields
-                  ) as (keyof ScoreToRender)[]
+                  ) as (keyof typeof sortFields)[]
                   const currIndex = fields.indexOf(sortOptions().by)
                   const nextIndex = (currIndex + 1) % fields.length
                   setSortOptions(o => ({ ...o, by: fields[nextIndex] }))

@@ -1,4 +1,11 @@
-import { Component, createSignal, Show } from 'solid-js'
+import {
+  Component,
+  createEffect,
+  createMemo,
+  createSignal,
+  on,
+  Show,
+} from 'solid-js'
 import { useScoreContext } from '../lib/score-context'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
 import { SingleDayScore } from '../types'
@@ -17,6 +24,7 @@ export const getDayHistoryItemId = (day: number) => `day-${day}-wrapper`
 const DayHistoryItem: Component<{
   day: number
   dayScore: SingleDayScore
+  onHeightChange?: () => void
 }> = props => {
   const [, { setDayScore, deleteDayScore }] = useScoreContext()
   const [showEdit, setShowEdit] = createSignal(false)
@@ -30,6 +38,18 @@ const DayHistoryItem: Component<{
     setShowEdit(false)
     setCurrentScore(props.dayScore as any)
   }
+
+  const showSaveButton = createMemo(() => currentScore() !== props.dayScore)
+
+  createEffect(
+    on(
+      [showSaveButton, showEdit],
+      () => {
+        props.onHeightChange?.()
+      },
+      { defer: true }
+    )
+  )
 
   return (
     <div id={getDayHistoryItemId(props.day)} class="py-4 space-y-4">
@@ -50,7 +70,7 @@ const DayHistoryItem: Component<{
             }
           }}
         />
-        <Show when={currentScore() !== props.dayScore}>
+        <Show when={showSaveButton()}>
           <Button block onClick={() => setDayScore(props.day, currentScore())}>
             Save Change ({props.dayScore} -&gt; {currentScore()})
           </Button>

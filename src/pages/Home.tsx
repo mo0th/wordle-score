@@ -5,6 +5,7 @@ import {
   createMemo,
   createSignal,
   For,
+  on,
   Show,
 } from 'solid-js'
 import Button from '../components/Button'
@@ -13,7 +14,11 @@ import DayHistoryItem, {
   getDayHistoryItemId,
 } from '../components/DayHistoryItem'
 import ReadScoreFromClipboard from '../components/ReadScoreFromClipboard'
+import SecondaryScoreDetails from '../components/SecondaryScoreDetails'
+import { useDev } from '../lib/dev-context'
+import { personScoreToRenderData } from '../lib/score-calc'
 import { useScoreContext } from '../lib/score-context'
+import { useResizeContainer } from '../lib/use-resize-container'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
@@ -26,9 +31,10 @@ const Home: Component = () => {
 
   return (
     <>
-      <div class="text-center">
+      <div class="text-center space-y-2">
         <h2 className="text-xl">Your score so far</h2>
         <p class="text-8xl font-mono">{score().score}</p>
+        <SecondaryScoreDetails record={personScoreToRenderData(score())} />
 
         <Show when={canSync()}>
           <p>
@@ -58,6 +64,7 @@ export default Home
 
 const ScoreHistory: Component = () => {
   const [{ recordArray, record }, { setDayScore }] = useScoreContext()
+  const [isDev] = useDev()
 
   const [showAll, setShowAll] = createSignal(false)
   const recordsLength = createMemo(() => recordArray().length)
@@ -71,48 +78,33 @@ const ScoreHistory: Component = () => {
   })
 
   let wrapper: HTMLDivElement | undefined
-  let timeout: NodeJS.Timeout
+
+  const resizeWrapper = useResizeContainer({
+    ref: () => wrapper,
+    onResizeStart: () => {
+      setAnimating(true)
+    },
+    onResizeEnd: () => {
+      setAnimating(false)
+    },
+  })
 
   const toggle = () => {
-    if (showAll()) {
-      setShowAll(false)
-    } else {
-      setShowAll(true)
-    }
+    setShowAll(s => !s)
   }
 
-  createEffect(() => {
-    if (timeout) clearTimeout(timeout)
-    if (!wrapper) return
-    showAll()
-
-    let startHeight = wrapper.offsetHeight
-    let endHeight: number
-
-    wrapper!.style.height = 'auto'
-    endHeight = wrapper!.offsetHeight
-    wrapper!.style.height = `${startHeight}px`
-
-    const duration = Math.round(
-      Math.log2(Math.abs(startHeight - endHeight) * 2) * 100
-    )
-    wrapper!.style.transitionDuration = `${duration}ms`
-
-    requestAnimationFrame(() => {
-      setAnimating(true)
-      if (wrapper?.style?.height) {
-        wrapper.style.height = `${endHeight}px`
-      }
-      timeout = setTimeout(() => setAnimating(false), duration)
+  createEffect(
+    on(showAll, () => {
+      resizeWrapper(!isDev())
     })
-  })
+  )
 
   return (
     <div>
       <h2 class="text-2xl mb-8">History</h2>
       <div class="space-y-4">
         <div
-          class="divide-y-2 divide-gray-300 dark:divide-gray-700 overflow-y-hidden ease-in-out"
+          class="divide-y-2 divide-gray-300 dark:divide-gray-700 overflow-y-hidden overflow-x-visible ease-in-out px-4 -mx-4"
           ref={wrapper}
           style={{
             'transition-property': 'height',
@@ -123,7 +115,13 @@ const ScoreHistory: Component = () => {
             fallback={<p>Record a day's score to see your history here</p>}
           >
             {([day, dayScore]) => (
-              <DayHistoryItem day={day} dayScore={dayScore} />
+              <DayHistoryItem
+                onHeightChange={() => {
+                  resizeWrapper(true)
+                }}
+                day={day}
+                dayScore={dayScore}
+              />
             )}
           </For>
         </div>

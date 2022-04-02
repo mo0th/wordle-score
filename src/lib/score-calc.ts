@@ -89,3 +89,10 @@ export const calculateCumulativeScores = (record: ScoreRecord): PersonScore => {
 
   return { score, daysPlayed: daysPlayed.length, uncountedFails }
 }
+
+export type ScoreRenderData = ReturnType<typeof personScoreToRenderData>
+export const personScoreToRenderData = (record: PersonScore) => ({
+  ...record,
+  scorePerDay:
+    Math.round((record.score / (record.daysPlayed || 1)) * 100) / 100,
+})

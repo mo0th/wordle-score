@@ -7,7 +7,7 @@ export const getInputNameForDay = (day: number) => `day-${day}-score`
 const DayControlButton: Component<{
   onClick?: () => void
   selected: boolean
-  variant?: 'red' | 'base'
+  variant?: 'delete' | 'base'
 }> = _props => {
   const props = mergeProps({ variant: 'base' }, _props)
   return (
@@ -17,12 +17,14 @@ const DayControlButton: Component<{
           'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer'
         }
         classList={{
-          'bg-slate-800 text-white hover:bg-black dark:hover:bg-white dark:bg-slate-200 dark:text-black':
+          'bg-slate-800 hover:bg-black dark:hover:bg-white dark:bg-slate-200':
             props.selected,
-          'hover:bg-red-200 dark:hover:bg-red-700':
-            !props.selected && props.variant === 'red',
-          'hover:bg-slate-300 dark:hover:bg-slate-600':
+          'hover:bg-red-200 dark:hover:bg-red-800 hover:text-red-900 dark:hover:text-red-100':
+            props.variant === 'delete',
+          'hover:bg-slate-300 dark:hover:bg-slate-600 text-black dark:text-white':
             !props.selected && props.variant === 'base',
+          'text-white dark:text-black':
+            props.selected && props.variant === 'base',
         }}
         onClick={props.onClick}
       >
@@ -58,7 +60,7 @@ const DayControl: Component<{
       </For>
       <Show when={Boolean(props.onDelete)}>
         <DayControlButton
-          variant="red"
+          variant="delete"
           selected={false}
           onClick={() => props.onDelete?.()}
         >
