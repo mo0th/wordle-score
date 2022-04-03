@@ -157,7 +157,7 @@ const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
       <div class="flex items-stretch space-x-4">
         <input
           ref={input}
-          class="form-input flex-1 block w-full"
+          class="form-input flex-1 block w-full appearance-none"
           type="number"
           id="day-to-add"
           min={1}
