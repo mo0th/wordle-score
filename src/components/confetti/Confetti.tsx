@@ -46,6 +46,14 @@ const Confetti: Component = () => {
     }
   })
 
+  createEffect(() => {
+    if (show()) {
+      document.body.style.overflowY = 'hidden'
+    } else {
+      document.body.style.overflowY = 'auto'
+    }
+  })
+
   return (
     <Show when={show()}>
       <div
