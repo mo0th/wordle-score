@@ -1,3 +1,4 @@
+@import '@fontsource/poppins/700.css';
 @tailwind base;
 @tailwind components;
 
@@ -26,12 +27,12 @@ h2 {
 @tailwind utilities;
 
 @keyframes fadeIn {
- from {
-   opacity: 0;
- }
- to {
-   opacity: 1;
- }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .fade-in {
