@@ -58,7 +58,9 @@ const Confetti: Component = () => {
             HAPPY BIRTHDAY
           </p>
           <div class="flex space-x-4">
-            <Button onClick={() => setShouldConfetti(p => !p)}>🎉</Button>
+            <Button onClick={() => setShouldConfetti(p => !p)}>
+              {shouldConfetti() ? '🎉' : '😟'}
+            </Button>
             <Button
               block
               onClick={() => {
