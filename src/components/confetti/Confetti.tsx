@@ -7,20 +7,21 @@ import {
   Show,
 } from 'solid-js'
 import { useScoreContext } from '../../lib/score-context'
-import { cx } from '../../utils/misc'
 import Button from '../Button'
 import Container from '../Container'
+
 const Particles = lazy(() => import('./Particles'))
 
 let done = false
 const Confetti: Component = () => {
-  const [{ syncDetails }] = useScoreContext()
+  const [{ syncDetails, canSync }] = useScoreContext()
   const [show, setShow] = createSignal(false)
   const [shouldConfetti, setShouldConfetti] = createSignal(true)
   const [shouldShowApi] = createResource<
     boolean,
     ReturnType<typeof syncDetails>
   >(syncDetails, async details => {
+    if (!details.user || !details.password) return false
     try {
       const { ok } = await fetch('/api/bday', {
         method: 'POST',

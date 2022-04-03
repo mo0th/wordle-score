@@ -32,11 +32,11 @@ const Particles: Component<{ id?: string; class?: string }> = props => {
               wait: false,
             },
             rate: {
-              quantity: 10,
-              delay: 0.1,
+              quantity: 5,
+              delay: 0.3,
             },
             shape: 'square',
-            startCount: 0,
+            startCount: 50,
             size: {
               mode: 'percent',
               height: 0,
@@ -44,7 +44,60 @@ const Particles: Component<{ id?: string; class?: string }> = props => {
             },
             position: {
               x: 50,
-              y: 0,
+              y: -10,
+            },
+            particles: {
+              move: { direction: 'bottom' },
+            },
+          },
+          {
+            autoPlay: true,
+            fill: true,
+            life: {
+              wait: false,
+            },
+            rate: {
+              quantity: 5,
+              delay: 0.3,
+            },
+            shape: 'square',
+            startCount: 50,
+            size: {
+              mode: 'percent',
+              height: 0,
+              width: 0,
+            },
+            position: {
+              x: 10,
+              y: -10,
+            },
+            particles: {
+              move: { direction: 'bottom-right' },
+            },
+          },
+          {
+            autoPlay: true,
+            fill: true,
+            life: {
+              wait: false,
+            },
+            rate: {
+              quantity: 5,
+              delay: 0.3,
+            },
+            shape: 'square',
+            startCount: 50,
+            size: {
+              mode: 'percent',
+              height: 0,
+              width: 0,
+            },
+            position: {
+              x: 90,
+              y: -10,
+            },
+            particles: {
+              move: { direction: 'bottom-left' },
             },
           },
         ],
