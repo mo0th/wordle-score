@@ -9,6 +9,8 @@ import {
   createSignal,
   Resource,
   Setter,
+  onCleanup,
+  mergeProps,
 } from 'solid-js'
 import { AccessorRecord, AllScores, PersonScore } from '../types'
 import { debounce } from '../utils/misc'
@@ -39,7 +41,11 @@ const ScoreContext = createContext<ScoreContextValue | null>(null)
 
 let lastFetchedAt: number | null = null
 
-export const ScoreProvider: Component = props => {
+export type ScoreProviderProps = {
+  focusRevalidate: boolean
+}
+export const ScoreProvider: Component<ScoreProviderProps> = _props => {
+  const props = mergeProps({ focusRevalidate: true }, _props)
   const [syncDetails, setSyncDetails] = useLocalStorage(
     'mooth:wordle-sync-details',
     { user: '', password: '' }
@@ -87,8 +93,15 @@ export const ScoreProvider: Component = props => {
   const [syncStatus, setSyncStatus] = createSignal<SyncStatus>('idle')
 
   const sync = debounce(
-    async (canSync: boolean, syncDetails: SyncDetails, score: PersonScore) => {
+    async (
+      canSync: boolean,
+      syncDetails: SyncDetails,
+      score: PersonScore,
+      currentScores: AllScores | undefined
+    ) => {
       if (!canSync) return
+      if (!currentScores) return
+      if (dequal(currentScores[syncDetails.user], score)) return
 
       setSyncStatus('loading')
       try {
@@ -117,7 +130,19 @@ export const ScoreProvider: Component = props => {
     500
   )
 
-  createEffect(() => sync(canSync(), syncDetails(), score()))
+  createEffect(() => sync(canSync(), syncDetails(), score(), allScores()))
+
+  createEffect(() => {
+    if (props.focusRevalidate) {
+      const handler = () => {
+        refetch()
+      }
+
+      window.addEventListener('focus', handler)
+
+      onCleanup(() => window.removeEventListener('focus', handler))
+    }
+  })
 
   const store: ScoreContextValue = [
     {
