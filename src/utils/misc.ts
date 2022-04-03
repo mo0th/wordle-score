@@ -54,6 +54,6 @@ export const jsxJoin = (arr: JSXElement[], sep: () => JSXElement) => {
 }
 
 export const toFixedOrLess = (n: number, dp: number) => {
-  const str = n.toFixed(dp).replace(/\.0+$/g, '')
+  const str = n.toFixed(dp).replace(/(\.)?0+$/g, '')
   return str
 }
