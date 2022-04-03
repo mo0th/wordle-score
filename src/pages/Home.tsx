@@ -119,7 +119,7 @@ const ScoreHistory: Component = () => {
           </Button>
         </Show>
 
-        <AddDay
+        <AddOrFindDay
           onAdd={day => {
             if (day > getCurrentDayOffset()) return
             if (record()[day]) {
@@ -142,7 +142,7 @@ const ScoreHistory: Component = () => {
   )
 }
 
-const AddDay: Component<{ onAdd?: (day: number) => void }> = props => {
+const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
   let input: HTMLInputElement | undefined
 
   const handleAdd = () => {
@@ -153,7 +153,7 @@ const AddDay: Component<{ onAdd?: (day: number) => void }> = props => {
 
   return (
     <div class="space-y-4 rounded bg-gray-200 dark:bg-gray-700 p-4">
-      <label for="day-to-add">Add an older day</label>
+      <label for="day-to-add">Add / find an older day</label>
       <div class="flex items-stretch space-x-4">
         <input
           ref={input}
