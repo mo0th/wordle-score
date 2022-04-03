@@ -54,7 +54,10 @@ const DayHistoryItem: Component<{
   return (
     <div id={getDayHistoryItemId(props.day)} class="py-4 space-y-4">
       <p class="text-xl justify-between flex items-center">
-        <span>{getDayLabel(props.day)}</span>
+        <span>
+          {getDayLabel(props.day)} -{' '}
+          <span class="font-mono">{props.dayScore}</span>
+        </span>
         <Button onClick={() => (showEdit() ? close() : open())}>
           {showEdit() ? 'cancel' : 'edit'}
         </Button>
