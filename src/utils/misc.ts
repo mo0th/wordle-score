@@ -53,7 +53,12 @@ export const jsxJoin = (arr: JSXElement[], sep: () => JSXElement) => {
   )
 }
 
-export const toFixedOrLess = (n: number, dp: number) => {
-  const str = n.toFixed(dp).replace(/(\.)?0+$/g, '')
-  return str
+export const toFixedOrLess = (n: number, dp: number): string => {
+  return (Math.round(n * Math.pow(10, dp)) / Math.pow(10, dp)).toString()
+}
+
+export const inspect = <T>(t: T, msg?: string): T => {
+  if (msg) console.log(msg, t)
+  else console.log(t)
+  return t
 }

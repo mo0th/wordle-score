@@ -1,5 +1,6 @@
 import { Link, Navigate, Route, Router, Routes } from 'solid-app-router'
 import { Component } from 'solid-js'
+import Confetti from './components/confetti/Confetti'
 import Container from './components/Container'
 import Footer from './components/Footer'
 import { StuffAndSettings } from './components/StuffAndSettings'
@@ -11,6 +12,7 @@ const App: Component = () => {
   return (
     <Router>
       <SyncIndicator />
+      <Confetti />
       <h1
         class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2"
         style="overflow-wrap: break-word"

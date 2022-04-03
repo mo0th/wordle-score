@@ -1,3 +1,4 @@
+const { fontFamily } = require('tailwindcss/defaultTheme')
 const plugin = require('tailwindcss/plugin')
 
 module.exports = {
@@ -13,6 +14,9 @@ module.exports = {
           4: 'var(--base-4)',
           5: 'var(--base-5)',
         },
+      },
+      fontFamily: {
+        poppins: ["'Poppins'", ...fontFamily.sans],
       },
     },
   },

@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { VercelApiHandler } from '@vercel/node'
+import { utcToZonedTime } from 'date-fns-tz'
 import * as types from 'pheno'
 
 export const SECRET = process.env.SECRET
@@ -85,4 +86,33 @@ export const setScore = async (body: unknown): Promise<boolean> => {
   if (error) return false
 
   return true
+}
+
+export const isBday = async (name: string): Promise<boolean> => {
+  const { data } = await supabase
+    .from<Singleton>('singletons')
+    .select('*')
+    .eq('slug', '~wordle-scores-bdays')
+    .maybeSingle()
+
+  if (!data) return false
+
+  const [_, dateStr] =
+    data.content
+      .trim()
+      .split('\n')
+      .map(line => {
+        const parts = line.split(',')
+        const dateStr = parts.pop()
+        return [parts.join(','), dateStr]
+      })
+      .find(([n]) => n === name) || []
+
+  if (!dateStr) return false
+
+  const [_d, _m] = dateStr.split('/')
+  const d = parseInt(_d)
+  const m = parseInt(_m)
+  const dateInAus = utcToZonedTime(new Date(), 'Australia/Sydney')
+  return dateInAus.getDate() === d && dateInAus.getMonth() === m - 1
 }
