@@ -73,7 +73,7 @@ const DayHistoryItem: Component<{
         />
         <Show when={showSaveButton()}>
           <Button block onClick={() => setDayScore(props.day, currentScore())}>
-            Save Change ({props.dayScore} &Rightarrow; {currentScore()})
+            Save Change ({props.dayScore} &rightarrow; {currentScore()})
           </Button>
         </Show>
       </Show>
