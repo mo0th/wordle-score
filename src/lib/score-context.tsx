@@ -65,6 +65,8 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
         return value
       }
 
+      if (!navigator.onLine) return value
+
       try {
         if (!canSync) return {}
         const response = await fetch('/api/get-scores', {
@@ -102,6 +104,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       if (!canSync) return
       if (!currentScores) return
       if (dequal(currentScores[syncDetails.user], score)) return
+      if (!navigator.onLine) return
 
       setSyncStatus('loading')
       try {
