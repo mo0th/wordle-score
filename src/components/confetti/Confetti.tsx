@@ -22,7 +22,7 @@ const Confetti: Component = () => {
     ReturnType<typeof syncDetails>
   >(syncDetails, async details => {
     try {
-      const response = await fetch('/api/bday', {
+      const { ok } = await fetch('/api/bday', {
         method: 'POST',
         body: JSON.stringify({
           user: details.user,
@@ -32,7 +32,8 @@ const Confetti: Component = () => {
           'Content-Type': 'application/json',
         },
       })
-      return response.ok
+      if (ok) Particles.preload()
+      return ok
     } catch (err) {
       return false
     }
