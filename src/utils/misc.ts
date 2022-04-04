@@ -62,3 +62,5 @@ export const inspect = <T>(t: T, msg?: string): T => {
   else console.log(t)
   return t
 }
+
+export const toggle = (t: boolean) => !t

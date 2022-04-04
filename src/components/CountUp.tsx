@@ -7,6 +7,7 @@ import {
   on,
   onCleanup,
 } from 'solid-js'
+import { useSettings } from '../lib/settings'
 import { toFixedOrLess } from '../utils/misc'
 
 interface CountUpProps {
@@ -44,30 +45,41 @@ const CountUp = (_props: CountUpProps): JSXElement => {
     },
     _props
   )
+  const [settings] = useSettings()
 
   // yoinked from https://github.com/solidjs-community/solid-primitives/blob/main/packages/tween/src/index.ts
   // since using the primitive directly didn't work
   const target = () => props.to
   const [start, setStart] = createSignal(document.timeline.currentTime)
-  const [current, setCurrent] = createSignal(0)
-  createEffect(
-    on([target], () => setStart(document.timeline.currentTime), {
-      defer: true,
-    })
+  const [current, setCurrent] = createSignal(
+    settings.animatedCounts ? 0 : props.to
   )
-  createEffect(
-    on([start, current], () => {
-      const cancelId = requestAnimationFrame(t => {
-        const elapsed = t - (start() || 0) + 1
-        setCurrent(c =>
-          elapsed < props.duration
-            ? (target() - c) * ease2(elapsed / props.duration) + c
-            : target()
-        )
+
+  createEffect(() => {
+    if (!settings.animatedCounts) {
+      setCurrent(target())
+      return
+    }
+
+    createEffect(
+      on([target], () => setStart(document.timeline.currentTime), {
+        defer: true,
       })
-      onCleanup(() => cancelAnimationFrame(cancelId))
-    })
-  )
+    )
+    createEffect(
+      on([start, current], () => {
+        const cancelId = requestAnimationFrame(t => {
+          const elapsed = t - (start() || 0) + 1
+          setCurrent(c =>
+            elapsed < props.duration
+              ? (target() - c) * ease2(elapsed / props.duration) + c
+              : target()
+          )
+        })
+        onCleanup(() => cancelAnimationFrame(cancelId))
+      })
+    )
+  })
 
   return props.children(current)
 }

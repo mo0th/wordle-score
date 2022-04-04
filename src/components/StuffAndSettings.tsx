@@ -1,24 +1,44 @@
 import { dequal } from 'dequal'
-import { Component, Show } from 'solid-js'
-import { useDev } from '../lib/dev-context'
+import { Component, JSXElement, Show } from 'solid-js'
 import { useScoreContext } from '../lib/score-context'
-import { useTheme } from '../lib/theme'
+import { useSettings } from '../lib/settings'
+import { toggle } from '../utils/misc'
 import Button from './Button'
 import Collapse from './Collapse'
 
 export const StuffAndSettings: Component = () => {
-  const [theme, toggleTheme] = useTheme()
-  const [isDev, setIsDev] = useDev()
   const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
+  const [settings, setSettings] = useSettings()
 
   return (
     <Collapse summary="Stuff and Settings">
-      <div class="flex justify-between items-center">
-        <p>Theme</p>
-        <Button onClick={() => toggleTheme()}>
-          Switch to {theme() === 'dark' ? 'light' : 'dark'}
-        </Button>
-      </div>
+      <SettingsToggle
+        label="Theme"
+        onToggle={() =>
+          setSettings('theme', t => (t === 'dark' ? 'light' : 'dark'))
+        }
+        value={settings.theme === 'dark'}
+        onChild="Dark"
+        offChild="Light"
+      />
+
+      <SettingsToggle
+        label="Animated Numbers"
+        value={settings.animatedCounts}
+        onToggle={() => setSettings('animatedCounts', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
+      <SettingsToggle
+        label="Sync Indicators"
+        value={settings.showSyncIndicators}
+        onToggle={() => setSettings('showSyncIndicators', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
+      <hr class="dark:border-gray-600 border-gray-300" />
 
       <form
         class="space-y-4"
@@ -71,16 +91,36 @@ export const StuffAndSettings: Component = () => {
       </form>
 
       <div class="space-y-4">
-        <div class="flex justify-between items-center">
-          <p>Dev Stuff</p>
-          <Button onClick={() => setIsDev(p => !p)}>
-            {isDev() ? 'Disable' : 'Enable'}
-          </Button>
-        </div>
-        <Show when={isDev()}>
+        <SettingsToggle
+          label="Dev Stuff"
+          value={settings.devStuff}
+          onToggle={() => setSettings('devStuff', toggle)}
+          onChild="Disable"
+          offChild="Enable"
+        />
+        <Show when={settings.devStuff}>
           <p class="text-sm">Some stuff might be broken so be careful!</p>
         </Show>
       </div>
     </Collapse>
+  )
+}
+
+const SettingsToggle: Component<{
+  value: boolean
+  onToggle: () => void
+  label: string
+  onChild: JSXElement
+  offChild: JSXElement
+}> = props => {
+  return (
+    <div class="flex justify-between items-center">
+      <p>{props.label}</p>
+      <Button onClick={() => props.onToggle()}>
+        <Show when={props.value} fallback={props.offChild}>
+          {props.onChild}
+        </Show>
+      </Button>
+    </div>
   )
 }

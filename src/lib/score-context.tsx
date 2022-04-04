@@ -16,6 +16,7 @@ import { AccessorRecord, AllScores, PersonScore } from '../types'
 import { debounce } from '../utils/misc'
 import { useLocalStorage } from '../utils/use-local-storage'
 import { ScoreAccessors, ScoreSetters, useScore } from './score-calc'
+import * as types from 'pheno'
 
 export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
 export type SyncDetails = {
@@ -42,7 +43,7 @@ const ScoreContext = createContext<ScoreContextValue | null>(null)
 let lastFetchedAt: number | null = null
 
 export type ScoreProviderProps = {
-  focusRevalidate: boolean
+  focusRevalidate?: boolean
 }
 export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   const props = mergeProps({ focusRevalidate: true }, _props)

@@ -7,23 +7,27 @@ import { RefreshIcon } from './components/icons'
 import { StuffAndSettings } from './components/StuffAndSettings'
 import SyncIndicator from './components/SyncIndicator'
 import { useScoreContext } from './lib/score-context'
+import { useSettings } from './lib/settings'
 import Home from './pages/Home'
 import Scores from './pages/Scores'
 
 const App: Component = () => {
   const [{ allScores }] = useScoreContext()
+  const [settings] = useSettings()
   return (
     <Router>
       <SyncIndicator />
       <Confetti />
-      <div
-        class="fixed left-4 top-4 transition-transform"
-        style={{
-          transform: `translateY(${allScores.loading ? 0 : '-3rem'})`,
-        }}
-      >
-        <RefreshIcon class="animate-spin w-6 h-6 opacity-75" />
-      </div>
+      <Show when={settings.showSyncIndicators}>
+        <div
+          class="fixed left-4 top-4 transition-transform"
+          style={{
+            transform: `translateY(${allScores.loading ? 0 : '-3rem'})`,
+          }}
+        >
+          <RefreshIcon class="animate-spin w-6 h-6 opacity-75" />
+        </div>
+      </Show>
       <h1
         class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2"
         style="overflow-wrap: break-word"

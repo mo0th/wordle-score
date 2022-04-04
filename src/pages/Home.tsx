@@ -18,6 +18,7 @@ import SecondaryScoreDetails from '../components/SecondaryScoreDetails'
 import { personScoreToRenderData } from '../lib/score-calc'
 import { useScoreContext } from '../lib/score-context'
 import { getCurrentDayOffset } from '../lib/wordle-stuff'
+import { toggle as _toggle } from '../utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 
@@ -77,7 +78,7 @@ const ScoreHistory: Component = () => {
   })
 
   const toggle = () => {
-    setShowAll(s => !s)
+    setShowAll(_toggle)
   }
 
   createEffect(() => {
@@ -110,7 +111,7 @@ const ScoreHistory: Component = () => {
             onClick={toggle}
             block
             classList={{
-              'sticky bottom-4': showAll(),
+              'sticky bottom-6': showAll(),
             }}
           >
             {showAll()
@@ -166,7 +167,7 @@ const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
           max={getCurrentDayOffset() - 1}
         />
         <Button onClick={handleAdd} class="flex-shrink-0">
-          Add Day
+          Add / find day
         </Button>
       </div>
     </div>

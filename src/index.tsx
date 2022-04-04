@@ -3,18 +3,19 @@ import { render } from 'solid-js/web'
 import App from './App'
 import DefaultErrorBoundary from './components/DefaultErrorBoundary'
 
-import './index.css'
-import { DevProvider } from './lib/dev-context'
 import { ScoreProvider } from './lib/score-context'
+import { SettingsProvider } from './lib/settings'
+
+import './index.css'
 
 render(
   () => (
     <DefaultErrorBoundary>
-      <DevProvider>
+      <SettingsProvider>
         <ScoreProvider>
           <App />
         </ScoreProvider>
-      </DevProvider>
+      </SettingsProvider>
     </DefaultErrorBoundary>
   ),
   document.getElementById('root') as HTMLElement

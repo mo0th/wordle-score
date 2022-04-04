@@ -1,14 +1,14 @@
-import { dequal } from 'dequal'
 import { Link, Navigate } from 'solid-app-router'
 import { onMount } from 'solid-js'
 import { Component, createMemo, For, Show } from 'solid-js'
 import CountUp from '../components/CountUp'
 import SecondaryScoreDetails from '../components/SecondaryScoreDetails'
-import { useDev } from '../lib/dev-context'
 import { personScoreToRenderData, ScoreRenderData } from '../lib/score-calc'
 import { useScoreContext } from '../lib/score-context'
+import { useSettings } from '../lib/settings'
 import { PersonScore } from '../types'
-import { useLocalStorage } from '../utils/use-local-storage'
+import { toggle } from '../utils/misc'
+import { useLocalStorageStore } from '../utils/use-local-storage'
 
 const scoreLoaderClassCommon =
   'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
@@ -28,10 +28,10 @@ const sortFields: Record<keyof ScoreRenderData, string> = {
 }
 
 const Scores: Component = () => {
+  const [settings] = useSettings()
   const [{ canSync, allScores, syncDetails }, { refetchAllScores }] =
     useScoreContext()
-  const [isDev] = useDev()
-  const [sortOptions, setSortOptions] = useLocalStorage<{
+  const [sortOptions, setSortOptions] = useLocalStorageStore<{
     asc: boolean
     by: keyof typeof sortFields
   }>('mooth:wordle-score-sorting', { asc: true, by: 'scorePerDay' })
@@ -45,15 +45,14 @@ const Scores: Component = () => {
     )
   )
   const entries = createMemo(() => {
-    const opts = sortOptions()
-
+    const field = sortOptions.by
     const sorted = unsortedEntries().sort(([nameA, a], [nameB, b]) => {
-      const diff = (a[opts.by] - b[opts.by]) * (opts.asc ? 1 : -1)
+      const diff = (a[field] - b[field]) * (sortOptions.asc ? 1 : -1)
       if (diff !== 0) return diff
       return nameA.toLowerCase().localeCompare(nameB.toLowerCase())
     })
 
-    if (!isDev()) {
+    if (!settings.devStuff) {
       return sorted.filter(
         ([name]) => !name.endsWith('-testing') || name === syncDetails().user
       )
@@ -101,19 +100,19 @@ const Scores: Component = () => {
                   const fields = Object.keys(
                     sortFields
                   ) as (keyof typeof sortFields)[]
-                  const currIndex = fields.indexOf(sortOptions().by)
+                  const currIndex = fields.indexOf(sortOptions.by)
                   const nextIndex = (currIndex + 1) % fields.length
-                  setSortOptions(o => ({ ...o, by: fields[nextIndex] }))
+                  setSortOptions('by', fields[nextIndex])
                 }}
               >
-                {sortFields[sortOptions().by]}
+                {sortFields[sortOptions.by]}
               </button>
               {' • '}Order{' '}
               <button
                 class="underline focus-outline rounded px-1"
-                onClick={() => setSortOptions(o => ({ ...o, asc: !o.asc }))}
+                onClick={() => setSortOptions('asc', toggle)}
               >
-                {sortOptions().asc ? 'ascending' : 'descending'}
+                {sortOptions.asc ? 'ascending' : 'descending'}
               </button>
             </div>
           </Show>

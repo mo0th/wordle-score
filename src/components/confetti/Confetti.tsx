@@ -7,6 +7,7 @@ import {
   Show,
 } from 'solid-js'
 import { useScoreContext } from '../../lib/score-context'
+import { toggle } from '../../utils/misc'
 import Button from '../Button'
 import Container from '../Container'
 
@@ -67,7 +68,7 @@ const Confetti: Component = () => {
             HAPPY BIRTHDAY
           </p>
           <div class="flex space-x-4">
-            <Button onClick={() => setShouldConfetti(p => !p)}>
+            <Button onClick={() => setShouldConfetti(toggle)}>
               {shouldConfetti() ? '🎉' : '😟'}
             </Button>
             <Button
