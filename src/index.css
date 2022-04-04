@@ -2,6 +2,10 @@
 @tailwind base;
 @tailwind components;
 
+* {
+  scroll-behaviour: smooth;
+}
+
 h1,
 h2 {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
