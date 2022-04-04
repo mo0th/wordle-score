@@ -1,5 +1,5 @@
 import { Component } from 'solid-js'
-import { cx } from '../utils/misc'
+import { cx } from '~/utils/misc'
 
 interface ContainerProps {
   class?: string

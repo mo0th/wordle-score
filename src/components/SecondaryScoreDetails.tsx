@@ -1,6 +1,6 @@
 import { Component } from 'solid-js'
-import { ScoreRenderData } from '../lib/score-calc'
-import { cx, plural, toFixedOrLess } from '../utils/misc'
+import { ScoreRenderData } from '~/lib/score-calc'
+import { cx, plural, toFixedOrLess } from '~/utils/misc'
 import CountUp from './CountUp'
 
 interface SecondaryScoreDetailsProps {

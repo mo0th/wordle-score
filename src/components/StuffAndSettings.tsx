@@ -1,8 +1,8 @@
 import { dequal } from 'dequal'
 import { Component, JSXElement, Show } from 'solid-js'
-import { useScoreContext } from '../lib/score-context'
-import { useSettings } from '../lib/settings'
-import { toggle } from '../utils/misc'
+import { useScoreContext } from '~/lib/score-context'
+import { useSettings } from '~/lib/settings'
+import { toggle } from '~/utils/misc'
 import Button from './Button'
 import Collapse from './Collapse'
 

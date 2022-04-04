@@ -5,8 +5,8 @@ import {
   onCleanup,
   Show,
 } from 'solid-js'
-import { useScoreContext } from '../lib/score-context'
-import { useSettings } from '../lib/settings'
+import { useScoreContext } from '~/lib/score-context'
+import { useSettings } from '~/lib/settings'
 
 const INDICATOR_TEXT = {
   idle: '',
@@ -15,7 +15,7 @@ const INDICATOR_TEXT = {
   success: '✅ Synced changes',
 } as const
 
-const SyncIndicator: Component = () => {
+const ScorePushIndicator: Component = () => {
   const [{ syncStatus }] = useScoreContext()
   const [showIndicator, setShowIndicator] = createSignal(false)
   const [settings] = useSettings()
@@ -73,4 +73,4 @@ const SyncIndicator: Component = () => {
   )
 }
 
-export default SyncIndicator
+export default ScorePushIndicator

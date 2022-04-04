@@ -6,10 +6,10 @@ import {
   lazy,
   Show,
 } from 'solid-js'
-import { useScoreContext } from '../../lib/score-context'
-import { toggle } from '../../utils/misc'
-import Button from '../Button'
-import Container from '../Container'
+import { useScoreContext } from '~/lib/score-context'
+import { toggle } from '~/utils/misc'
+import Button from '~/components/Button'
+import Container from '~/components/Container'
 
 const Particles = lazy(() => import('./Particles'))
 

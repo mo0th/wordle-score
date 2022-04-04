@@ -1,7 +1,7 @@
 import * as types from 'pheno'
 import { createContext, Component, useContext, createEffect } from 'solid-js'
 import { SetStoreFunction, Store } from 'solid-js/store'
-import { useLocalStorageStore } from '../utils/use-local-storage'
+import { useLocalStorageStore } from '~/utils/use-local-storage'
 import { Theme, updateThemeInDocument } from './theme'
 
 export type Settings = {

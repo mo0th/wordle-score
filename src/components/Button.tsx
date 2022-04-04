@@ -1,5 +1,5 @@
 import { Component, ComponentProps, splitProps, mergeProps } from 'solid-js'
-import { cx } from '../utils/misc'
+import { cx } from '~/utils/misc'
 
 const Button: Component<
   ComponentProps<'button'> & { block?: boolean }
@@ -12,7 +12,8 @@ const Button: Component<
   return (
     <button
       class={cx(
-        'px-2 py-1 bg-gray-300 dark:bg-gray-600 rounded hover:bg-gray-400 dark:hover:bg-gray-500 transition-colors focus-outline',
+        'px-2 py-1 rounded transition-colors focus-outline',
+        'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500',
         local.class
       )}
       classList={{

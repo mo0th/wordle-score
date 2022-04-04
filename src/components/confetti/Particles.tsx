@@ -1,6 +1,6 @@
 import SParticles from 'solid-particles'
 import { Component } from 'solid-js'
-import { cx } from '../../utils/misc'
+import { cx } from '~/utils/misc'
 import { loadConfettiPreset } from 'tsparticles-preset-confetti'
 
 const Particles: Component<{ id?: string; class?: string }> = props => {

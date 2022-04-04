@@ -1,7 +1,7 @@
 import { Component } from 'solid-js'
-import { scores } from '../lib/score-calc'
-import { useScoreContext } from '../lib/score-context'
-import { getCurrentDayOffset } from '../lib/wordle-stuff'
+import { scores } from '~/lib/score-calc'
+import { useScoreContext } from '~/lib/score-context'
+import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import Button from './Button'
 
 const ReadScoreFromClipboard: Component = () => {

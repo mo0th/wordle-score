@@ -12,9 +12,9 @@ import {
   onCleanup,
   mergeProps,
 } from 'solid-js'
-import { AccessorRecord, AllScores, PersonScore } from '../types'
-import { debounce } from '../utils/misc'
-import { useLocalStorage } from '../utils/use-local-storage'
+import { AccessorRecord, AllScores, PersonScore } from '~/types'
+import { debounce } from '~/utils/misc'
+import { useLocalStorage } from '~/utils/use-local-storage'
 import { ScoreAccessors, ScoreSetters, useScore } from './score-calc'
 import * as types from 'pheno'
 

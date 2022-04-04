@@ -7,18 +7,18 @@ import {
   For,
   Show,
 } from 'solid-js'
-import Button from '../components/Button'
-import CountUp from '../components/CountUp'
-import DayControl from '../components/DayControl'
+import Button from '~/components/Button'
+import CountUp from '~/components/CountUp'
+import DayControl from '~/components/DayControl'
 import DayHistoryItem, {
   getDayHistoryItemId,
-} from '../components/DayHistoryItem'
-import ReadScoreFromClipboard from '../components/ReadScoreFromClipboard'
-import SecondaryScoreDetails from '../components/SecondaryScoreDetails'
-import { personScoreToRenderData } from '../lib/score-calc'
-import { useScoreContext } from '../lib/score-context'
-import { getCurrentDayOffset } from '../lib/wordle-stuff'
-import { toggle as _toggle } from '../utils/misc'
+} from '~/components/DayHistoryItem'
+import ReadScoreFromClipboard from '~/components/ReadScoreFromClipboard'
+import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
+import { personScoreToRenderData } from '~/lib/score-calc'
+import { useScoreContext } from '~/lib/score-context'
+import { getCurrentDayOffset } from '~/lib/wordle-stuff'
+import { toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 

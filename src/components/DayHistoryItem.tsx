@@ -6,9 +6,9 @@ import {
   on,
   Show,
 } from 'solid-js'
-import { useScoreContext } from '../lib/score-context'
-import { getCurrentDayOffset } from '../lib/wordle-stuff'
-import { SingleDayScore } from '../types'
+import { useScoreContext } from '~/lib/score-context'
+import { getCurrentDayOffset } from '~/lib/wordle-stuff'
+import { SingleDayScore } from '~/types'
 import Button from './Button'
 import DayControl from './DayControl'
 

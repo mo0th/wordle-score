@@ -7,8 +7,8 @@ import {
   on,
   onCleanup,
 } from 'solid-js'
-import { useSettings } from '../lib/settings'
-import { toFixedOrLess } from '../utils/misc'
+import { useSettings } from '~/lib/settings'
+import { toFixedOrLess } from '~/utils/misc'
 
 interface CountUpProps {
   start?: number

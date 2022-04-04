@@ -1,6 +1,6 @@
 import { Component, For, mergeProps, Show } from 'solid-js'
-import { scores } from '../lib/score-calc'
-import { SingleDayScore } from '../types'
+import { scores } from '~/lib/score-calc'
+import { SingleDayScore } from '~/types'
 
 export const getInputNameForDay = (day: number) => `day-${day}-score`
 

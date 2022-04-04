@@ -5,9 +5,9 @@ import {
   ScoreRecord,
   ScoreRecordTuple,
   SingleDayScore,
-} from '../types'
-import { minmax } from '../utils/misc'
-import { useLocalStorage } from '../utils/use-local-storage'
+} from '~/types'
+import { minmax } from '~/utils/misc'
+import { useLocalStorage } from '~/utils/use-local-storage'
 import { getCurrentDayOffset } from './wordle-stuff'
 
 export type ScoreAccessors = AccessorRecord<{
