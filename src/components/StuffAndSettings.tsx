@@ -38,6 +38,19 @@ export const StuffAndSettings: Component = () => {
         offChild="Off"
       />
 
+      <div class="space-y-4">
+        <SettingsToggle
+          label="Dev Stuff"
+          value={settings.devStuff}
+          onToggle={() => setSettings('devStuff', toggle)}
+          onChild="Disable"
+          offChild="Enable"
+        />
+        <Show when={settings.devStuff}>
+          <p class="text-sm">Some stuff might be broken so be careful!</p>
+        </Show>
+      </div>
+
       <hr class="dark:border-gray-600 border-gray-300" />
 
       <form
@@ -89,19 +102,6 @@ export const StuffAndSettings: Component = () => {
           Save Sync Details
         </Button>
       </form>
-
-      <div class="space-y-4">
-        <SettingsToggle
-          label="Dev Stuff"
-          value={settings.devStuff}
-          onToggle={() => setSettings('devStuff', toggle)}
-          onChild="Disable"
-          offChild="Enable"
-        />
-        <Show when={settings.devStuff}>
-          <p class="text-sm">Some stuff might be broken so be careful!</p>
-        </Show>
-      </div>
     </Collapse>
   )
 }
