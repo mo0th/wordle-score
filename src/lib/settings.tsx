@@ -19,7 +19,7 @@ export const SettingsProvider: Component = props => {
     'mooth:wordle-score-settings',
     {
       animatedCounts: true,
-      showSyncIndicators: false,
+      showSyncIndicators: true,
       devStuff: false,
       theme: 'dark',
     },
