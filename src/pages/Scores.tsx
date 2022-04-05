@@ -20,7 +20,7 @@ const ScoreLoader: Component = () => (
   </div>
 )
 
-const sortFields: Record<keyof ScoreRenderData, string> = {
+const sortFields: Record<Exclude<keyof ScoreRenderData, 'record'>, string> = {
   daysPlayed: 'Days Played',
   score: 'Score',
   scorePerDay: 'Average Score',
@@ -118,9 +118,14 @@ const Scores: Component = () => {
           </Show>
         </div>
 
-        <Link class="underline block focus-outline rounded px-2" href="/">
-          Go Home
-        </Link>
+        <div>
+          <Link
+            class="underline block focus-outline rounded px-2 mx-auto"
+            href="/"
+          >
+            Go Home
+          </Link>
+        </div>
       </div>
     </Show>
   )
