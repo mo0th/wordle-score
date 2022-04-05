@@ -123,19 +123,19 @@ const ScoreHistory: Component = () => {
         <AddOrFindDay
           onAdd={day => {
             if (day > getCurrentDayOffset()) return
-            if (record()[day]) {
-              const id = getDayHistoryItemId(day)
-              let el = document.getElementById(id)
-              if (!el) {
-                setShowAll(true)
-                el = document.getElementById(id)
-              }
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth' })
-              }
-              return
+            if (!record()[day]) {
+              setDayScore(day, 'X')
             }
-            setDayScore(day, 'X')
+            const id = getDayHistoryItemId(day)
+            let el = document.getElementById(id)
+            if (!el) {
+              setShowAll(true)
+              el = document.getElementById(id)
+            }
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' })
+            }
+            return
           }}
         />
       </div>
@@ -146,14 +146,16 @@ const ScoreHistory: Component = () => {
 const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
   let input: HTMLInputElement | undefined
 
-  const handleAdd = () => {
-    const day = input?.valueAsNumber
-    if (!day || typeof day !== 'number' || Number.isNaN(day)) return
-    props.onAdd?.(day)
-  }
-
   return (
-    <div class="space-y-4 rounded bg-gray-200 dark:bg-gray-700 p-4">
+    <form
+      onSubmit={event => {
+        event.preventDefault()
+        const day = input?.valueAsNumber
+        if (!day || typeof day !== 'number' || Number.isNaN(day)) return
+        props.onAdd?.(day)
+      }}
+      class="space-y-4 rounded bg-gray-200 dark:bg-gray-700 p-4"
+    >
       <label for="day-to-add">Add / find an older day</label>
       <div class="flex items-stretch space-x-4">
         <input
@@ -166,10 +168,10 @@ const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
           attr:value={getCurrentDayOffset() - 1}
           max={getCurrentDayOffset() - 1}
         />
-        <Button onClick={handleAdd} class="flex-shrink-0">
+        <Button type="submit" class="flex-shrink-0">
           Add / find day
         </Button>
       </div>
-    </div>
+    </form>
   )
 }
