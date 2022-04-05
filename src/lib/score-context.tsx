@@ -27,6 +27,7 @@ import {
   ScoreSetters,
 } from './score-calc'
 import { getCurrentDayOffset } from './wordle-stuff'
+import { useSettings } from './settings'
 
 export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
 export type SyncDetails = {
@@ -59,6 +60,7 @@ export type ScoreProviderProps = {
 }
 export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   const props = mergeProps({ focusRevalidate: true }, _props)
+  const [settings] = useSettings()
   const [syncDetails, setSyncDetails] = useLocalStorage(
     'mooth:wordle-sync-details',
     { user: '', password: '' }
@@ -131,6 +133,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   }
 
   const canRestore = createMemo(() => {
+    if (settings.devStuff) return true
     const allServerData = allScores()
     if (!allServerData) return false
     const serverDataForUser = allServerData[syncDetails().user]
@@ -140,10 +143,11 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       Object.keys(serverDataForUser.record).length === 0
     )
       return false
+    if (dequal(serverDataForUser, { ...score(), record: record() }))
+      return false
     return true
   })
   const restoreFromSaved = () => {
-    if (!canRestore) return
     const allServerData = allScores()
     if (!allServerData) return
     const serverDataForUser = allServerData[syncDetails().user]
