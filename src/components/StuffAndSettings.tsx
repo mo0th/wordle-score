@@ -7,7 +7,8 @@ import Button from './Button'
 import Collapse from './Collapse'
 
 export const StuffAndSettings: Component = () => {
-  const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
+  const [{ syncDetails, canRestore }, { setSyncDetails, restoreFromSaved }] =
+    useScoreContext()
   const [settings, setSettings] = useSettings()
 
   return (
@@ -101,6 +102,11 @@ export const StuffAndSettings: Component = () => {
         <Button type="submit" block>
           Save Sync Details
         </Button>
+        <Show when={canRestore()}>
+          <Button type="button" block onClick={restoreFromSaved}>
+            Restore Saved Data
+          </Button>
+        </Show>
       </form>
     </Collapse>
   )

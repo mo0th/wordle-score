@@ -12,11 +12,21 @@ import {
   onCleanup,
   mergeProps,
 } from 'solid-js'
-import { AccessorRecord, AllScores, PersonScore } from '~/types'
-import { debounce } from '~/utils/misc'
+import {
+  AccessorRecord,
+  AllScores,
+  PersonScore,
+  ScoreRecord,
+  ScoreRecordTuple,
+} from '~/types'
+import { debounce, getHistoryDiffs } from '~/utils/misc'
 import { useLocalStorage } from '~/utils/use-local-storage'
-import { ScoreAccessors, ScoreSetters, useScore } from './score-calc'
-import * as types from 'pheno'
+import {
+  calculateCumulativeScores,
+  ScoreAccessors,
+  ScoreSetters,
+} from './score-calc'
+import { getCurrentDayOffset } from './wordle-stuff'
 
 export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
 export type SyncDetails = {
@@ -29,12 +39,14 @@ export type ScoreContextValue = [
       syncDetails: SyncDetails
       canSync: boolean
       syncStatus: SyncStatus
+      canRestore: boolean
     }> & {
       allScores: Resource<AllScores | undefined>
     },
   ScoreSetters & {
     setSyncDetails: Setter<SyncDetails>
     refetchAllScores: () => void
+    restoreFromSaved: () => void
   }
 ]
 
@@ -55,13 +67,12 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     const d = syncDetails()
     return Boolean(d.user) && Boolean(d.password)
   })
-  const password = createMemo(() => syncDetails().password)
   const [allScores, { refetch }] = createResource<
     AllScores,
-    readonly [string, boolean]
+    readonly [SyncDetails, boolean]
   >(
-    () => [password(), canSync()] as const,
-    async ([password, canSync], { value, refetching }) => {
+    () => [syncDetails(), canSync()] as const,
+    async ([{ password, user }, canSync], { value, refetching }) => {
       if (lastFetchedAt && Date.now() - lastFetchedAt < 10_000 && value) {
         return value
       }
@@ -73,6 +84,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
         const response = await fetch('/api/get-scores', {
           headers: {
             authorization: `Bearer ${password}`,
+            'x-user': user,
           },
         })
         if (!response.ok) throw new Error('Request not 2XX')
@@ -88,10 +100,62 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       }
     }
   )
-  const [
-    { record, score, recordArray },
-    { deleteDayScore, setDayScore, setTodayScore },
-  ] = useScore()
+  const [record, setRecord] = useLocalStorage<ScoreRecord>(
+    'mooth:wordle-score',
+    {}
+  )
+
+  const recordArray = createMemo(() =>
+    Object.entries(record())
+      .map(([k, v]) => [parseInt(k), v] as ScoreRecordTuple)
+      .filter(t => !Number.isNaN(t[0]))
+      .sort(([a], [b]) => a - b)
+  )
+  const score = createMemo(() => {
+    return calculateCumulativeScores(record())
+  })
+
+  const setDayScore: ScoreSetters['setDayScore'] = (day, score) => {
+    setRecord(record => ({ ...record, [day]: score }))
+  }
+
+  const setTodayScore: ScoreSetters['setTodayScore'] = score => {
+    setDayScore(getCurrentDayOffset(), score)
+  }
+
+  const deleteDayScore: ScoreSetters['deleteDayScore'] = day => {
+    setRecord(record => {
+      delete record[day]
+      return { ...record }
+    })
+  }
+
+  const canRestore = createMemo(() => {
+    const allServerData = allScores()
+    if (!allServerData) return false
+    const serverDataForUser = allServerData[syncDetails().user]
+    if (!serverDataForUser?.record) return false
+    if (
+      serverDataForUser.daysPlayed === 0 ||
+      Object.keys(serverDataForUser.record).length === 0
+    )
+      return false
+    return true
+  })
+  const restoreFromSaved = () => {
+    if (!canRestore) return
+    const allServerData = allScores()
+    if (!allServerData) return
+    const serverDataForUser = allServerData[syncDetails().user]
+    if (
+      serverDataForUser.record &&
+      confirm(
+        "Are you sure you want to restore from your saved data? This can't be undone."
+      )
+    ) {
+      setRecord(serverDataForUser.record)
+    }
+  }
 
   const [syncStatus, setSyncStatus] = createSignal<SyncStatus>('idle')
 
@@ -100,12 +164,27 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       canSync: boolean,
       syncDetails: SyncDetails,
       score: PersonScore,
-      currentScores: AllScores | undefined
+      currentScores: AllScores | undefined,
+      record: ScoreRecord
     ) => {
       if (!canSync) return
       if (!currentScores) return
-      if (dequal(currentScores[syncDetails.user], score)) return
+      const dataToSync = { ...score, record }
+      const current = currentScores[syncDetails.user]
+      console.log({ canSync, currentScores, d: dequal(current, dataToSync) })
+      if (dequal(current, dataToSync)) return
       if (!navigator.onLine) return
+
+      const diffs = getHistoryDiffs(current.record || {}, record)
+      if (diffs > 1) {
+        if (
+          !confirm(
+            `There are ${diffs} differences between your local data and your saved data. Are you sure you want to push changes?`
+          )
+        ) {
+          return
+        }
+      }
 
       setSyncStatus('loading')
       try {
@@ -117,7 +196,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
           },
           body: JSON.stringify({
             user: syncDetails.user,
-            data: score,
+            data: dataToSync,
           }),
         })
         const json = await response.json()
@@ -134,7 +213,9 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     500
   )
 
-  createEffect(() => sync(canSync(), syncDetails(), score(), allScores()))
+  createEffect(() =>
+    sync(canSync(), syncDetails(), score(), allScores(), record())
+  )
 
   createEffect(() => {
     if (props.focusRevalidate) {
@@ -157,6 +238,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       syncDetails,
       canSync,
       syncStatus,
+      canRestore,
     },
     {
       setDayScore,
@@ -164,6 +246,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       deleteDayScore,
       setSyncDetails,
       refetchAllScores: refetch,
+      restoreFromSaved,
     },
   ]
 

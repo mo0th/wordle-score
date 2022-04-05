@@ -31,13 +31,16 @@ type Singleton = {
   slug: string
   content: string
 }
-const ScoreSchema = types.objectWithOnlyTheseProperties({
+
+const _ScoreSchema = {
   score: types.number,
   daysPlayed: types.number,
   uncountedFails: types.number,
-})
+}
 
-export const getScores = async (): Promise<Scores> => {
+const ScoreSchema = types.objectWithProperties(_ScoreSchema)
+
+export const getScores = async (user?: string): Promise<Scores> => {
   const { data } = await supabase
     .from<Singleton>('singletons')
     .select('*')
@@ -49,20 +52,32 @@ export const getScores = async (): Promise<Scores> => {
   try {
     const parsed = JSON.parse(data.content)
     const filtered = Object.fromEntries(
-      Object.entries(parsed).filter(
-        ([key, value]) =>
-          typeof key === 'string' && types.isOfType(value, ScoreSchema)
-      )
+      Object.entries(parsed)
+        .filter(
+          ([key, value]) =>
+            typeof key === 'string' && types.isOfType(value, ScoreSchema)
+        )
+        .map(([key, value]: [string, any]) => {
+          const { record: _, ...valueWithoutRecord } = value
+          const newValue = user === key ? value : valueWithoutRecord
+          return [key, newValue]
+        })
     ) as Scores
     return filtered
   } catch (err) {
+    console.log(err)
     return {}
   }
 }
 
 const SetScoreSchema = types.objectWithOnlyTheseProperties({
   user: types.string,
-  data: ScoreSchema,
+  data: types.intersection(
+    ScoreSchema,
+    types.partialObjectWithProperties({
+      history: types.record(types.string, types.or(types.string, types.number)),
+    })
+  ),
 })
 export const setScore = async (body: unknown): Promise<boolean> => {
   if (!types.isOfType(body, SetScoreSchema)) {

@@ -1,4 +1,5 @@
 import { JSXElement, mapArray } from 'solid-js'
+import { ScoreRecord } from '~/types'
 
 export const minmax = <T>(arr: T[]): [min: T, max: T] => {
   if (arr.length < 1) {
@@ -17,6 +18,28 @@ export const minmax = <T>(arr: T[]): [min: T, max: T] => {
   }
 
   return [min, max]
+}
+
+export const getValidIntKeysAsNumbers = <T extends Record<string, unknown>>(
+  record: T
+): number[] => {
+  return Object.keys(record)
+    .map(str => parseInt(str))
+    .filter(n => Number.isInteger(n))
+}
+
+export const getHistoryDiffs = (a: ScoreRecord, b: ScoreRecord): number => {
+  const [minA, maxA] = minmax(getValidIntKeysAsNumbers(a))
+  const [minB, maxB] = minmax(getValidIntKeysAsNumbers(b))
+  const min = Math.min(minA, minB)
+  const max = Math.min(maxA, maxB)
+
+  let diffs = 0
+  for (let i = min; i <= max; ++i) {
+    if (a[i] !== b[i]) diffs++
+  }
+
+  return diffs
 }
 
 export const cx = (...arr: any[]): string =>

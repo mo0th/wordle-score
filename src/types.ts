@@ -7,6 +7,7 @@ export type PersonScore = {
   score: number
   daysPlayed: number
   uncountedFails: number
+  record?: ScoreRecord
 }
 export type AllScores = Record<string, PersonScore>
 
