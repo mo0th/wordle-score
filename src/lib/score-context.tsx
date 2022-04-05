@@ -171,11 +171,10 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       if (!currentScores) return
       const dataToSync = { ...score, record }
       const current = currentScores[syncDetails.user]
-      console.log({ canSync, currentScores, d: dequal(current, dataToSync) })
       if (dequal(current, dataToSync)) return
       if (!navigator.onLine) return
 
-      const diffs = getHistoryDiffs(current.record || {}, record)
+      const diffs = current.record ? getHistoryDiffs(current.record, record) : 0
       if (diffs > 1) {
         if (
           !confirm(
