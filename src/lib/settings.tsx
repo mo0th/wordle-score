@@ -9,6 +9,7 @@ export type Settings = {
   showSyncIndicators: boolean
   devStuff: boolean
   theme: Theme
+  plausible: boolean
 }
 
 const SettingsContext =
@@ -22,12 +23,21 @@ export const SettingsProvider: Component = props => {
       showSyncIndicators: true,
       devStuff: false,
       theme: 'dark',
+      plausible: true,
     },
     types.record(types.string, types.any) as types.TypeValidator<Settings>
   )
 
   createEffect(() => {
     updateThemeInDocument(settings.theme)
+  })
+
+  createEffect(() => {
+    if (settings.plausible) {
+      localStorage.setItem('plausible_ignore', 'true')
+    } else {
+      localStorage.removeItem('plausible_ignore')
+    }
   })
 
   return (

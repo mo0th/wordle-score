@@ -52,6 +52,16 @@ export const StuffAndSettings: Component = () => {
         </Show>
       </div>
 
+      <Show when={settings.devStuff}>
+        <SettingsToggle
+          label="Dev Stuff"
+          value={settings.plausible}
+          onToggle={() => setSettings('plausible', toggle)}
+          onChild="Disable"
+          offChild="Enable"
+        />
+      </Show>
+
       <hr class="dark:border-gray-600 border-gray-300" />
 
       <form
