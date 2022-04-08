@@ -54,11 +54,11 @@ export const StuffAndSettings: Component = () => {
 
       <Show when={settings.devStuff}>
         <SettingsToggle
-          label="Dev Stuff"
+          label="Plausible"
           value={settings.plausible}
           onToggle={() => setSettings('plausible', toggle)}
-          onChild="Disable"
-          offChild="Enable"
+          onChild="On"
+          offChild="Off"
         />
       </Show>
 
