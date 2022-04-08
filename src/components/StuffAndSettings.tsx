@@ -95,8 +95,6 @@ export const StuffAndSettings: Component = () => {
             class="form-input"
             name="password"
             id="sync-password"
-            // @ts-expect-error
-            attr:value={syncDetails().password}
           />
         </div>
         <Button type="submit" block>
