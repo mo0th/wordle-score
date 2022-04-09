@@ -31,8 +31,9 @@ h2 {
 
 .main-heading {
   --clr-from: black;
-  --clr-to: theme('colors.purple.700');
-  transition: background-position 500ms ease-in-out;
+  --clr-to: theme('colors.purple.600');
+  transition: background-position 1000ms ease-in-out;
+  transition-delay: 0s;
   color: transparent;
   background-clip: text;
   background-image: linear-gradient(
@@ -48,7 +49,7 @@ h2 {
 
 .dark .main-heading {
   --clr-from: white;
-  --clr-to: theme('colors.purple.300');
+  --clr-to: theme('colors.purple.400');
 }
 .main-heading:hover {
   background-position: top;
