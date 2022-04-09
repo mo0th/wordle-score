@@ -11,10 +11,10 @@ const DayControlButton: Component<{
 }> = _props => {
   const props = mergeProps({ variant: 'base' }, _props)
   return (
-    <span class="block aspect-w-1 aspect-h-1 w-full focus-within-outline">
+    <span class="block aspect-w-1 aspect-h-1 w-full focus-within-outline rounded">
       <button
         class={
-          'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer'
+          'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer hocus:border-purple-400 focus:outline-none rounded'
         }
         classList={{
           'bg-slate-800 hover:bg-black dark:hover:bg-white dark:bg-slate-200':
