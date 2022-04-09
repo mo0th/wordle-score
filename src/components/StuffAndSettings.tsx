@@ -39,6 +39,14 @@ export const StuffAndSettings: Component = () => {
         offChild="Off"
       />
 
+      <SettingsToggle
+        label="Coloured Scores"
+        value={settings.colorScores}
+        onToggle={() => setSettings('colorScores', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
       <div class="space-y-4">
         <SettingsToggle
           label="Dev Stuff"

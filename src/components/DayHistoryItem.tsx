@@ -6,6 +6,7 @@ import {
   on,
   Show,
 } from 'solid-js'
+import { scoreGoodnessTextColors } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import { SingleDayScore } from '~/types'
@@ -56,7 +57,18 @@ const DayHistoryItem: Component<{
       <p class="text-xl justify-between flex items-center">
         <span>
           {getDayLabel(props.day)} -{' '}
-          <span class="font-mono">{props.dayScore}</span>
+          <span
+            class="font-mono"
+            classList={{
+              [scoreGoodnessTextColors.good]: props.dayScore <= 2,
+              [scoreGoodnessTextColors.ok]:
+                props.dayScore > 2 && props.dayScore <= 5,
+              [scoreGoodnessTextColors.bad]:
+                props.dayScore > 5 || props.dayScore === 'X',
+            }}
+          >
+            {props.dayScore}
+          </span>
         </span>
         <Button onClick={() => (showEdit() ? close() : open())}>
           {showEdit() ? 'cancel' : 'edit'}

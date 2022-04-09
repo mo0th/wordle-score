@@ -10,6 +10,7 @@ export type Settings = {
   devStuff: boolean
   theme: Theme
   plausible: boolean
+  colorScores: boolean
 }
 
 const SettingsContext =
@@ -24,6 +25,7 @@ export const SettingsProvider: Component = props => {
       devStuff: false,
       theme: 'dark',
       plausible: true,
+      colorScores: true,
     },
     types.record(types.string, types.any) as types.TypeValidator<Settings>
   )

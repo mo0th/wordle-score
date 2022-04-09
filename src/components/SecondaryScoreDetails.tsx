@@ -1,5 +1,7 @@
 import { Component } from 'solid-js'
+import { scoreGoodnessTextColors } from '~/lib/colors'
 import { ScoreRenderData } from '~/lib/score-calc'
+import { useSettings } from '~/lib/settings'
 import { cx, plural, toFixedOrLess } from '~/utils/misc'
 import CountUp from './CountUp'
 
@@ -7,19 +9,16 @@ interface SecondaryScoreDetailsProps {
   record: ScoreRenderData
 }
 
-const avgScoreColors = {
-  good: 'text-green-700 dark:text-green-300',
-  ok: 'text-yellow-700 dark:text-yellow-300',
-  bad: 'text-red-700 dark:text-red-300',
-} as const
-
-const getAverageScoreRating = (avg: number): keyof typeof avgScoreColors => {
+const getAverageScoreRating = (
+  avg: number
+): keyof typeof scoreGoodnessTextColors => {
   if (0 <= avg && avg <= 2) return 'good'
   if (avg <= 4) return 'ok'
   return 'bad'
 }
 
 const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
+  const [settings] = useSettings()
   return (
     <p class="text-sm">
       <span>
@@ -35,7 +34,8 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
             <span
               class={cx(
                 'font-mono',
-                avgScoreColors[getAverageScoreRating(count())]
+                settings.colorScores &&
+                  scoreGoodnessTextColors[getAverageScoreRating(count())]
               )}
             >
               {toFixedOrLess(count(), 2)}
