@@ -60,7 +60,7 @@ const DayHistoryItem: Component<{
         <span>
           {getDayLabel(props.day)} -{' '}
           <span
-            class="font-mono"
+            class="font-mono transition-colors"
             classList={
               settings.colorScores
                 ? {
