@@ -17,11 +17,11 @@ const DayControlButton: Component<{
           'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer hocus:border-purple-400 focus:outline-none rounded'
         }
         classList={{
-          'bg-slate-800 hover:bg-black dark:hover:bg-white dark:bg-slate-200':
+          'bg-purple-800 hover:bg-purple-900 dark:hover:bg-purple-100 dark:bg-purple-50':
             props.selected,
           'hover:bg-red-200 dark:hover:bg-red-800 hover:text-red-900 dark:hover:text-red-100':
             props.variant === 'delete',
-          'hover:bg-slate-300 dark:hover:bg-slate-600 text-black dark:text-white':
+          'hover:bg-purple-200 dark:hover:bg-purple-700 text-black dark:text-white':
             !props.selected && props.variant === 'base',
           'text-white dark:text-black':
             props.selected && props.variant === 'base',
