@@ -102,6 +102,10 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       }
     }
   )
+  const forceRefetch = () => {
+    lastFetchedAt = 0
+    refetch()
+  }
   const [record, setRecord] = useLocalStorage<ScoreRecord>(
     'mooth:wordle-score',
     {}
@@ -204,7 +208,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
         })
         const json = await response.json()
         if (json.success === true) {
-          refetch()
+          forceRefetch()
           setSyncStatus('success')
         } else {
           setSyncStatus('failed')
