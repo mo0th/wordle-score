@@ -18,7 +18,7 @@ h2 {
 .form-textarea,
 .form-select,
 .form-multiselect {
-  @apply rounded dark:bg-slate-900 dark:text-white px-2 py-1 focus:ring-0 focus:border-purple-400;
+  @apply rounded border-2 dark:bg-slate-900 dark:text-white px-2 py-1 focus:ring-0 focus:border-purple-400;
 }
 .focus-outline,
 .form-input {

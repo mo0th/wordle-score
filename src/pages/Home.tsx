@@ -22,6 +22,8 @@ import { toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 
+const CURRENT_DAY_INPUT_ID = 'current-day-wrapper'
+
 const Home: Component = () => {
   const [{ score, record, canSync }, { setTodayScore }] = useScoreContext()
 
@@ -48,7 +50,7 @@ const Home: Component = () => {
       </div>
 
       <Show when={isTodayPending()}>
-        <div id="current-day-wrapper" class="space-y-6">
+        <div id={CURRENT_DAY_INPUT_ID} class="space-y-6 scroll-m-8">
           <h2 class="text-2xl">
             Add Today's Score <span class="text-base">(Day {today})</span>
           </h2>
@@ -122,11 +124,13 @@ const ScoreHistory: Component = () => {
 
         <AddOrFindDay
           onAdd={day => {
-            if (day > getCurrentDayOffset()) return
-            if (!record()[day]) {
+            const curr = getCurrentDayOffset()
+            if (day > curr) return
+            if (day !== curr && !record()[day]) {
               setDayScore(day, 'X')
             }
-            const id = getDayHistoryItemId(day)
+            const id =
+              day === curr ? CURRENT_DAY_INPUT_ID : getDayHistoryItemId(day)
             let el = document.getElementById(id)
             if (!el) {
               setShowAll(true)
@@ -165,8 +169,8 @@ const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
           id="day-to-add"
           min={1}
           // @ts-expect-error no types for solid's attr:__ yet
-          attr:value={getCurrentDayOffset() - 1}
-          max={getCurrentDayOffset() - 1}
+          attr:value={getCurrentDayOffset()}
+          max={getCurrentDayOffset()}
         />
         <Button type="submit" class="flex-shrink-0">
           Add / find day
