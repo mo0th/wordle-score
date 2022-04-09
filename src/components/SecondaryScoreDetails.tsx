@@ -33,7 +33,7 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
           {count => (
             <span
               class={cx(
-                'font-mono',
+                'font-mono transition-colors',
                 settings.colorScores &&
                   scoreGoodnessTextColors[getAverageScoreRating(count())]
               )}

@@ -8,6 +8,7 @@ import {
 } from 'solid-js'
 import { scoreGoodnessTextColors } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
+import { SettingsProvider, useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import { SingleDayScore } from '~/types'
 import Button from './Button'
@@ -30,6 +31,7 @@ const DayHistoryItem: Component<{
   const [, { setDayScore, deleteDayScore }] = useScoreContext()
   const [showEdit, setShowEdit] = createSignal(false)
   const [currentScore, setCurrentScore] = createSignal(props.dayScore)
+  const [settings] = useSettings()
 
   const open = () => {
     setShowEdit(true)
@@ -59,13 +61,17 @@ const DayHistoryItem: Component<{
           {getDayLabel(props.day)} -{' '}
           <span
             class="font-mono"
-            classList={{
-              [scoreGoodnessTextColors.good]: props.dayScore <= 2,
-              [scoreGoodnessTextColors.ok]:
-                props.dayScore > 2 && props.dayScore <= 5,
-              [scoreGoodnessTextColors.bad]:
-                props.dayScore > 5 || props.dayScore === 'X',
-            }}
+            classList={
+              settings.colorScores
+                ? {
+                    [scoreGoodnessTextColors.good]: props.dayScore <= 2,
+                    [scoreGoodnessTextColors.ok]:
+                      props.dayScore > 2 && props.dayScore <= 5,
+                    [scoreGoodnessTextColors.bad]:
+                      props.dayScore > 5 || props.dayScore === 'X',
+                  }
+                : {}
+            }
           >
             {props.dayScore}
           </span>
