@@ -1,4 +1,5 @@
 import { Component } from 'solid-js'
+import { HeartIcon } from './icons'
 
 const Footer: Component = () => {
   return (
@@ -9,8 +10,9 @@ const Footer: Component = () => {
         rel="noopener noreferrer"
         className="group inline-block px-2 hover:underline focus-outline rounded"
       >
-        Made with ❤ by{' '}
-        <span className="underline group-hover:no-underline">Soorria</span>
+        Made with{' '}
+        <HeartIcon class="w-5 h-5 inline-block align-middle fill-purple-500 text-purple-500" />{' '}
+        by <span className="underline group-hover:no-underline">Soorria</span>
       </a>
       <a
         href="https://github.com/mo0th/wordle-score"

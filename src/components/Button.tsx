@@ -13,7 +13,7 @@ const Button: Component<
     <button
       class={cx(
         'px-2 py-1 rounded transition-colors focus-outline',
-        'bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500',
+        'bg-gray-300 hover:bg-purple-200 active:bg-purple-300 dark:bg-gray-600 dark:hover:bg-purple-600 dark:active:bg-purple-700',
         local.class
       )}
       classList={{

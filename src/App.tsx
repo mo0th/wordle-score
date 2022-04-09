@@ -14,7 +14,7 @@ const App: Component = () => {
       <SyncIndicator />
       <Confetti />
       <h1
-        class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2"
+        class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2 main-heading"
         style="overflow-wrap: break-word"
       >
         <Link href="/">Wordle Score</Link>

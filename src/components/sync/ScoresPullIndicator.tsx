@@ -7,14 +7,14 @@ const ScoresPullIndicator: Component = () => {
   const [{ allScores }] = useScoreContext()
   const [settings] = useSettings()
   return (
-    <Show when={settings.showSyncIndicators}>
+    <Show when={settings.showSyncIndicators || true}>
       <div
         class="fixed left-4 top-4 transition-transform"
         style={{
           transform: `translateY(${allScores.loading ? 0 : '-3rem'})`,
         }}
       >
-        <RefreshIcon class="animate-spin w-6 h-6 opacity-75" />
+        <RefreshIcon class="animate-spin w-6 h-6 text-purple-400/75" />
       </div>
     </Show>
   )

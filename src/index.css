@@ -4,7 +4,7 @@
 
 * {
   scroll-behaviour: smooth;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
 h1,
@@ -18,15 +18,40 @@ h2 {
 .form-textarea,
 .form-select,
 .form-multiselect {
-  @apply rounded dark:bg-slate-900 dark:text-white px-2 py-1 focus:ring-0 focus:border-gray-500;
+  @apply rounded dark:bg-slate-900 dark:text-white px-2 py-1 focus:ring-0 focus:border-purple-400;
 }
 .focus-outline,
 .form-input {
-  @apply focus:outline-2 focus:outline focus:outline-slate-400 outline-offset-2;
+  @apply focus:outline-2 focus:outline focus:outline-purple-400 outline-offset-2;
 }
 
 .focus-within-outline {
-  @apply focus-within:outline-2 focus-within:outline outline-slate-400 outline-offset-2;
+  @apply focus-within:outline-2 focus-within:outline outline-purple-400 outline-offset-2;
+}
+
+.main-heading {
+  --clr-from: black;
+  --clr-to: theme('colors.purple.700');
+  transition: background-position 500ms ease-in-out;
+  color: transparent;
+  background-clip: text;
+  background-image: linear-gradient(
+    to top,
+    var(--clr-from) 0%,
+    var(--clr-from) 50%,
+    var(--clr-to) 50%,
+    var(--clr-to) 100%
+  );
+  background-size: 100% 400%;
+  background-position: bottom;
+}
+
+.dark .main-heading {
+  --clr-from: white;
+  --clr-to: theme('colors.purple.300');
+}
+.main-heading:hover {
+  background-position: top;
 }
 
 @tailwind utilities;
