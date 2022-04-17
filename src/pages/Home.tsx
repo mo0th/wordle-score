@@ -1,24 +1,15 @@
 import { Link } from 'solid-app-router'
-import {
-  Component,
-  createEffect,
-  createMemo,
-  createSignal,
-  For,
-  Show,
-} from 'solid-js'
+import { Component, createEffect, createMemo, createSignal, For, Show } from 'solid-js'
 import Button from '~/components/Button'
 import CountUp from '~/components/CountUp'
 import DayControl from '~/components/DayControl'
-import DayHistoryItem, {
-  getDayHistoryItemId,
-} from '~/components/DayHistoryItem'
+import DayHistoryItem, { getDayHistoryItemId } from '~/components/DayHistoryItem'
 import ReadScoreFromClipboard from '~/components/ReadScoreFromClipboard'
 import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
 import { personScoreToRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
-import { toggle as _toggle } from '~/utils/misc'
+import { nDigits, toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 
@@ -26,6 +17,13 @@ const CURRENT_DAY_INPUT_ID = 'current-day-wrapper'
 
 const Home: Component = () => {
   const [{ score, record, canSync }, { setTodayScore }] = useScoreContext()
+  const scoreClass = createMemo(() => {
+    const scoreLength = nDigits(score().score)
+
+    if (scoreLength < 7) return 'text-8xl'
+    if (scoreLength < 9) return 'text-7xl'
+    return 'text-6xl'
+  })
 
   const today = getCurrentDayOffset()
   const isTodayPending = createMemo(() => !Boolean(record()[today]))
@@ -35,7 +33,7 @@ const Home: Component = () => {
       <div class="text-center space-y-2">
         <Show when={score().daysPlayed > 0}>
           <h2 className="text-xl">Your score so far</h2>
-          <p class="text-8xl font-mono">
+          <p class={`font-mono ${scoreClass()}`}>
             <CountUp to={score().score} />
           </p>
           <SecondaryScoreDetails record={personScoreToRenderData(score())} />
@@ -103,9 +101,7 @@ const ScoreHistory: Component = () => {
             each={recordsToShow()}
             fallback={<p>Record a day's score to see your history here</p>}
           >
-            {([day, dayScore]) => (
-              <DayHistoryItem day={day} dayScore={dayScore} />
-            )}
+            {([day, dayScore]) => <DayHistoryItem day={day} dayScore={dayScore} />}
           </For>
         </div>
         <Show when={recordsLength() > NUM_RECORDS_BEFORE_HIDING}>
@@ -116,9 +112,7 @@ const ScoreHistory: Component = () => {
               'sticky bottom-6': showAll(),
             }}
           >
-            {showAll()
-              ? `Show Top ${NUM_RECORDS_BEFORE_HIDING}`
-              : `Show All (${recordsLength()})`}
+            {showAll() ? `Show Top ${NUM_RECORDS_BEFORE_HIDING}` : `Show All (${recordsLength()})`}
           </Button>
         </Show>
 
@@ -129,8 +123,7 @@ const ScoreHistory: Component = () => {
             if (day !== curr && !record()[day]) {
               setDayScore(day, 'X')
             }
-            const id =
-              day === curr ? CURRENT_DAY_INPUT_ID : getDayHistoryItemId(day)
+            const id = day === curr ? CURRENT_DAY_INPUT_ID : getDayHistoryItemId(day)
             let el = document.getElementById(id)
             if (!el) {
               setShowAll(true)

@@ -45,10 +45,7 @@ export const getHistoryDiffs = (a: ScoreRecord, b: ScoreRecord): number => {
 export const cx = (...arr: any[]): string =>
   arr.filter(el => Boolean(el) && typeof el === 'string').join(' ')
 
-export const debounce = <T extends CallableFunction>(
-  fn: T,
-  delay: number
-): T => {
+export const debounce = <T extends CallableFunction>(fn: T, delay: number): T => {
   let timer: ReturnType<typeof setTimeout>
 
   return ((...args: any[]) => {
@@ -87,3 +84,5 @@ export const inspect = <T>(t: T, msg?: string): T => {
 }
 
 export const toggle = (t: boolean) => !t
+
+export const nDigits = (n: number): number => n.toString().length

@@ -1,11 +1,4 @@
-import {
-  Component,
-  createEffect,
-  createMemo,
-  createSignal,
-  on,
-  Show,
-} from 'solid-js'
+import { Component, createEffect, createMemo, createSignal, on, Show } from 'solid-js'
 import { scoreGoodnessTextColors } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
 import { SettingsProvider, useSettings } from '~/lib/settings'
@@ -60,15 +53,14 @@ const DayHistoryItem: Component<{
         <span>
           {getDayLabel(props.day)} -{' '}
           <span
-            class="font-mono transition-colors"
+            class="font-mono transition-colors text-2xl"
             classList={
               settings.colorScores
                 ? {
-                    [scoreGoodnessTextColors.good]: props.dayScore <= 2,
-                    [scoreGoodnessTextColors.ok]:
-                      props.dayScore > 2 && props.dayScore <= 5,
-                    [scoreGoodnessTextColors.bad]:
-                      props.dayScore > 5 || props.dayScore === 'X',
+                    'score-great-glow': settings.glowyNumbers && props.dayScore === 1,
+                    [scoreGoodnessTextColors.good]: props.dayScore <= 3,
+                    [scoreGoodnessTextColors.ok]: props.dayScore > 3 && props.dayScore <= 5,
+                    [scoreGoodnessTextColors.bad]: props.dayScore > 5 || props.dayScore === 'X',
                   }
                 : {}
             }

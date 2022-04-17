@@ -10,8 +10,7 @@ import { PersonScore } from '~/types'
 import { toggle } from '~/utils/misc'
 import { useLocalStorageStore } from '~/utils/use-local-storage'
 
-const scoreLoaderClassCommon =
-  'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
+const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
 const ScoreLoader: Component = () => (
   <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
     <div class={`h-7 ${scoreLoaderClassCommon}`} style="width:100px" />
@@ -29,8 +28,7 @@ const sortFields: Record<Exclude<keyof ScoreRenderData, 'record'>, string> = {
 
 const Scores: Component = () => {
   const [settings] = useSettings()
-  const [{ canSync, allScores, syncDetails }, { refetchAllScores }] =
-    useScoreContext()
+  const [{ canSync, allScores, syncDetails }, { refetchAllScores }] = useScoreContext()
   const [sortOptions, setSortOptions] = useLocalStorageStore<{
     asc: boolean
     by: keyof typeof sortFields
@@ -40,8 +38,7 @@ const Scores: Component = () => {
 
   const unsortedEntries = createMemo(() =>
     (Object.entries(allScores() || {}) as [string, PersonScore][]).map(
-      ([name, record]) =>
-        [name, personScoreToRenderData(record)] as [string, ScoreRenderData]
+      ([name, record]) => [name, personScoreToRenderData(record)] as [string, ScoreRenderData]
     )
   )
   const entries = createMemo(() => {
@@ -53,9 +50,7 @@ const Scores: Component = () => {
     })
 
     if (!settings.devStuff) {
-      return sorted.filter(
-        ([name]) => !name.endsWith('-testing') || name === syncDetails().user
-      )
+      return sorted.filter(([name]) => !name.endsWith('-testing') || name === syncDetails().user)
     }
 
     return sorted
@@ -72,10 +67,7 @@ const Scores: Component = () => {
               <ScoreLoader />
             ))}
           >
-            <For
-              each={entries()}
-              fallback={<p>No one's added their scores yet :(</p>}
-            >
+            <For each={entries()} fallback={<p>No one's added their scores yet :(</p>}>
               {([user, record]) => {
                 return (
                   <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
@@ -97,9 +89,7 @@ const Scores: Component = () => {
               <button
                 class="underline focus-outline rounded px-1"
                 onClick={() => {
-                  const fields = Object.keys(
-                    sortFields
-                  ) as (keyof typeof sortFields)[]
+                  const fields = Object.keys(sortFields) as (keyof typeof sortFields)[]
                   const currIndex = fields.indexOf(sortOptions.by)
                   const nextIndex = (currIndex + 1) % fields.length
                   setSortOptions('by', fields[nextIndex])
@@ -119,10 +109,7 @@ const Scores: Component = () => {
         </div>
 
         <div>
-          <Link
-            class="underline block focus-outline rounded px-2 mx-auto"
-            href="/"
-          >
+          <Link class="underline block focus-outline rounded px-2 mx-auto" href="/">
             Go Home
           </Link>
         </div>

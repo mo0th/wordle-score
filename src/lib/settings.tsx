@@ -11,10 +11,10 @@ export type Settings = {
   theme: Theme
   plausible: boolean
   colorScores: boolean
+  glowyNumbers: boolean
 }
 
-const SettingsContext =
-  createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
+const SettingsContext = createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
 
 export const SettingsProvider: Component = props => {
   const [settings, setSettings] = useLocalStorageStore<Settings>(
@@ -26,6 +26,7 @@ export const SettingsProvider: Component = props => {
       theme: 'dark',
       plausible: true,
       colorScores: true,
+      glowyNumbers: true,
     },
     types.record(types.string, types.any) as types.TypeValidator<Settings>
   )

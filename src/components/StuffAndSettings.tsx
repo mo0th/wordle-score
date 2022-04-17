@@ -7,17 +7,14 @@ import Button from './Button'
 import Collapse from './Collapse'
 
 export const StuffAndSettings: Component = () => {
-  const [{ syncDetails, canRestore }, { setSyncDetails, restoreFromSaved }] =
-    useScoreContext()
+  const [{ syncDetails, canRestore }, { setSyncDetails, restoreFromSaved }] = useScoreContext()
   const [settings, setSettings] = useSettings()
 
   return (
     <Collapse summary="Stuff and Settings">
       <SettingsToggle
         label="Theme"
-        onToggle={() =>
-          setSettings('theme', t => (t === 'dark' ? 'light' : 'dark'))
-        }
+        onToggle={() => setSettings('theme', t => (t === 'dark' ? 'light' : 'dark'))}
         value={settings.theme === 'dark'}
         onChild="Dark"
         offChild="Light"
@@ -43,6 +40,14 @@ export const StuffAndSettings: Component = () => {
         label="Coloured Scores"
         value={settings.colorScores}
         onToggle={() => setSettings('colorScores', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
+      <SettingsToggle
+        label="Glowy Numbers"
+        value={settings.glowyNumbers}
+        onToggle={() => setSettings('glowyNumbers', toggle)}
         onChild="On"
         offChild="Off"
       />
@@ -108,12 +113,7 @@ export const StuffAndSettings: Component = () => {
           <label class="text-sm" for="sync-password">
             Password
           </label>
-          <input
-            type="password"
-            class="form-input"
-            name="password"
-            id="sync-password"
-          />
+          <input type="password" class="form-input" name="password" id="sync-password" />
         </div>
         <Button type="submit" block>
           Save Sync Details
