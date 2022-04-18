@@ -24,8 +24,7 @@ const ease2 = (t: number) => {
   t--
   return -0.5 * (t * (t - 2) - 1)
 }
-const ease3 = (t: number) =>
-  t > 0.5 ? 4 * Math.pow(t - 1, 3) + 1 : 4 * Math.pow(t, 3)
+const ease3 = (t: number) => (t > 0.5 ? 4 * Math.pow(t - 1, 3) + 1 : 4 * Math.pow(t, 3))
 
 const ease4 = (t: number) =>
   t < 0.5 ? +8.0 * Math.pow(t, 4.0) : -8.0 * Math.pow(t - 1.0, 4.0) + 1.0
@@ -51,9 +50,7 @@ const CountUp = (_props: CountUpProps): JSXElement => {
   // since using the primitive directly didn't work
   const target = () => props.to
   const [start, setStart] = createSignal(document.timeline.currentTime)
-  const [current, setCurrent] = createSignal(
-    settings.animatedCounts ? 0 : props.to
-  )
+  const [current, setCurrent] = createSignal(settings.animatedCounts ? 0 : props.to)
 
   createEffect(() => {
     if (!settings.animatedCounts) {

@@ -12,7 +12,7 @@ import { useLocalStorageStore } from '~/utils/use-local-storage'
 
 const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
 const ScoreLoader: Component = () => (
-  <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
+  <div class="space-y-1 rounded-lg bg-gray-200 p-4 dark:bg-gray-700">
     <div class={`h-7 ${scoreLoaderClassCommon}`} style="width:100px" />
     <div class={`h-8 ${scoreLoaderClassCommon}`} style="width: 150px" />
     <div class={`h-5 ${scoreLoaderClassCommon}`} style="width: 250px" />
@@ -58,8 +58,8 @@ const Scores: Component = () => {
 
   return (
     <Show when={canSync()} fallback={<Navigate href="/" />}>
-      <div class="text-center space-y-8">
-        <h2 class="text-2xl mb-8">Other People's Scores</h2>
+      <div class="space-y-8 text-center">
+        <h2 class="mb-8 text-2xl">Other People's Scores</h2>
         <div class="space-y-4">
           <Show
             when={Boolean(allScores())}
@@ -70,9 +70,9 @@ const Scores: Component = () => {
             <For each={entries()} fallback={<p>No one's added their scores yet :(</p>}>
               {([user, record]) => {
                 return (
-                  <div class="bg-gray-200 dark:bg-gray-700 rounded-lg p-4 space-y-1">
-                    <p class="font-bold text-lg">{user}</p>
-                    <p class="text-2xl mb-1">
+                  <div class="space-y-1 rounded-lg bg-gray-200 p-4 dark:bg-gray-700">
+                    <p class="text-lg font-bold">{user}</p>
+                    <p class="mb-1 text-2xl">
                       Score:{' '}
                       <span class="font-mono">
                         <CountUp to={record.score} />
@@ -87,7 +87,7 @@ const Scores: Component = () => {
             <div>
               Sort by{' '}
               <button
-                class="underline focus-outline rounded px-1"
+                class="link px-1"
                 onClick={() => {
                   const fields = Object.keys(sortFields) as (keyof typeof sortFields)[]
                   const currIndex = fields.indexOf(sortOptions.by)
@@ -98,10 +98,7 @@ const Scores: Component = () => {
                 {sortFields[sortOptions.by]}
               </button>
               {' • '}Order{' '}
-              <button
-                class="underline focus-outline rounded px-1"
-                onClick={() => setSortOptions('asc', toggle)}
-              >
+              <button class="link px-1" onClick={() => setSortOptions('asc', toggle)}>
                 {sortOptions.asc ? 'ascending' : 'descending'}
               </button>
             </div>
@@ -109,7 +106,7 @@ const Scores: Component = () => {
         </div>
 
         <div>
-          <Link class="underline block focus-outline rounded px-2 mx-auto" href="/">
+          <Link class="link px-2" href="/">
             Go Home
           </Link>
         </div>

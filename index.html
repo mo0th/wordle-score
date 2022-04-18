@@ -4,19 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
-    <link
-      rel="shortcut icon"
-      type="image/ico"
-      href="https://mooth.tech/favicon.ico"
-    />
-    <meta
-      name="description"
-      content="Get a cumulative score of how well you've done at Wordle"
-    />
-    <meta
-      name="image"
-      content="https://og-gen-mooth.vercel.app/api/og?category=Wordle%20Score"
-    />
+    <link rel="shortcut icon" type="image/ico" href="https://mooth.tech/favicon.ico" />
+    <meta name="description" content="Get a cumulative score of how well you've done at Wordle" />
+    <meta name="image" content="https://og-gen-mooth.vercel.app/api/og?category=Wordle%20Score" />
     <meta property="og:url" content="https://sizes.mooth.tech" />
     <meta property="og:type" content="website" />
     <meta
@@ -46,9 +36,7 @@
     ></script>
     <script>
       try {
-        const theme = JSON.parse(
-          localStorage.getItem('mooth:wordle-score-theme')
-        )
+        const theme = JSON.parse(localStorage.getItem('mooth:wordle-score-theme'))
         if (theme === 'light') document.documentElement.classList.remove('dark')
       } catch (_) {}
     </script>

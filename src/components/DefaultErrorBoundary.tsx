@@ -9,7 +9,7 @@ const DefaultErrorBoundary: Component<DefaultErrorBoundaryProps> = props => {
       fallback={error => (
         <>
           <h1
-            class="text-6xl sm:text-7xl md:text-8xl sm:mt-12 text-center mt-8 mb-16 px-2"
+            class="mt-8 mb-16 px-2 text-center text-6xl sm:mt-12 sm:text-7xl md:text-8xl"
             style="overflow-wrap: break-word"
           >
             Something broke!

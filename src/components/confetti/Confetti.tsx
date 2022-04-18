@@ -1,11 +1,4 @@
-import {
-  Component,
-  createEffect,
-  createResource,
-  createSignal,
-  lazy,
-  Show,
-} from 'solid-js'
+import { Component, createEffect, createResource, createSignal, lazy, Show } from 'solid-js'
 import { useScoreContext } from '~/lib/score-context'
 import { toggle } from '~/utils/misc'
 import Button from '~/components/Button'
@@ -18,28 +11,28 @@ const Confetti: Component = () => {
   const [{ syncDetails, canSync }] = useScoreContext()
   const [show, setShow] = createSignal(false)
   const [shouldConfetti, setShouldConfetti] = createSignal(true)
-  const [shouldShowApi] = createResource<
-    boolean,
-    ReturnType<typeof syncDetails>
-  >(syncDetails, async details => {
-    if (!details.user || !details.password) return false
-    try {
-      const { ok } = await fetch('/api/bday', {
-        method: 'POST',
-        body: JSON.stringify({
-          user: details.user,
-        }),
-        headers: {
-          Authorization: `Bearer ${details.password}`,
-          'Content-Type': 'application/json',
-        },
-      })
-      if (ok) Particles.preload()
-      return ok
-    } catch (err) {
-      return false
+  const [shouldShowApi] = createResource<boolean, ReturnType<typeof syncDetails>>(
+    syncDetails,
+    async details => {
+      if (!details.user || !details.password) return false
+      try {
+        const { ok } = await fetch('/api/bday', {
+          method: 'POST',
+          body: JSON.stringify({
+            user: details.user,
+          }),
+          headers: {
+            Authorization: `Bearer ${details.password}`,
+            'Content-Type': 'application/json',
+          },
+        })
+        if (ok) Particles.preload()
+        return ok
+      } catch (err) {
+        return false
+      }
     }
-  })
+  )
 
   createEffect(() => {
     if (shouldShowApi() && !done) {
@@ -60,13 +53,11 @@ const Confetti: Component = () => {
     <Show when={show()}>
       <div
         class={
-          'fixed inset-0 grid place-items-center px-4 bg-black/25 backdrop-blur-sm fade-in z-10'
+          'fade-in fixed inset-0 z-10 grid place-items-center bg-black/25 px-4 backdrop-blur-sm'
         }
       >
-        <Container class="py-8 rounded bg-gray-200 dark:bg-gray-700 space-y-4">
-          <p class="text-5xl sm:text-6xl font-bold font-poppins text-center">
-            HAPPY BIRTHDAY
-          </p>
+        <Container class="space-y-4 rounded bg-gray-200 py-8 dark:bg-gray-700">
+          <p class="text-center font-poppins text-5xl font-bold sm:text-6xl">HAPPY BIRTHDAY</p>
           <div class="flex space-x-4">
             <Button onClick={() => setShouldConfetti(toggle)}>
               {shouldConfetti() ? '🎉' : '😟'}

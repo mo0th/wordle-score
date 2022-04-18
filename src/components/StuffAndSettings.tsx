@@ -75,7 +75,7 @@ export const StuffAndSettings: Component = () => {
         />
       </Show>
 
-      <hr class="dark:border-gray-600 border-gray-300" />
+      <hr class="border-gray-300 dark:border-gray-600" />
 
       <form
         class="space-y-4"
@@ -96,7 +96,7 @@ export const StuffAndSettings: Component = () => {
         }}
       >
         <p>Sync Details</p>
-        <div class="space-y-2 flex flex-col">
+        <div class="flex flex-col space-y-2">
           <label class="text-sm" for="sync-user">
             Username
           </label>
@@ -109,7 +109,7 @@ export const StuffAndSettings: Component = () => {
             attr:value={syncDetails().user}
           />
         </div>
-        <div class="space-y-2 flex flex-col">
+        <div class="flex flex-col space-y-2">
           <label class="text-sm" for="sync-password">
             Password
           </label>
@@ -136,7 +136,7 @@ const SettingsToggle: Component<{
   offChild: JSXElement
 }> = props => {
   return (
-    <div class="flex justify-between items-center">
+    <div class="flex items-center justify-between">
       <p>{props.label}</p>
       <Button onClick={() => props.onToggle()}>
         <Show when={props.value} fallback={props.offChild}>

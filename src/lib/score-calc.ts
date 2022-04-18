@@ -1,11 +1,5 @@
 import { createMemo } from 'solid-js'
-import {
-  AccessorRecord,
-  PersonScore,
-  ScoreRecord,
-  ScoreRecordTuple,
-  SingleDayScore,
-} from '~/types'
+import { AccessorRecord, PersonScore, ScoreRecord, ScoreRecordTuple, SingleDayScore } from '~/types'
 import { minmax } from '~/utils/misc'
 import { useLocalStorage } from '~/utils/use-local-storage'
 import { getCurrentDayOffset } from './wordle-stuff'
@@ -56,8 +50,7 @@ export const calculateCumulativeScores = (record: ScoreRecord): PersonScore => {
 export type ScoreRenderData = ReturnType<typeof personScoreToRenderData>
 export const personScoreToRenderData = (record: PersonScore) => ({
   ...record,
-  scorePerDay:
-    Math.round((record.score / daysAccountedForInScore(record)) * 100) / 100,
+  scorePerDay: Math.round((record.score / daysAccountedForInScore(record)) * 100) / 100,
 })
 const daysAccountedForInScore = (record: PersonScore): number => {
   const t = record.daysPlayed - record.uncountedFails

@@ -14,7 +14,7 @@ const ScoresPullIndicator: Component = () => {
           transform: `translateY(${allScores.loading ? 0 : '-3rem'})`,
         }}
       >
-        <RefreshIcon class="animate-spin w-6 h-6 text-purple-400/75" />
+        <RefreshIcon class="h-6 w-6 animate-spin text-purple-400/75" />
       </div>
     </Show>
   )

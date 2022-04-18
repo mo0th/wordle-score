@@ -7,6 +7,10 @@
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
+body {
+  overflow-x: hidden;
+}
+
 h1,
 h2 {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
@@ -18,15 +22,15 @@ h2 {
 .form-textarea,
 .form-select,
 .form-multiselect {
-  @apply rounded border-2 dark:bg-slate-900 dark:text-white px-2 py-1 focus:ring-0 focus:border-purple-400;
+  @apply rounded border-2 px-2 py-1 focus:border-purple-400 focus:ring-0 dark:bg-slate-900 dark:text-white;
 }
 .focus-outline,
 .form-input {
-  @apply focus:outline-2 focus:outline focus:outline-purple-400 outline-offset-2;
+  @apply outline-offset-2 focus:outline focus:outline-2 focus:outline-purple-400;
 }
 
 .focus-within-outline {
-  @apply focus-within:outline-2 focus-within:outline outline-purple-400 outline-offset-2;
+  @apply outline-offset-2 outline-purple-400 focus-within:outline focus-within:outline-2;
 }
 
 .main-heading {
@@ -94,6 +98,10 @@ h2 {
 }
 .dark .score-great-glow {
   animation: glowDark 1s ease-in infinite alternate;
+}
+
+.link {
+  @apply focus-outline rounded underline transition-colors hover:text-purple-700 dark:hover:text-purple-300;
 }
 
 @tailwind utilities;

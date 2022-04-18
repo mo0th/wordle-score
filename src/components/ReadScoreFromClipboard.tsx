@@ -15,9 +15,7 @@ const ReadScoreFromClipboard: Component = () => {
 
         const today = getCurrentDayOffset()
 
-        const matches = firstLine.match(
-          new RegExp(`Wordle ${today} (?<score>[123456X])/6`)
-        )
+        const matches = firstLine.match(new RegExp(`Wordle ${today} (?<score>[123456X])/6`))
 
         const matchedScore = matches?.groups?.score
         const scoreToMaybeInsert: any =

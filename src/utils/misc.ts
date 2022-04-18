@@ -86,3 +86,7 @@ export const inspect = <T>(t: T, msg?: string): T => {
 export const toggle = (t: boolean) => !t
 
 export const nDigits = (n: number): number => n.toString().length
+
+export const random = (n: number) => Math.floor(Math.random() * n)
+
+export const randomItem = <T>(arr: T[]): T => arr[random(arr.length)]

@@ -48,12 +48,12 @@ const DayHistoryItem: Component<{
   )
 
   return (
-    <div id={getDayHistoryItemId(props.day)} class="py-4 space-y-4">
-      <p class="text-xl justify-between flex items-center">
+    <div id={getDayHistoryItemId(props.day)} class="space-y-4 py-4">
+      <p class="flex items-center justify-between text-xl">
         <span>
           {getDayLabel(props.day)} -{' '}
           <span
-            class="font-mono transition-colors text-2xl"
+            class="font-mono text-2xl transition-colors"
             classList={
               settings.colorScores
                 ? {

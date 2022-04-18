@@ -24,9 +24,7 @@ export const useLocalStorage = <T>(
   initial: T,
   validate?: TypeValidator<T>
 ): [Accessor<T>, Setter<T>] => {
-  const [state, setState] = createSignal<T>(
-    getInitialValue(key, initial, validate)
-  )
+  const [state, setState] = createSignal<T>(getInitialValue(key, initial, validate))
   createEffect(() => {
     localStorage.setItem(key, JSON.stringify(state()))
   })
@@ -38,9 +36,7 @@ export const useLocalStorageStore = <T>(
   initial: T,
   validate?: TypeValidator<T>
 ): [Store<T>, SetStoreFunction<T>] => {
-  const [store, setStore] = createStore<T>(
-    getInitialValue(key, initial, validate)
-  )
+  const [store, setStore] = createStore<T>(getInitialValue(key, initial, validate))
   createEffect(() => {
     localStorage.setItem(key, JSON.stringify(store))
   })

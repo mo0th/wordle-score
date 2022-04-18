@@ -30,7 +30,7 @@ const Home: Component = () => {
 
   return (
     <>
-      <div class="text-center space-y-2">
+      <div class="space-y-2 text-center">
         <Show when={score().daysPlayed > 0}>
           <h2 className="text-xl">Your score so far</h2>
           <p class={`font-mono ${scoreClass()}`}>
@@ -39,7 +39,7 @@ const Home: Component = () => {
           <SecondaryScoreDetails record={personScoreToRenderData(score())} />
           <Show when={canSync()}>
             <p>
-              <Link href="/scores" class="px-2 underline focus-outline rounded">
+              <Link href="/scores" class="link px-2">
                 See other people's scores
               </Link>
             </p>
@@ -48,7 +48,7 @@ const Home: Component = () => {
       </div>
 
       <Show when={isTodayPending()}>
-        <div id={CURRENT_DAY_INPUT_ID} class="space-y-6 scroll-m-8">
+        <div id={CURRENT_DAY_INPUT_ID} class="scroll-m-8 space-y-6">
           <h2 class="text-2xl">
             Add Today's Score <span class="text-base">(Day {today})</span>
           </h2>
@@ -92,7 +92,7 @@ const ScoreHistory: Component = () => {
       <h2 class="text-2xl">History</h2>
       <div class="space-y-4">
         <div
-          class="divide-y-2 divide-gray-300 dark:divide-gray-700 overflow-y-hidden overflow-x-visible ease-in-out px-4 -mx-4"
+          class="-mx-4 divide-y-2 divide-gray-300 overflow-y-hidden overflow-x-visible px-4 ease-in-out dark:divide-gray-700"
           style={{
             'transition-property': 'height',
           }}
@@ -151,13 +151,13 @@ const AddOrFindDay: Component<{ onAdd?: (day: number) => void }> = props => {
         if (!day || typeof day !== 'number' || Number.isNaN(day)) return
         props.onAdd?.(day)
       }}
-      class="space-y-4 rounded bg-gray-200 dark:bg-gray-700 p-4"
+      class="space-y-4 rounded bg-gray-200 p-4 dark:bg-gray-700"
     >
       <label for="day-to-add">Add / find an older day</label>
       <div class="flex items-stretch space-x-4">
         <input
           ref={input}
-          class="form-input flex-1 block w-full appearance-none"
+          class="form-input block w-full flex-1 appearance-none"
           type="number"
           id="day-to-add"
           min={1}

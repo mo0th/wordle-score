@@ -9,9 +9,7 @@ interface SecondaryScoreDetailsProps {
   record: ScoreRenderData
 }
 
-const getAverageScoreRating = (
-  avg: number
-): keyof typeof scoreGoodnessTextColors => {
+const getAverageScoreRating = (avg: number): keyof typeof scoreGoodnessTextColors => {
   if (0 <= avg && avg <= 2) return 'good'
   if (avg <= 4) return 'ok'
   return 'bad'
@@ -34,8 +32,7 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
             <span
               class={cx(
                 'font-mono transition-colors',
-                settings.colorScores &&
-                  scoreGoodnessTextColors[getAverageScoreRating(count())]
+                settings.colorScores && scoreGoodnessTextColors[getAverageScoreRating(count())]
               )}
             >
               {toFixedOrLess(count(), 2)}

@@ -13,14 +13,7 @@ const Particles: Component<{ id?: string; class?: string }> = props => {
         preset: 'confetti',
         particles: {
           color: {
-            value: [
-              '#f43f5e',
-              '#ef4444',
-              '#10b981',
-              '#0ea5e9',
-              '#6366f1',
-              '#d946ef',
-            ],
+            value: ['#f43f5e', '#ef4444', '#10b981', '#0ea5e9', '#6366f1', '#d946ef'],
           },
         },
         spread: 75,

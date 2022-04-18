@@ -11,10 +11,10 @@ const DayControlButton: Component<{
 }> = _props => {
   const props = mergeProps({ variant: 'base' }, _props)
   return (
-    <span class="block aspect-w-1 aspect-h-1 w-full focus-within-outline rounded">
+    <span class="focus-within-outline aspect-w-1 aspect-h-1 block w-full rounded">
       <button
         class={
-          'border-2 border-slate-400 flex-shrink-0 transition flex items-center justify-center cursor-pointer hocus:border-purple-400 focus:outline-none rounded'
+          'flex flex-shrink-0 cursor-pointer items-center justify-center rounded border-2 border-slate-400 transition focus:outline-none hocus:border-purple-400'
         }
         classList={{
           'bg-purple-800 hover:bg-purple-900 dark:hover:bg-purple-100 dark:bg-purple-50':
@@ -23,8 +23,7 @@ const DayControlButton: Component<{
             props.variant === 'delete',
           'hover:bg-purple-200 dark:hover:bg-purple-700 text-black dark:text-white':
             !props.selected && props.variant === 'base',
-          'text-white dark:text-black':
-            props.selected && props.variant === 'base',
+          'text-white dark:text-black': props.selected && props.variant === 'base',
         }}
         onClick={props.onClick}
       >
@@ -43,7 +42,7 @@ const DayControl: Component<{
 }> = props => {
   return (
     <div
-      class="grid gap-4 justify-between justify-items-center font-mono"
+      class="grid justify-between justify-items-center gap-4 font-mono"
       classList={{
         'grid-cols-4 text-5xl': !props.isBig,
         'grid-cols-3 text-6xl': props.isBig,
@@ -59,11 +58,7 @@ const DayControl: Component<{
         )}
       </For>
       <Show when={Boolean(props.onDelete)}>
-        <DayControlButton
-          variant="delete"
-          selected={false}
-          onClick={() => props.onDelete?.()}
-        >
+        <DayControlButton variant="delete" selected={false} onClick={() => props.onDelete?.()}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-10 w-10"

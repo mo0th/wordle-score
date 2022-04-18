@@ -1,10 +1,4 @@
-import {
-  Component,
-  createEffect,
-  createSignal,
-  onCleanup,
-  Show,
-} from 'solid-js'
+import { Component, createEffect, createSignal, onCleanup, Show } from 'solid-js'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 
@@ -40,7 +34,7 @@ const ScorePushIndicator: Component = () => {
   return (
     <Show when={settings.showSyncIndicators}>
       <div
-        class="flex z-50 fixed -top-20 py-2 px-4 rounded bg-slate-200 dark:bg-slate-700 shadow-lg left-1/2 -translate-x-1/2 transition-transform items-center space-x-2 text-lg"
+        class="fixed -top-20 left-1/2 z-50 flex -translate-x-1/2 items-center space-x-2 rounded bg-slate-200 py-2 px-4 text-lg shadow-lg transition-transform dark:bg-slate-700"
         classList={{
           'translate-y-24': showIndicator(),
           'translate-y-0': !showIndicator(),
@@ -51,13 +45,10 @@ const ScorePushIndicator: Component = () => {
         }}
       >
         <p class="flex-1">{INDICATOR_TEXT[syncStatus()]}</p>
-        <button
-          class="focus-outline rounded"
-          onClick={() => setShowIndicator(false)}
-        >
+        <button class="focus-outline rounded" onClick={() => setShowIndicator(false)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="w-4 h-4"
+            class="h-4 w-4"
             viewBox="0 0 20 20"
             fill="currentColor"
           >
