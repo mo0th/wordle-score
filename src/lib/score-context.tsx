@@ -12,20 +12,10 @@ import {
   onCleanup,
   mergeProps,
 } from 'solid-js'
-import {
-  AccessorRecord,
-  AllScores,
-  PersonScore,
-  ScoreRecord,
-  ScoreRecordTuple,
-} from '~/types'
+import { AccessorRecord, AllScores, PersonScore, ScoreRecord, ScoreRecordTuple } from '~/types'
 import { debounce, getHistoryDiffs } from '~/utils/misc'
 import { useLocalStorage } from '~/utils/use-local-storage'
-import {
-  calculateCumulativeScores,
-  ScoreAccessors,
-  ScoreSetters,
-} from './score-calc'
+import { calculateCumulativeScores, ScoreAccessors, ScoreSetters } from './score-calc'
 import { getCurrentDayOffset } from './wordle-stuff'
 import { useSettings } from './settings'
 
@@ -61,18 +51,15 @@ export type ScoreProviderProps = {
 export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   const props = mergeProps({ focusRevalidate: true }, _props)
   const [settings] = useSettings()
-  const [syncDetails, setSyncDetails] = useLocalStorage(
-    'mooth:wordle-sync-details',
-    { user: '', password: '' }
-  )
+  const [syncDetails, setSyncDetails] = useLocalStorage('mooth:wordle-sync-details', {
+    user: '',
+    password: '',
+  })
   const canSync = createMemo(() => {
     const d = syncDetails()
     return Boolean(d.user) && Boolean(d.password)
   })
-  const [allScores, { refetch }] = createResource<
-    AllScores,
-    readonly [SyncDetails, boolean]
-  >(
+  const [allScores, { refetch }] = createResource<AllScores, readonly [SyncDetails, boolean]>(
     () => [syncDetails(), canSync()] as const,
     async ([{ password, user }, canSync], { value, refetching }) => {
       if (lastFetchedAt && Date.now() - lastFetchedAt < 10_000 && value) {
@@ -106,10 +93,9 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     lastFetchedAt = 0
     refetch()
   }
-  const [record, setRecord] = useLocalStorage<ScoreRecord>(
-    'mooth:wordle-score',
-    {}
-  )
+  const [record, setRecord] = useLocalStorage<ScoreRecord>('mooth:wordle-score', {})
+
+  createEffect(() => console.log(syncDetails(), canSync()))
 
   const recordArray = createMemo(() =>
     Object.entries(record())
@@ -142,13 +128,9 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     if (!allServerData) return false
     const serverDataForUser = allServerData[syncDetails().user]
     if (!serverDataForUser?.record) return false
-    if (
-      serverDataForUser.daysPlayed === 0 ||
-      Object.keys(serverDataForUser.record).length === 0
-    )
+    if (serverDataForUser.daysPlayed === 0 || Object.keys(serverDataForUser.record).length === 0)
       return false
-    if (dequal(serverDataForUser, { ...score(), record: record() }))
-      return false
+    if (dequal(serverDataForUser, { ...score(), record: record() })) return false
     return true
   })
   const restoreFromSaved = () => {
@@ -157,9 +139,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     const serverDataForUser = allServerData[syncDetails().user]
     if (
       serverDataForUser.record &&
-      confirm(
-        "Are you sure you want to restore from your saved data? This can't be undone."
-      )
+      confirm("Are you sure you want to restore from your saved data? This can't be undone.")
     ) {
       setRecord(serverDataForUser.record)
     }
@@ -182,7 +162,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       if (dequal(current, dataToSync)) return
       if (!navigator.onLine) return
 
-      const diffs = current.record ? getHistoryDiffs(current.record, record) : 0
+      const diffs = current?.record ? getHistoryDiffs(current.record, record) : 0
       if (diffs > 1) {
         if (
           !confirm(
@@ -220,9 +200,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     500
   )
 
-  createEffect(() =>
-    sync(canSync(), syncDetails(), score(), allScores(), record())
-  )
+  createEffect(() => sync(canSync(), syncDetails(), score(), allScores(), record()))
 
   createEffect(() => {
     if (props.focusRevalidate) {
@@ -257,11 +235,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     },
   ]
 
-  return (
-    <ScoreContext.Provider value={store}>
-      {props.children}
-    </ScoreContext.Provider>
-  )
+  return <ScoreContext.Provider value={store}>{props.children}</ScoreContext.Provider>
 }
 
 export const useScoreContext = () => {

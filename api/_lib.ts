@@ -19,10 +19,7 @@ export const verifyRequest: ApiWrapper = handler => {
 }
 
 const SLUG = process.env.VERCEL ? '~wordle-scores' : '~wordle-scores-dev'
-const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_KEY!
-)
+const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
 
 type Score = { score: number; daysPlayed: number }
 type Scores = Record<string, Score>
@@ -40,7 +37,7 @@ const _ScoreSchema = {
 
 const ScoreSchema = types.objectWithProperties(_ScoreSchema)
 
-export const getScores = async (user?: string): Promise<Scores> => {
+const getScoresWithAllRecords = async (): Promise<Scores> => {
   const { data } = await supabase
     .from<Singleton>('singletons')
     .select('*')
@@ -51,23 +48,26 @@ export const getScores = async (user?: string): Promise<Scores> => {
 
   try {
     const parsed = JSON.parse(data.content)
-    const filtered = Object.fromEntries(
-      Object.entries(parsed)
-        .filter(
-          ([key, value]) =>
-            typeof key === 'string' && types.isOfType(value, ScoreSchema)
-        )
-        .map(([key, value]: [string, any]) => {
-          const { record: _, ...valueWithoutRecord } = value
-          const newValue = user === key ? value : valueWithoutRecord
-          return [key, newValue]
-        })
+    return Object.fromEntries(
+      Object.entries(parsed).filter(
+        ([key, value]) => typeof key === 'string' && types.isOfType(value, ScoreSchema)
+      )
     ) as Scores
-    return filtered
   } catch (err) {
     console.log(err)
     return {}
   }
+}
+
+export const getScores = async (user: string): Promise<Scores> => {
+  const scoresWithAllRecords = await getScoresWithAllRecords()
+  return Object.fromEntries(
+    Object.entries(scoresWithAllRecords).map(([key, value]: [string, any]) => {
+      const { record: _, ...valueWithoutRecord } = value
+      const newValue = user === key ? value : valueWithoutRecord
+      return [key, newValue]
+    })
+  ) as Scores
 }
 
 const SetScoreSchema = types.objectWithOnlyTheseProperties({
@@ -84,7 +84,7 @@ export const setScore = async (body: unknown): Promise<boolean> => {
     return false
   }
 
-  const current = await getScores()
+  const current = await getScoresWithAllRecords()
 
   if (body.data.daysPlayed === 0) {
     delete current[body.user]
