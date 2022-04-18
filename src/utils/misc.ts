@@ -87,6 +87,9 @@ export const toggle = (t: boolean) => !t
 
 export const nDigits = (n: number): number => n.toString().length
 
+export const lessThanOrEqualWithError = (a: number, b: number, err: number) =>
+  a <= b || Math.abs(a - b) <= Math.abs(err)
+
 export const random = (n: number) => Math.floor(Math.random() * n)
 
 export const randomItem = <T>(arr: T[]): T => arr[random(arr.length)]

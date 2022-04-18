@@ -95,8 +95,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   }
   const [record, setRecord] = useLocalStorage<ScoreRecord>('mooth:wordle-score', {})
 
-  createEffect(() => console.log(syncDetails(), canSync()))
-
   const recordArray = createMemo(() =>
     Object.entries(record())
       .map(([k, v]) => [parseInt(k), v] as ScoreRecordTuple)
