@@ -26,6 +26,7 @@ import { useLocalStorage } from '~/utils/use-local-storage'
 import { calculateCumulativeScores, ScoreAccessors, scores, ScoreSetters } from './score-calc'
 import { getCurrentDayOffset } from './wordle-stuff'
 import { useSettings } from './settings'
+import { plausible } from './plausible'
 
 const DayScoreSchema = scores
   .filter(s => typeof s === 'number')
@@ -217,6 +218,13 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       window.addEventListener('focus', handler)
 
       onCleanup(() => window.removeEventListener('focus', handler))
+    }
+  })
+
+  createEffect(() => {
+    const user = syncDetails().user
+    if (user) {
+      plausible('user', { user })
     }
   })
 
