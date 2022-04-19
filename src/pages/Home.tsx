@@ -123,16 +123,14 @@ const ScoreHistory: Component = () => {
             if (day !== curr && !record()[day]) {
               setDayScore(day, 'X')
             }
-            const id = day === curr ? CURRENT_DAY_INPUT_ID : getDayHistoryItemId(day)
+            const id =
+              day === curr && !record()[day] ? CURRENT_DAY_INPUT_ID : getDayHistoryItemId(day)
             let el = document.getElementById(id)
             if (!el) {
               setShowAll(true)
               el = document.getElementById(id)
             }
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth' })
-            }
-            return
+            el?.scrollIntoView({ behavior: 'smooth' })
           }}
         />
       </div>
