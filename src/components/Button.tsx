@@ -14,11 +14,9 @@ const Button: Component<ComponentProps<'button'> & { block?: boolean; as?: strin
       class={cx(
         'focus-outline focus-within-ouline cursor-pointer rounded px-2 py-1 text-center transition-colors',
         'bg-gray-300 hover:bg-purple-200 active:bg-purple-300 dark:bg-gray-600 dark:hover:bg-purple-600 dark:active:bg-purple-700',
-        local.class
+        local.class,
+        local.block && 'block w-full'
       )}
-      classList={{
-        'block w-full': local.block,
-      }}
       {...delegated}
     />
   )
