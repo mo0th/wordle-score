@@ -1,8 +1,5 @@
-import { createMemo } from 'solid-js'
 import { AccessorRecord, PersonScore, ScoreRecord, ScoreRecordTuple, SingleDayScore } from '~/types'
 import { minmax } from '~/utils/misc'
-import { useLocalStorage } from '~/utils/use-local-storage'
-import { getCurrentDayOffset } from './wordle-stuff'
 
 export type ScoreAccessors = AccessorRecord<{
   score: PersonScore

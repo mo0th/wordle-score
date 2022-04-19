@@ -93,3 +93,7 @@ export const lessThanOrEqualWithError = (a: number, b: number, err: number) =>
 export const random = (n: number) => Math.floor(Math.random() * n)
 
 export const randomItem = <T>(arr: T[]): T => arr[random(arr.length)]
+
+export const scrollToHash = (hash: string) => {
+  document.getElementById(hash)?.scrollIntoView(true)
+}

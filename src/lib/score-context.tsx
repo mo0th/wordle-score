@@ -12,12 +12,29 @@ import {
   onCleanup,
   mergeProps,
 } from 'solid-js'
-import { AccessorRecord, AllScores, PersonScore, ScoreRecord, ScoreRecordTuple } from '~/types'
+import * as types from 'pheno'
+import {
+  AccessorRecord,
+  AllScores,
+  PersonScore,
+  ScoreRecord,
+  ScoreRecordTuple,
+  SingleDayScore,
+} from '~/types'
 import { debounce, getHistoryDiffs } from '~/utils/misc'
 import { useLocalStorage } from '~/utils/use-local-storage'
-import { calculateCumulativeScores, ScoreAccessors, ScoreSetters } from './score-calc'
+import { calculateCumulativeScores, ScoreAccessors, scores, ScoreSetters } from './score-calc'
 import { getCurrentDayOffset } from './wordle-stuff'
 import { useSettings } from './settings'
+
+const DayScoreSchema = scores
+  .filter(s => typeof s === 'number')
+  .reduce(
+    (accSchema, s) =>
+      types.or(accSchema, types.exactNumber<Exclude<SingleDayScore, 'X'>>(s as any)),
+    types.exactString('X') as types.TypeValidator<SingleDayScore>
+  )
+const ScoreRecordSchema = types.record(types.string, DayScoreSchema)
 
 export type SyncStatus = 'idle' | 'loading' | 'success' | 'failed'
 export type SyncDetails = {
@@ -37,7 +54,9 @@ export type ScoreContextValue = [
   ScoreSetters & {
     setSyncDetails: Setter<SyncDetails>
     refetchAllScores: () => void
-    restoreFromSaved: () => void
+    getJsonBackup: () => string
+    importJsonBackup: (json: unknown) => void
+    isBackupValid: (obj: unknown) => obj is ScoreRecord
   }
 ]
 
@@ -131,17 +150,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     if (dequal(serverDataForUser, { ...score(), record: record() })) return false
     return true
   })
-  const restoreFromSaved = () => {
-    const allServerData = allScores()
-    if (!allServerData) return
-    const serverDataForUser = allServerData[syncDetails().user]
-    if (
-      serverDataForUser.record &&
-      confirm("Are you sure you want to restore from your saved data? This can't be undone.")
-    ) {
-      setRecord(serverDataForUser.record)
-    }
-  }
 
   const [syncStatus, setSyncStatus] = createSignal<SyncStatus>('idle')
 
@@ -212,6 +220,22 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     }
   })
 
+  const getJsonBackup = () => JSON.stringify(record(), null, 2)
+  const importJsonBackup = (json: unknown) => {
+    try {
+      const parsed = typeof json === 'string' ? JSON.parse(json) : json
+      if (!isBackupValid(parsed)) {
+        return
+      }
+      setRecord(parsed)
+    } catch {
+      return
+    }
+  }
+  const isBackupValid = (obj: unknown): obj is ScoreRecord => {
+    return types.isOfType(obj, ScoreRecordSchema)
+  }
+
   const store: ScoreContextValue = [
     {
       record,
@@ -229,7 +253,9 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       deleteDayScore,
       setSyncDetails,
       refetchAllScores: refetch,
-      restoreFromSaved,
+      getJsonBackup,
+      importJsonBackup,
+      isBackupValid,
     },
   ]
 

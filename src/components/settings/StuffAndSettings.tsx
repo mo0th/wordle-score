@@ -3,11 +3,12 @@ import { Component, JSXElement, Show } from 'solid-js'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { toggle } from '~/utils/misc'
-import Button from './Button'
-import Collapse from './Collapse'
+import Button from '../Button'
+import Collapse from '../Collapse'
+import BackupRestore from './BackupRestore'
 
 export const StuffAndSettings: Component = () => {
-  const [{ syncDetails, canRestore }, { setSyncDetails, restoreFromSaved }] = useScoreContext()
+  const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
   const [settings, setSettings] = useSettings()
 
   return (
@@ -118,12 +119,9 @@ export const StuffAndSettings: Component = () => {
         <Button type="submit" block>
           Save Sync Details
         </Button>
-        <Show when={canRestore()}>
-          <Button type="button" block onClick={restoreFromSaved}>
-            Restore Saved Data
-          </Button>
-        </Show>
       </form>
+
+      <BackupRestore />
     </Collapse>
   )
 }
