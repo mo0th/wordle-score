@@ -43,7 +43,10 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
                 settings.colorScores && scoreGoodnessTextColors[getAverageScoreRating(count())]
               )}
             >
-              {formatScoreNumber(count(), { shortenBigNumbers: settings.shortenBigNumbers })}
+              {formatScoreNumber(count(), {
+                shortenBigNumbers: settings.shortenBigNumbers,
+                truncateMax: 0,
+              })}
             </span>
           )}
         </CountUp>{' '}
