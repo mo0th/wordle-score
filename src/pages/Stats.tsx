@@ -44,11 +44,11 @@ const Distribution: Component = () => {
 
     const isLight = settings.theme === 'light'
 
-    const bgIndex = cond(isLight, '200', '800')
+    const bgIndex = cond(isLight, '700', '300')
     const bgGreen = twColors.green[bgIndex]
     const bgYellow = twColors.yellow[bgIndex]
     const bgRed = twColors.red[bgIndex]
-    const borderIndex = cond(isLight, '400', '600')
+    const borderIndex = cond(isLight, '900', '100')
     const borderGreen = twColors.green[borderIndex]
     const borderYellow = twColors.yellow[borderIndex]
     const borderRed = twColors.red[borderIndex]
