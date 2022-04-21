@@ -8,7 +8,7 @@ import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { SingleDayScore } from '~/types'
 import { twColors } from '~/lib/tailwind'
-import { cond, cx } from '~/utils/misc'
+import { cond, cx, sum } from '~/utils/misc'
 
 const Stats: Component = () => {
   return (
@@ -36,6 +36,8 @@ const Distribution: Component = () => {
 
     return scores.map(s => [s, results[s]] as const)
   })
+
+  const total = createMemo(() => sum(counts().map(([_, c]) => c)))
 
   let canvas: HTMLCanvasElement | undefined
 
@@ -118,7 +120,7 @@ const Distribution: Component = () => {
     <div class="space-y-6">
       <h3 class="text-xl font-bold">Distribution</h3>
 
-      <table class={cx('w-full border-y-2 font-mono text-xl', BORDER_COLOR)}>
+      <table class={cx('w-full table-fixed overflow-x-auto border-y-2 font-mono', BORDER_COLOR)}>
         <thead class={cx('border-b-[1px]', BORDER_COLOR)}>
           <tr>
             <For each={scores}>
@@ -133,11 +135,13 @@ const Distribution: Component = () => {
                 </th>
               )}
             </For>
+            <th>T</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <For each={counts()}>{([_, c]) => <td>{Math.floor(c)}</td>}</For>
+            <td>{total()}</td>
           </tr>
         </tbody>
       </table>
