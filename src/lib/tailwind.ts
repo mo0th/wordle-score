@@ -1,3 +1,3 @@
-import { green, red, yellow, gray } from 'tailwindcss/colors'
+import { green, red, yellow, gray, purple } from 'tailwindcss/colors'
 
-export const twColors = { green, red, yellow, gray }
+export const twColors = { green, red, yellow, gray, purple }
