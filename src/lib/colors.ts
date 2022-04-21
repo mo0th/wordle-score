@@ -11,3 +11,5 @@ export const getColorForDayScore = (s: SingleDayScore): string => {
   if (s > 3 && s <= 5) return scoreGoodnessTextColors.ok
   return scoreGoodnessTextColors.bad
 }
+
+export const SCORE_GREAT_GLOW = 'score-great-glow'

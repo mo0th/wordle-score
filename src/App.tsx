@@ -1,14 +1,16 @@
 import { Link, Navigate, Route, Router, Routes } from 'solid-app-router'
-import { Component, createEffect, createSignal, lazy, onCleanup, Suspense } from 'solid-js'
+import { Component, createEffect, createSignal, lazy, onCleanup, Show, Suspense } from 'solid-js'
 import Container from './components/Container'
 import Footer from './components/Footer'
 import { StuffAndSettings } from './components/settings/StuffAndSettings'
 import Home from './pages/Home'
 import Scores from './pages/Scores'
 import SyncIndicator from './components/sync/SyncIndicator'
+import { useSettings } from './lib/settings'
 
 const Confetti = lazy(() => import('./components/confetti/Confetti'))
 const Stats = lazy(() => import('./pages/Stats'))
+const DevOverlay = lazy(() => import('./components/DevOverlay'))
 
 const Heading: Component = () => {
   const [spinning, setSpinning] = createSignal(false)
@@ -42,12 +44,13 @@ const Heading: Component = () => {
 }
 
 const App: Component = () => {
+  const [settings] = useSettings()
   return (
     <Router>
       <SyncIndicator />
       <Confetti />
       <Heading />
-      <Container class="space-y-24">
+      <Container class="relative space-y-24">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scores" element={<Scores />} />
@@ -72,6 +75,9 @@ const App: Component = () => {
           <Footer />
         </div>
       </Container>
+      <Show when={settings.devStuff}>
+        <DevOverlay />
+      </Show>
     </Router>
   )
 }

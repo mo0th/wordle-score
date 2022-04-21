@@ -1,5 +1,5 @@
 import { Component, createMemo, createSignal, Show } from 'solid-js'
-import { getColorForDayScore } from '~/lib/colors'
+import { getColorForDayScore, SCORE_GREAT_GLOW } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
@@ -46,7 +46,7 @@ const DayHistoryItem: Component<{
             class={cx(
               'font-mono text-2xl transition-colors',
               settings.colorScores && getColorForDayScore(props.dayScore),
-              settings.glowyNumbers && props.dayScore === 1 && 'score-great-glow'
+              settings.glowyNumbers && props.dayScore === 1 && SCORE_GREAT_GLOW
             )}
           >
             {props.dayScore}

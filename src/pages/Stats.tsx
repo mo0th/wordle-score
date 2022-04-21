@@ -2,7 +2,7 @@ import { Component, createEffect, createMemo, For, onCleanup } from 'solid-js'
 import Chart from 'chart.js/auto'
 
 import NotHomePageLayout from '~/layouts/NotHomePageLayout'
-import { getColorForDayScore } from '~/lib/colors'
+import { getColorForDayScore, SCORE_GREAT_GLOW } from '~/lib/colors'
 import { scores } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
@@ -123,7 +123,12 @@ const Distribution: Component = () => {
           <tr>
             <For each={scores}>
               {s => (
-                <th class={getColorForDayScore(s)} classList={{ 'score-great-glow': s === 1 }}>
+                <th
+                  class={cx(
+                    settings.colorScores && getColorForDayScore(s),
+                    s === 1 && settings.glowyNumbers && SCORE_GREAT_GLOW
+                  )}
+                >
                   {s}
                 </th>
               )}
@@ -132,7 +137,7 @@ const Distribution: Component = () => {
         </thead>
         <tbody>
           <tr>
-            <For each={counts()}>{([_, c]) => <td>{c}</td>}</For>
+            <For each={counts()}>{([_, c]) => <td>{Math.floor(c)}</td>}</For>
           </tr>
         </tbody>
       </table>
