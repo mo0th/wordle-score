@@ -17,22 +17,23 @@ export type Settings = {
 
 const SettingsContext = createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
 
-export const SettingsProvider: Component = props => {
-  const [settings, setSettings] = useLocalStorageStore<Settings>(
-    'mooth:wordle-score-settings',
-    {
-      animatedCounts: true,
-      showSyncIndicators: true,
-      devStuff: false,
-      theme: 'dark',
-      plausible: true,
-      colorScores: true,
-      glowyNumbers: true,
-      shortenBigNumbers: true,
-    },
-    types.record(types.string, types.any) as types.TypeValidator<Settings>
-  )
+const [settings, setSettings] = useLocalStorageStore<Settings>(
+  'mooth:wordle-score-settings',
+  {
+    animatedCounts: true,
+    showSyncIndicators: true,
+    devStuff: false,
+    theme: 'dark',
+    plausible: true,
+    colorScores: true,
+    glowyNumbers: true,
+    shortenBigNumbers: true,
+  },
+  types.record(types.string, types.any) as types.TypeValidator<Settings>
+)
 
+export { settings }
+export const SettingsProvider: Component = props => {
   createEffect(() => {
     updateThemeInDocument(settings.theme)
   })

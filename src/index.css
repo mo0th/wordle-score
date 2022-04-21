@@ -58,6 +58,20 @@ h2 {
   background-position: top;
 }
 
+.stat-table {
+  @apply border-y-2;
+}
+
+.stat-table thead {
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.stat-table,
+.stat-table thead {
+  @apply border-gray-300 dark:border-gray-700;
+}
+
 @keyframes glowDark {
   from {
     /* prettier-ignore */
