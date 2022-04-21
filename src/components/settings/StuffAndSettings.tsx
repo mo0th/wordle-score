@@ -38,14 +38,6 @@ export const StuffAndSettings: Component = () => {
       />
 
       <SettingsToggle
-        label="Animated Numbers"
-        value={settings.animatedCounts}
-        onToggle={() => setSettings('animatedCounts', toggle)}
-        onChild="On"
-        offChild="Off"
-      />
-
-      <SettingsToggle
         label="Coloured Scores"
         value={settings.colorScores}
         onToggle={() => setSettings('colorScores', toggle)}
