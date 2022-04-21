@@ -44,14 +44,17 @@ const Distribution: Component = () => {
 
     const isLight = settings.theme === 'light'
 
-    const bgIndex = cond(isLight, '300', '700')
+    const bgIndex = cond(isLight, '200', '800')
     const bgGreen = twColors.green[bgIndex]
     const bgYellow = twColors.yellow[bgIndex]
     const bgRed = twColors.red[bgIndex]
+    const borderIndex = cond(isLight, '400', '600')
+    const borderGreen = twColors.green[borderIndex]
+    const borderYellow = twColors.yellow[borderIndex]
+    const borderRed = twColors.red[borderIndex]
 
     const text = twColors.gray[cond(isLight, '600', '400')]
     const border = twColors.gray[cond(isLight, '300', '700')]
-    // const text = 'rgb(255,0,0)'
 
     const chart = new Chart(canvas, {
       type: 'bar',
@@ -62,6 +65,16 @@ const Distribution: Component = () => {
             label: '',
             data: counts().map(([_, c]) => c),
             backgroundColor: [bgGreen, bgGreen, bgGreen, bgYellow, bgYellow, bgRed, bgRed],
+            borderColor: [
+              borderGreen,
+              borderGreen,
+              borderGreen,
+              borderYellow,
+              borderYellow,
+              borderRed,
+              borderRed,
+            ],
+            borderWidth: 3,
           },
         ],
       },
