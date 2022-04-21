@@ -17,6 +17,7 @@ interface CountUpProps {
   children?: (count: Accessor<number>) => JSXElement
 }
 
+const easeLinear = (t: number) => t
 const easeCos = (t: number) => 1 - (Math.cos(Math.PI * t) + 1) / 2
 const ease2 = (t: number) => {
   t /= 0.5

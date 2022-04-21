@@ -8,8 +8,9 @@ import ReadScoreFromClipboard from '~/components/ReadScoreFromClipboard'
 import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
 import { personScoreToRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
+import { useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
-import { nDigits, toggle as _toggle } from '~/utils/misc'
+import { formatNumber, toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 
@@ -17,13 +18,7 @@ const CURRENT_DAY_INPUT_ID = 'current-day-wrapper'
 
 const Home: Component = () => {
   const [{ score, record, canSync }, { setTodayScore }] = useScoreContext()
-  const scoreClass = createMemo(() => {
-    const scoreLength = nDigits(score().score)
-
-    if (scoreLength < 7) return 'text-8xl'
-    if (scoreLength < 9) return 'text-7xl'
-    return 'text-6xl'
-  })
+  const [settings] = useSettings()
 
   const today = getCurrentDayOffset()
   const isTodayPending = createMemo(() => !Boolean(record()[today]))
@@ -33,8 +28,25 @@ const Home: Component = () => {
       <div class="space-y-2 text-center">
         <Show when={score().daysPlayed > 0}>
           <h2 className="text-xl">Your score so far</h2>
-          <p class={`font-mono ${scoreClass()}`}>
-            <CountUp to={score().score} />
+          <p class="font-mono">
+            <CountUp to={score().score}>
+              {c => {
+                const formatted = formatNumber(c(), {
+                  shortenBigNumbers: settings.shortenBigNumbers,
+                })
+                const textsize = (() => {
+                  const len = formatted.length
+                  if (len < 7) return 'text-8xl'
+                  if (len < 9) return 'text-7xl'
+                  if (len < 11) return 'text-6xl'
+                  if (len < 13) return 'text-5xl'
+                  if (len < 15) return 'text-4xl'
+                  if (len < 17) return 'text-3xl'
+                  return 'text-2xl'
+                })()
+                return <span class={textsize}>{formatted}</span>
+              }}
+            </CountUp>
           </p>
           <SecondaryScoreDetails record={personScoreToRenderData(score())} />
           <Show when={canSync()}>
