@@ -77,11 +77,14 @@ export const toFixedOrLess = (n: number, dp: number): string => {
   return (Math.round(n * Math.pow(10, dp)) / Math.pow(10, dp)).toString()
 }
 
-type FormatOptions = Partial<{ len: number; shortenBigNumbers: boolean }>
-export const formatNumber = (n: number, opts?: FormatOptions): string => {
-  const { len = 2, shortenBigNumbers = true } = opts || {}
+type FormatOptions = Partial<{ len: number; shortenBigNumbers: boolean; truncateMax: number }>
+export const formatScoreNumber = (n: number, opts?: FormatOptions): string => {
+  const { len = 2, shortenBigNumbers = true, truncateMax = 1e9 } = opts || {}
   if (shortenBigNumbers && nDigits(n) > 15) return n.toExponential(len)
-  const f = toFixedOrLess(n, 2)
+  if (n < truncateMax) {
+    return toFixedOrLess(n, 0)
+  }
+  const f = toFixedOrLess(n, len)
   return f
 }
 

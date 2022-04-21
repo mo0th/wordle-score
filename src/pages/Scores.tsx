@@ -7,7 +7,7 @@ import { personScoreToRenderData, ScoreRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { PersonScore } from '~/types'
-import { formatNumber, toggle } from '~/utils/misc'
+import { formatScoreNumber, toggle } from '~/utils/misc'
 import { useLocalStorageStore } from '~/utils/use-local-storage'
 
 const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
@@ -78,7 +78,9 @@ const Scores: Component = () => {
                         <CountUp
                           to={record.score}
                           children={c =>
-                            formatNumber(c(), { shortenBigNumbers: settings.shortenBigNumbers })
+                            formatScoreNumber(c(), {
+                              shortenBigNumbers: settings.shortenBigNumbers,
+                            })
                           }
                         />
                       </span>

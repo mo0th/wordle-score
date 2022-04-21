@@ -10,7 +10,7 @@ import { personScoreToRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
-import { formatNumber, toggle as _toggle } from '~/utils/misc'
+import { formatScoreNumber, toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 
@@ -31,7 +31,7 @@ const Home: Component = () => {
           <p class="font-mono">
             <CountUp to={score().score}>
               {c => {
-                const formatted = formatNumber(c(), {
+                const formatted = formatScoreNumber(c(), {
                   shortenBigNumbers: settings.shortenBigNumbers,
                 })
                 const textsize = (() => {
