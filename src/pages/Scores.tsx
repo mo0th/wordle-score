@@ -7,7 +7,7 @@ import { personScoreToRenderData, ScoreRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { PersonScore } from '~/types'
-import { toggle } from '~/utils/misc'
+import { formatNumberTo2DP, toggle } from '~/utils/misc'
 import { useLocalStorageStore } from '~/utils/use-local-storage'
 
 const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
@@ -75,7 +75,7 @@ const Scores: Component = () => {
                     <p class="mb-1 text-2xl">
                       Score:{' '}
                       <span class="font-mono">
-                        <CountUp to={record.score} />
+                        <CountUp to={record.score} children={c => formatNumberTo2DP(c())} />
                       </span>
                     </p>
                     <SecondaryScoreDetails record={record} />

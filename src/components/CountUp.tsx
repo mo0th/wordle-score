@@ -78,7 +78,7 @@ const CountUp = (_props: CountUpProps): JSXElement => {
     )
   })
 
-  return props.children(current)
+  return <>{props.children(current)}</>
 }
 
 export default CountUp

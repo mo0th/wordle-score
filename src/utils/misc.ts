@@ -77,6 +77,12 @@ export const toFixedOrLess = (n: number, dp: number): string => {
   return (Math.round(n * Math.pow(10, dp)) / Math.pow(10, dp)).toString()
 }
 
+export const formatNumberTo2DP = (n: number): string => {
+  if (nDigits(n) > 15) return n.toExponential(2)
+  const f = toFixedOrLess(n, 2)
+  return f
+}
+
 export const inspect = <T>(t: T, msg?: string): T => {
   if (msg) console.log(msg, t)
   else console.log(t)
@@ -85,7 +91,15 @@ export const inspect = <T>(t: T, msg?: string): T => {
 
 export const toggle = (t: boolean) => !t
 
-export const nDigits = (n: number): number => n.toString().length
+export const nDigits = (n: number): number => {
+  const str = Math.round(n).toString()
+  if (!str.includes('e')) {
+    return str.length
+  }
+  const eIndex = str.indexOf('e')
+  const exponent = Math.abs(parseInt(str.substring(eIndex + 1)))
+  return exponent
+}
 
 export const lessThanOrEqualWithError = (a: number, b: number, err: number) =>
   a <= b || Math.abs(a - b) <= Math.abs(err)

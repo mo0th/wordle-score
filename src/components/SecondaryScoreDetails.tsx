@@ -2,7 +2,13 @@ import { Component } from 'solid-js'
 import { scoreGoodnessTextColors } from '~/lib/colors'
 import { ScoreRenderData } from '~/lib/score-calc'
 import { useSettings } from '~/lib/settings'
-import { cx, lessThanOrEqualWithError, plural, toFixedOrLess } from '~/utils/misc'
+import {
+  cx,
+  formatNumberTo2DP,
+  lessThanOrEqualWithError,
+  plural,
+  toFixedOrLess,
+} from '~/utils/misc'
 import CountUp from './CountUp'
 
 interface SecondaryScoreDetailsProps {
@@ -37,7 +43,7 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
                 settings.colorScores && scoreGoodnessTextColors[getAverageScoreRating(count())]
               )}
             >
-              {toFixedOrLess(count(), 2)}
+              {formatNumberTo2DP(count())}
             </span>
           )}
         </CountUp>{' '}
