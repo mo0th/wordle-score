@@ -12,6 +12,7 @@ export type Settings = {
   plausible: boolean
   colorScores: boolean
   glowyNumbers: boolean
+  shortenBigNumbers: boolean
 }
 
 const SettingsContext = createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
@@ -27,6 +28,7 @@ export const SettingsProvider: Component = props => {
       plausible: true,
       colorScores: true,
       glowyNumbers: true,
+      shortenBigNumbers: true,
     },
     types.record(types.string, types.any) as types.TypeValidator<Settings>
   )

@@ -77,8 +77,10 @@ export const toFixedOrLess = (n: number, dp: number): string => {
   return (Math.round(n * Math.pow(10, dp)) / Math.pow(10, dp)).toString()
 }
 
-export const formatNumberTo2DP = (n: number): string => {
-  if (nDigits(n) > 15) return n.toExponential(2)
+type FormatOptions = Partial<{ len: number; shortenBigNumbers: boolean }>
+export const formatNumber = (n: number, opts?: FormatOptions): string => {
+  const { len = 2, shortenBigNumbers = true } = opts || {}
+  if (shortenBigNumbers && nDigits(n) > 15) return n.toExponential(len)
   const f = toFixedOrLess(n, 2)
   return f
 }

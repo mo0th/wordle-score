@@ -30,9 +30,17 @@ export const StuffAndSettings: Component = () => {
       />
 
       <SettingsToggle
-        label="Sync Indicators"
-        value={settings.showSyncIndicators}
-        onToggle={() => setSettings('showSyncIndicators', toggle)}
+        label="Shorten Big Numbers"
+        value={settings.shortenBigNumbers}
+        onToggle={() => setSettings('shortenBigNumbers', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
+      <SettingsToggle
+        label="Animated Numbers"
+        value={settings.animatedCounts}
+        onToggle={() => setSettings('animatedCounts', toggle)}
         onChild="On"
         offChild="Off"
       />
@@ -49,6 +57,14 @@ export const StuffAndSettings: Component = () => {
         label="Glowy Numbers"
         value={settings.glowyNumbers}
         onToggle={() => setSettings('glowyNumbers', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
+      <SettingsToggle
+        label="Sync Indicators"
+        value={settings.showSyncIndicators}
+        onToggle={() => setSettings('showSyncIndicators', toggle)}
         onChild="On"
         offChild="Off"
       />
