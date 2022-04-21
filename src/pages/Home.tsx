@@ -100,7 +100,7 @@ const ScoreHistory: Component = () => {
   })
 
   return (
-    <div class="space-y-6">
+    <div class="space-y-8">
       <h2 class="text-2xl">History</h2>
       <div class="space-y-4">
         <div
@@ -145,6 +145,11 @@ const ScoreHistory: Component = () => {
             el?.scrollIntoView({ behavior: 'smooth' })
           }}
         />
+        <div class="text-center">
+          <Link class="link px-2" href="/stats">
+            Stats
+          </Link>
+        </div>
       </div>
     </div>
   )

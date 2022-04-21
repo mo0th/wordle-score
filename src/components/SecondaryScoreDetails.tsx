@@ -2,13 +2,7 @@ import { Component } from 'solid-js'
 import { scoreGoodnessTextColors } from '~/lib/colors'
 import { ScoreRenderData } from '~/lib/score-calc'
 import { useSettings } from '~/lib/settings'
-import {
-  cx,
-  formatScoreNumber,
-  lessThanOrEqualWithError,
-  plural,
-  toFixedOrLess,
-} from '~/utils/misc'
+import { cx, formatScoreNumber, lessThanOrEqualWithError, plural } from '~/utils/misc'
 import CountUp from './CountUp'
 
 interface SecondaryScoreDetailsProps {

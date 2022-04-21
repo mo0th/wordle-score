@@ -3,6 +3,7 @@ import { onMount } from 'solid-js'
 import { Component, createMemo, For, Show } from 'solid-js'
 import CountUp from '~/components/CountUp'
 import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
+import NotHomePageLayout from '~/layouts/NotHomePageLayout'
 import { personScoreToRenderData, ScoreRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
@@ -58,8 +59,7 @@ const Scores: Component = () => {
 
   return (
     <Show when={canSync()} fallback={<Navigate href="/" />}>
-      <div class="space-y-8 text-center">
-        <h2 class="mb-8 text-2xl">Other People's Scores</h2>
+      <NotHomePageLayout title="Other People's Scores">
         <div class="space-y-4">
           <Show
             when={Boolean(allScores())}
@@ -111,13 +111,7 @@ const Scores: Component = () => {
             </div>
           </Show>
         </div>
-
-        <div>
-          <Link class="link px-2" href="/">
-            Go Home
-          </Link>
-        </div>
-      </div>
+      </NotHomePageLayout>
     </Show>
   )
 }

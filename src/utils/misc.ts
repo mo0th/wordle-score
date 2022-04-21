@@ -116,3 +116,5 @@ export const randomItem = <T>(arr: T[]): T => arr[random(arr.length)]
 export const scrollToHash = (hash: string) => {
   document.getElementById(hash)?.scrollIntoView(true)
 }
+
+export const cond = <T>(c: boolean, a: T, b: T): T => (c ? a : b)

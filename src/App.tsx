@@ -1,5 +1,5 @@
 import { Link, Navigate, Route, Router, Routes } from 'solid-app-router'
-import { Component, createEffect, createSignal, lazy, onCleanup } from 'solid-js'
+import { Component, createEffect, createSignal, lazy, onCleanup, Suspense } from 'solid-js'
 import Container from './components/Container'
 import Footer from './components/Footer'
 import { StuffAndSettings } from './components/settings/StuffAndSettings'
@@ -8,6 +8,7 @@ import Scores from './pages/Scores'
 import SyncIndicator from './components/sync/SyncIndicator'
 
 const Confetti = lazy(() => import('./components/confetti/Confetti'))
+const Stats = lazy(() => import('./pages/Stats'))
 
 const Heading: Component = () => {
   const [spinning, setSpinning] = createSignal(false)
@@ -50,6 +51,20 @@ const App: Component = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/scores" element={<Scores />} />
+          <Route
+            path="/stats"
+            element={
+              <Suspense
+                fallback={
+                  <div class="text-center" style="min-height: 30vh">
+                    loading...
+                  </div>
+                }
+              >
+                <Stats />
+              </Suspense>
+            }
+          />
           <Route path="/*all" element={<Navigate href="/" />} />
         </Routes>
         <div class="space-y-12">
