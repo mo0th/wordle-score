@@ -49,32 +49,34 @@ const App: Component = () => {
     <Router>
       <SyncIndicator />
       <Confetti />
-      <Heading />
-      <Container class="relative space-y-24">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/scores" element={<Scores />} />
-          <Route
-            path="/stats"
-            element={
-              <Suspense
-                fallback={
-                  <div class="text-center" style="min-height: 30vh">
-                    loading...
-                  </div>
-                }
-              >
-                <Stats />
-              </Suspense>
-            }
-          />
-          <Route path="/*all" element={<Navigate href="/" />} />
-        </Routes>
-        <div class="space-y-12">
+      <div class="flex h-full flex-col">
+        <Heading />
+        <Container class="relative flex-1 space-y-24 pb-24">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/scores" element={<Scores />} />
+            <Route
+              path="/stats"
+              element={
+                <Suspense
+                  fallback={
+                    <div class="text-center" style="min-height: 30vh">
+                      loading...
+                    </div>
+                  }
+                >
+                  <Stats />
+                </Suspense>
+              }
+            />
+            <Route path="/*all" element={<Navigate href="/" />} />
+          </Routes>
+        </Container>
+        <Container class="space-y-12">
           <StuffAndSettings />
           <Footer />
-        </div>
-      </Container>
+        </Container>
+      </div>
       <Show when={settings.devStuff}>
         <DevOverlay />
       </Show>

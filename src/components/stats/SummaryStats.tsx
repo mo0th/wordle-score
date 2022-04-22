@@ -4,7 +4,7 @@ import { scores } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { SingleDayScore } from '~/types'
-import { formatScoreNumber, minmax, plural, sum } from '~/utils/misc'
+import { formatScoreNumber, jsxJoin, minmax, plural, sum } from '~/utils/misc'
 import StatsSectionWrapper from './StatsSectionWrapper'
 
 const FAIL_NUMBER = 7
@@ -67,9 +67,22 @@ const SummaryStats: Component = () => {
         shortenBigNumbers: settings.shortenBigNumbers,
       })
 
+    const withColorFormatted = (n: number | string) => (
+      <span class={getClassesForScore(n)}>{typeof n === 'string' ? n : formatFloats(n)}</span>
+    )
+
     const result: [JSXElement, JSXElement][] = [
-      ['Total', total],
-      [`Mean, ${mu}`, <span class={getClassesForScore(mean)}>{formatFloats(mean)}</span>],
+      [`Mean, ${mu}`, withColorFormatted(mean)],
+      ['Median', withColorFormatted(median)],
+      [
+        plural(modes.length, 'Mode', 'Modes'),
+        jsxJoin(
+          modes.map(n => withColorFormatted(n)),
+          () => ','
+        ),
+      ],
+      ['Minimum', min],
+      ['Maximum', max],
       [
         <>
           Variance, {sigma}
@@ -80,10 +93,7 @@ const SummaryStats: Component = () => {
       [`Standard Deviation, ${sigma}`, formatFloats(standardDeviation)],
       [`Skewness, ${gamma}`, formatFloats(skewness)],
       [`Kurtosis, ${kappa}`, formatFloats(kurtosis)],
-      ['Median', median],
-      ['Minimum', min],
-      ['Maximum', max],
-      [plural(modes.length, 'Mode', 'Modes'), modes.join(',')],
+      ['Total', total],
     ]
 
     return result

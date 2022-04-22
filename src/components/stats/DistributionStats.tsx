@@ -7,6 +7,7 @@ import { useSettings } from '~/lib/settings'
 import { SingleDayScore } from '~/types'
 import { twColors } from '~/lib/tailwind'
 import { cond, cx, sum } from '~/utils/misc'
+import StatsSectionWrapper from './StatsSectionWrapper'
 
 const DistributionStats: Component = () => {
   const [settings] = useSettings()
@@ -104,9 +105,7 @@ const DistributionStats: Component = () => {
   })
 
   return (
-    <div class="space-y-6">
-      <h3 class="text-xl font-bold">Distribution</h3>
-
+    <StatsSectionWrapper title="Distribution">
       <table class={cx('stat-table w-full table-fixed overflow-x-auto font-mono')}>
         <thead>
           <tr>
@@ -125,7 +124,7 @@ const DistributionStats: Component = () => {
       <div>
         <canvas ref={canvas} />
       </div>
-    </div>
+    </StatsSectionWrapper>
   )
 }
 
