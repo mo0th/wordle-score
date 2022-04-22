@@ -50,7 +50,8 @@ const Scores: Component = () => {
       return nameA.toLowerCase().localeCompare(nameB.toLowerCase())
     })
 
-    if (!settings.devStuff) {
+    console.log(settings.devStuff, settings.showTestingUsers)
+    if (!(settings.devStuff && settings.showTestingUsers)) {
       return sorted.filter(([name]) => !name.endsWith('-testing') || name === syncDetails().user)
     }
 

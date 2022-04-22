@@ -42,6 +42,14 @@ const DevOverlay: Component = () => {
             onChild="On"
             offChild="Off"
           />
+
+          <SettingsToggle
+            label="Show testing users"
+            value={settings.showTestingUsers}
+            onToggle={() => setSettings('showTestingUsers', toggle)}
+            onChild="On"
+            offChild="Off"
+          />
         </div>
       </Container>
     </div>
