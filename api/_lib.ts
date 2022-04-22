@@ -9,7 +9,8 @@ type ApiWrapper = (h: VercelApiHandler) => VercelApiHandler
 
 export const verifyRequest: ApiWrapper = handler => {
   return async (req, res) => {
-    const secret = req.headers['authorization']?.replace('Bearer ', '')
+    const secret =
+      req.headers['authorization']?.replace('Bearer ', '') ?? (req.query.secret as string)
     if (secret !== SECRET) {
       res.status(401).end()
       return
