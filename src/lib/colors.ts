@@ -12,8 +12,8 @@ const E = 0.001
 const getColorForDayScore = (s: string | number): string => {
   if (s === 'X') return scoreGoodnessTextColors.bad
   if (typeof s === 'string') return ''
-  if (Math.round(s) < 3) return scoreGoodnessTextColors.good
-  if (Math.round(s) < 5) return scoreGoodnessTextColors.ok
+  if (Math.round(s) <= 3) return scoreGoodnessTextColors.good
+  if (Math.round(s) <= 5) return scoreGoodnessTextColors.ok
   return scoreGoodnessTextColors.bad
 }
 
