@@ -136,7 +136,7 @@ export const isBday = async (name: string): Promise<boolean> => {
 export const backup = async (): Promise<boolean> => {
   const date = new Date().toISOString()
 
-  const filename = `${date}${isProd ? '' : '--dev'}.json`
+  const filename = `${isProd ? 'prod/' : 'dev/'}${date}.json`
 
   const data = JSON.stringify(await getScoresWithAllRecords())
   const result = await supabase.storage
