@@ -18,7 +18,8 @@ export const verifyRequest: ApiWrapper = handler => {
   }
 }
 
-const SLUG = process.env.VERCEL ? '~wordle-scores' : '~wordle-scores-dev'
+const isProd = Boolean(process.env.VERCEL)
+const SLUG = isProd ? '~wordle-scores' : '~wordle-scores-dev'
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
 
 type Score = { score: number; daysPlayed: number }
@@ -130,4 +131,18 @@ export const isBday = async (name: string): Promise<boolean> => {
   const m = parseInt(_m)
   const dateInAus = utcToZonedTime(new Date(), 'Australia/Sydney')
   return dateInAus.getDate() === d && dateInAus.getMonth() === m - 1
+}
+
+export const backup = async (): Promise<boolean> => {
+  const date = new Date().toISOString()
+
+  const filename = `${date}${isProd ? '' : '--dev'}.json`
+
+  const data = JSON.stringify(await getScoresWithAllRecords())
+  const result = await supabase.storage
+    .from('wordle-score-backups')
+    .upload(filename, data, { contentType: 'application/json' })
+
+  if (result.error) return false
+  return true
 }
