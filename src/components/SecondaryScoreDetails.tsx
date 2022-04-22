@@ -23,7 +23,7 @@ const SecondaryScoreDetails: Component<SecondaryScoreDetailsProps> = props => {
       <span>
         <CountUp to={props.record.scorePerDay}>
           {count => (
-            <span class={cx('font-mono', getClassesForScore(props.record.scorePerDay))}>
+            <span class={cx('font-mono', getClassesForScore(count()))}>
               {formatScoreNumber(count(), {
                 shortenBigNumbers: settings.shortenBigNumbers,
                 truncateMax: 0,
