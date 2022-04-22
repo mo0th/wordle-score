@@ -173,7 +173,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       if (diffs > 1) {
         if (
           !confirm(
-            `There are ${diffs} differences between your local data and your saved data. Are you sure you want to push changes?`
+            `There are ${diffs} differences between your local data and your saved data. Are you sure you want to push changes? This WILL override any data on the server and may not be recoverable. Consider making a backup (in settings) first.`
           )
         ) {
           return
