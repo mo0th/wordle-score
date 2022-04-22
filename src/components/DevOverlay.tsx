@@ -31,7 +31,7 @@ const DevOverlay: Component = () => {
         </div>
         <div
           class={cx(classes.bg, 'space-y-6 overflow-y-auto p-4')}
-          style="max-height: 80vh; min-height: 50vh"
+          style="max-height: 80vh; min-height: 30vh"
         >
           <WindowSize />
 

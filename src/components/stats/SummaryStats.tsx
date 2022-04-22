@@ -13,6 +13,8 @@ const numberToScore = (n: number): SingleDayScore => (n >= 0 && n <= 6 ? n : 'X'
 
 const mu = 'μ'
 const sigma = 'σ'
+const gamma = 'γ'
+const kappa = 'κ'
 
 const SummaryStats: Component = () => {
   const [settings] = useSettings()
@@ -44,9 +46,20 @@ const SummaryStats: Component = () => {
 
     const total = sum(dayScores)
     const mean = total / nDays
+    const median = (() => {
+      const sorted = [...dayScores].sort((a, b) => a - b)
+      if (sorted.length % 2 === 1) {
+        return sorted[(sorted.length - 1) / 2]
+      }
+      const mid = sorted.length / 2
+      return (sorted[mid - 1] + sorted[mid]) / 2
+    })()
 
     const variance = sum(dayScores.map(s => Math.pow(s - mean, 2))) / nDays
     const standardDeviation = Math.sqrt(variance)
+
+    const skewness = sum(dayScores.map(s => Math.pow((s - mean) / standardDeviation, 3))) / nDays
+    const kurtosis = sum(dayScores.map(s => Math.pow((s - mean) / standardDeviation, 4))) / nDays
 
     const formatFloats = (n: number) =>
       formatScoreNumber(n, {
@@ -65,6 +78,9 @@ const SummaryStats: Component = () => {
         formatFloats(variance),
       ],
       [`Standard Deviation, ${sigma}`, formatFloats(standardDeviation)],
+      [`Skewness, ${gamma}`, formatFloats(skewness)],
+      [`Kurtosis, ${kappa}`, formatFloats(kurtosis)],
+      ['Median', median],
       ['Minimum', min],
       ['Maximum', max],
       [plural(modes.length, 'Mode', 'Modes'), modes.join(',')],
