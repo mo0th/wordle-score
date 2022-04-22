@@ -30,7 +30,7 @@ const Heading: Component = () => {
 
   return (
     <h1
-      class="main-heading mt-8 mb-16 animate-spin px-2 text-center text-6xl sm:mt-12 sm:text-7xl md:text-8xl"
+      class="main-heading mt-8 mb-16 px-2 text-center text-6xl motion-safe:animate-spin sm:mt-12 sm:text-7xl md:text-8xl"
       style={{
         'overflow-wrap': 'break-word',
         'animation-play-state': spinning() ? 'running' : 'paused',

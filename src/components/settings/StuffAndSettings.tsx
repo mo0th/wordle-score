@@ -74,16 +74,6 @@ export const StuffAndSettings: Component = () => {
         </Show>
       </div>
 
-      <Show when={settings.devStuff}>
-        <SettingsToggle
-          label="Plausible"
-          value={settings.plausible}
-          onToggle={() => setSettings('plausible', toggle)}
-          onChild="On"
-          offChild="Off"
-        />
-      </Show>
-
       <hr class="border-gray-300 dark:border-gray-600" />
 
       <form
@@ -134,7 +124,7 @@ export const StuffAndSettings: Component = () => {
   )
 }
 
-const SettingsToggle: Component<{
+export const SettingsToggle: Component<{
   value: boolean
   onToggle: () => void
   label: string

@@ -136,3 +136,25 @@ h2 {
 .details[open] > summary .details-icon {
   @apply rotate-90;
 }
+
+@screen sm {
+  /* Chrome */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-purple-400 hover:bg-purple-500 dark:hover:bg-purple-300;
+  }
+
+  /* Firefox */
+  * {
+    scrollbar-width: 'thin';
+    scrollbar-color: theme('colors.purple.400') theme('colors.transparent');
+  }
+}

@@ -1,6 +1,8 @@
 import { Component, createEffect, createSignal, onCleanup } from 'solid-js'
+import { useSettings } from '~/lib/settings'
 import { cx, toggle } from '~/utils/misc'
 import Container from './Container'
+import { SettingsToggle } from './settings/StuffAndSettings'
 
 const classes = {
   bg: 'bg-purple-200 dark:bg-purple-800',
@@ -8,9 +10,10 @@ const classes = {
 
 const DevOverlay: Component = () => {
   const [show, setShow] = createSignal(false)
+  const [settings, setSettings] = useSettings()
   return (
     <div
-      class="fixed inset-x-0 bottom-0 !m-0 transition-transform"
+      class="fixed inset-x-0 bottom-0 !m-0 motion-safe:transition-transform"
       style={{ transform: show() ? '' : 'translateY(calc(100% - 2rem))' }}
     >
       <Container>
@@ -18,7 +21,7 @@ const DevOverlay: Component = () => {
           <button
             class={cx(
               classes.bg,
-              'transition-colors hover:bg-purple-300 dark:hover:bg-purple-700',
+
               'rounded-t px-2 py-1 font-mono'
             )}
             onClick={() => setShow(toggle)}
@@ -26,8 +29,19 @@ const DevOverlay: Component = () => {
             {'</>'}
           </button>
         </div>
-        <div class={cx(classes.bg, 'p-4')}>
+        <div
+          class={cx(classes.bg, 'space-y-6 overflow-y-auto p-4')}
+          style="max-height: 80vh; min-height: 50vh"
+        >
           <WindowSize />
+
+          <SettingsToggle
+            label="Plausible"
+            value={settings.plausible}
+            onToggle={() => setSettings('plausible', toggle)}
+            onChild="On"
+            offChild="Off"
+          />
         </div>
       </Container>
     </div>
