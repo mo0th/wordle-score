@@ -1,4 +1,4 @@
-import { Component, createEffect, createMemo, For, JSXElement, Show } from 'solid-js'
+import { Component, createEffect, createMemo, For, JSXElement, Show, mergeProps } from 'solid-js'
 import { createStore } from 'solid-js/store'
 import { getClassesForScore } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
@@ -14,10 +14,12 @@ const Comparison: Component<{
   leftTitle: JSXElement
   right: ModifiedScoreRecord
   rightTitle: JSXElement
-}> = props => {
+  fallback?: string
+}> = _props => {
+  const props = mergeProps({ fallback: 'No data' }, _props)
   const data = (record: ModifiedScoreRecord) => {
     return (
-      <For each={Object.entries(record)} fallback={<p class="text-center">No data</p>}>
+      <For each={Object.entries(record)} fallback={<p class="text-center">{props.fallback}</p>}>
         {([day, score]) => (
           <p>
             Day {day} - <span class={cx('font-mono', getClassesForScore(score))}>{score}</span>
@@ -152,8 +154,6 @@ const BackupRestore: Component = () => {
     const backup = state.backup
     if (!backup) return
 
-    console.log(state.backup)
-
     const days = new Set(
       Object.keys(current)
         .concat(Object.keys(state.backup))
@@ -169,33 +169,22 @@ const BackupRestore: Component = () => {
       const fromRecord = current[i]
       const fromBackup = backup[i]
 
-      if (fromBackup && fromRecord) {
-        console.log(3)
-        if (fromBackup === fromRecord) {
-          console.log(4)
-          continue
-        }
-
-        console.log(5)
-        result.record[i] = fromRecord
-        result.backup[i] = fromRecord
-
+      if (fromBackup === fromRecord) {
         continue
       }
 
-      console.log(6)
       result.record[i] = 'N/A'
       result.backup[i] = 'N/A'
 
-      console.log(7)
-      if (fromBackup) {
+      if (fromBackup && fromRecord) {
+        result.record[i] = fromRecord
+        result.backup[i] = fromRecord
+      } else if (fromBackup) {
         result.backup[i] = fromBackup
       } else if (fromRecord) {
         result.record[i] = fromRecord
       }
     }
-
-    console.log(result)
 
     return result
   })
@@ -284,6 +273,7 @@ const BackupRestore: Component = () => {
               left={differences()!.record}
               rightTitle={state.source}
               right={differences()!.backup}
+              fallback="No differences"
             />
           </Collapse>
 
