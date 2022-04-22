@@ -1,29 +1,33 @@
-import { Component, createEffect, For, JSXElement, Show } from 'solid-js'
+import { Component, createEffect, createMemo, For, JSXElement, Show } from 'solid-js'
 import { createStore } from 'solid-js/store'
+import { getClassesForScore } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
 import { ScoreRecord } from '~/types'
-import { scrollToHash } from '~/utils/misc'
+import { cx, scrollToHash } from '~/utils/misc'
 import Button from '../Button'
+import Collapse from '../Collapse'
+
+type ModifiedScoreRecord = Record<keyof ScoreRecord, ScoreRecord[keyof ScoreRecord] | 'N/A'>
 
 const Comparison: Component<{
-  left: ScoreRecord
+  left: ModifiedScoreRecord
   leftTitle: JSXElement
-  right: ScoreRecord
+  right: ModifiedScoreRecord
   rightTitle: JSXElement
 }> = props => {
-  const data = (record: ScoreRecord) => {
+  const data = (record: ModifiedScoreRecord) => {
     return (
       <For each={Object.entries(record)} fallback={<p class="text-center">No data</p>}>
         {([day, score]) => (
           <p>
-            Day {day} - <span class="font-mono">{score}</span>
+            Day {day} - <span class={cx('font-mono', getClassesForScore(score))}>{score}</span>
           </p>
         )}
       </For>
     )
   }
 
-  const side = (title: JSXElement, record: ScoreRecord) => (
+  const side = (title: JSXElement, record: ModifiedScoreRecord) => (
     <div class="space-y-2 rounded border-2 border-gray-400 p-2 text-sm">
       <p class="text-center capitalize">{title}</p>
       <div class="space-y-1">{data(record)}</div>
@@ -143,6 +147,59 @@ const BackupRestore: Component = () => {
     })
   }
 
+  const differences = createMemo(() => {
+    const current = record()
+    const backup = state.backup
+    if (!backup) return
+
+    console.log(state.backup)
+
+    const days = new Set(
+      Object.keys(current)
+        .concat(Object.keys(state.backup))
+        .map(n => parseInt(n))
+    )
+
+    const result: Record<'record' | 'backup', ModifiedScoreRecord> = {
+      record: {},
+      backup: {},
+    }
+
+    for (const i of days) {
+      const fromRecord = current[i]
+      const fromBackup = backup[i]
+
+      if (fromBackup && fromRecord) {
+        console.log(3)
+        if (fromBackup === fromRecord) {
+          console.log(4)
+          continue
+        }
+
+        console.log(5)
+        result.record[i] = fromRecord
+        result.backup[i] = fromRecord
+
+        continue
+      }
+
+      console.log(6)
+      result.record[i] = 'N/A'
+      result.backup[i] = 'N/A'
+
+      console.log(7)
+      if (fromBackup) {
+        result.backup[i] = fromBackup
+      } else if (fromRecord) {
+        result.record[i] = fromRecord
+      }
+    }
+
+    console.log(result)
+
+    return result
+  })
+
   const Reset: Component = () => (
     <Button
       block
@@ -221,12 +278,23 @@ const BackupRestore: Component = () => {
         <div id={IDS.comparison} class="space-y-2 text-sm">
           <p>Compare and Confirm</p>
 
-          <Comparison
-            leftTitle={'Current Data'}
-            left={record()}
-            rightTitle={state.source}
-            right={state.backup!}
-          />
+          <Collapse summary="Differences" defaultOpen>
+            <Comparison
+              leftTitle={'Current Data'}
+              left={differences()!.record}
+              rightTitle={state.source}
+              right={differences()!.backup}
+            />
+          </Collapse>
+
+          <Collapse summary="All Data">
+            <Comparison
+              leftTitle={'Current Data'}
+              left={record()}
+              rightTitle={state.source}
+              right={state.backup!}
+            />
+          </Collapse>
 
           <Button block onClick={confirm}>
             Confirm

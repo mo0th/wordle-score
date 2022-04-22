@@ -132,3 +132,7 @@ h2 {
 .fade-in {
   animation: fadeIn 300ms linear forwards;
 }
+
+.details[open] > summary .details-icon {
+  @apply rotate-90;
+}
