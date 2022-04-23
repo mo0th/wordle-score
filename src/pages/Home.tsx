@@ -8,9 +8,9 @@ import ReadScoreFromClipboard from '~/components/ReadScoreFromClipboard'
 import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
 import { personScoreToRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
-import { useSettings } from '~/lib/settings'
+import { settings, useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
-import { formatScoreNumber, toggle as _toggle } from '~/utils/misc'
+import { cx, formatScoreNumber, toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 
@@ -120,8 +120,9 @@ const ScoreHistory: Component = () => {
           <Button
             onClick={toggle}
             block
+            class={cx(showAll() && (settings.devStuff ? 'bottom-10' : 'bottom-6'))}
             classList={{
-              'sticky bottom-10': showAll(),
+              sticky: showAll(),
             }}
           >
             {showAll() ? `Show Top ${NUM_RECORDS_BEFORE_HIDING}` : `Show All (${recordsLength()})`}
