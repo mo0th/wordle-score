@@ -11,7 +11,6 @@ import {
   Setter,
   onCleanup,
   mergeProps,
-  Accessor,
   createRenderEffect,
   on,
 } from 'solid-js'
