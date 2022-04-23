@@ -18,22 +18,31 @@ export type Settings = {
 }
 
 const SettingsContext = createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
+const DEFAULTS: Settings = {
+  animatedCounts: true,
+  showSyncIndicators: true,
+  devStuff: false,
+  theme: 'dark',
+  plausible: true,
+  colorScores: true,
+  glowyNumbers: true,
+  shortenBigNumbers: true,
+  showTestingUsers: false,
+  showDoneCheckmark: true,
+}
 
 const [settings, setSettings] = useLocalStorageStore<Settings>(
   'mooth:wordle-score-settings',
-  {
-    animatedCounts: true,
-    showSyncIndicators: true,
-    devStuff: false,
-    theme: 'dark',
-    plausible: true,
-    colorScores: true,
-    glowyNumbers: true,
-    shortenBigNumbers: true,
-    showTestingUsers: false,
-    showDoneCheckmark: true,
-  },
-  types.record(types.string, types.any) as types.TypeValidator<Settings>
+  DEFAULTS,
+  (val: unknown): val is Settings => {
+    if (!types.isOfType(val, types.record(types.string, types.any))) return false
+    for (const key in DEFAULTS) {
+      if (!(key in val)) {
+        val[key] = DEFAULTS[key as keyof Settings]
+      }
+    }
+    return true
+  }
 )
 
 export { settings }
