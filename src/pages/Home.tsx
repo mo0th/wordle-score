@@ -120,9 +120,11 @@ const ScoreHistory: Component = () => {
           <Button
             onClick={toggle}
             block
-            class={cx(showAll() && (settings.devStuff ? 'bottom-10' : 'bottom-6'))}
+            style="transition: bottom 150ms ease-in-out"
             classList={{
               sticky: showAll(),
+              'bottom-6': showAll() && !settings.devStuff,
+              'bottom-10': showAll() && settings.devStuff,
             }}
           >
             {showAll() ? `Show Top ${NUM_RECORDS_BEFORE_HIDING}` : `Show All (${recordsLength()})`}
