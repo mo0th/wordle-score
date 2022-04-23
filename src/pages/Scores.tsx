@@ -1,14 +1,17 @@
-import { Link, Navigate } from 'solid-app-router'
+import { Navigate } from 'solid-app-router'
 import { onMount } from 'solid-js'
 import { Component, createMemo, For, Show } from 'solid-js'
 import CountUp from '~/components/CountUp'
+import { CheckCircleIcon } from '~/components/icons'
 import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
 import NotHomePageLayout from '~/layouts/NotHomePageLayout'
+import { scoreGoodnessTextColors } from '~/lib/colors'
 import { personScoreToRenderData, ScoreRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
+import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import { PersonScore } from '~/types'
-import { formatScoreNumber, toggle } from '~/utils/misc'
+import { cx, formatScoreNumber, toggle } from '~/utils/misc'
 import { useLocalStorageStore } from '~/utils/use-local-storage'
 
 const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
@@ -20,7 +23,10 @@ const ScoreLoader: Component = () => (
   </div>
 )
 
-const sortFields: Record<Exclude<keyof ScoreRenderData, 'record'>, string> = {
+const sortFields: Record<
+  Exclude<keyof ScoreRenderData, 'record' | 'mostRecentlyPlayed'>,
+  string
+> = {
   daysPlayed: 'Days Played',
   score: 'Score',
   scorePerDay: 'Average Score',
@@ -37,6 +43,8 @@ const Scores: Component = () => {
 
   onMount(() => refetchAllScores())
 
+  const syncUser = createMemo(() => syncDetails().user)
+
   const unsortedEntries = createMemo(() =>
     (Object.entries(allScores() || {}) as [string, PersonScore][]).map(
       ([name, record]) => [name, personScoreToRenderData(record)] as [string, ScoreRenderData]
@@ -51,11 +59,13 @@ const Scores: Component = () => {
     })
 
     if (!(settings.devStuff && settings.showTestingUsers)) {
-      return sorted.filter(([name]) => !name.endsWith('-testing') || name === syncDetails().user)
+      return sorted.filter(([name]) => !name.endsWith('-testing') || name === syncUser())
     }
 
     return sorted
   })
+
+  const currDay = getCurrentDayOffset()
 
   return (
     <Show when={canSync()} fallback={<Navigate href="/" />}>
@@ -70,7 +80,7 @@ const Scores: Component = () => {
             <For each={entries()} fallback={<p>No one's added their scores yet :(</p>}>
               {([user, record]) => {
                 return (
-                  <div class="space-y-1 rounded-lg bg-gray-200 p-4 dark:bg-gray-700">
+                  <div class="relative space-y-1 rounded-lg bg-gray-200 p-4 dark:bg-gray-700">
                     <p class="text-lg font-bold">{user}</p>
                     <p class="mb-1 text-2xl">
                       Score:{' '}
@@ -86,6 +96,21 @@ const Scores: Component = () => {
                       </span>
                     </p>
                     <SecondaryScoreDetails record={record} />
+                    <Show
+                      when={settings.showDoneCheckmark && currDay === record.mostRecentlyPlayed}
+                    >
+                      <span class="group absolute top-4 right-4 !mt-0 text-purple-700 dark:text-purple-300">
+                        <CheckCircleIcon class="h-5 w-5" />
+                        <span
+                          class={`pointer-events-none absolute -right-2 block w-64 -translate-y-4 rounded bg-gray-300 p-2 text-left opacity-0 shadow-md transition group-hover:translate-y-0 group-hover:opacity-100 dark:bg-gray-600`}
+                          style="max-width: calc(100vw-4rem); top: 1.5rem"
+                        >
+                          {`${
+                            syncUser() === user ? "You've" : `${user} has`
+                          } completed today (day ${currDay})`}
+                        </span>
+                      </span>
+                    </Show>
                   </div>
                 )
               }}

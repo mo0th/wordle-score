@@ -14,6 +14,7 @@ export type Settings = {
   glowyNumbers: boolean
   shortenBigNumbers: boolean
   showTestingUsers: boolean
+  showDoneCheckmark: boolean
 }
 
 const SettingsContext = createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
@@ -30,6 +31,7 @@ const [settings, setSettings] = useLocalStorageStore<Settings>(
     glowyNumbers: true,
     shortenBigNumbers: true,
     showTestingUsers: false,
+    showDoneCheckmark: true,
   },
   types.record(types.string, types.any) as types.TypeValidator<Settings>
 )

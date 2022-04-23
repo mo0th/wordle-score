@@ -54,6 +54,14 @@ export const StuffAndSettings: Component = () => {
       />
 
       <SettingsToggle
+        label="Show Done Today Checkmark"
+        value={settings.showDoneCheckmark}
+        onToggle={() => setSettings('showDoneCheckmark', toggle)}
+        onChild="On"
+        offChild="Off"
+      />
+
+      <SettingsToggle
         label="Sync Indicators"
         value={settings.showSyncIndicators}
         onToggle={() => setSettings('showSyncIndicators', toggle)}

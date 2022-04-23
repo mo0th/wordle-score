@@ -8,6 +8,7 @@ export type PersonScore = {
   daysPlayed: number
   uncountedFails: number
   record?: ScoreRecord
+  mostRecentlyPlayed?: number | null | undefined
 }
 export type AllScores = Record<string, PersonScore>
 

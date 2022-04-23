@@ -23,7 +23,7 @@ const isProd = Boolean(process.env.VERCEL)
 const SLUG = isProd ? '~wordle-scores' : '~wordle-scores-dev'
 const supabase = createClient(process.env.SUPABASE_URL!, process.env.SUPABASE_KEY!)
 
-type Score = { score: number; daysPlayed: number }
+type Score = { score: number; daysPlayed: number; record?: Record<string, string | number> }
 type Scores = Record<string, Score>
 type Singleton = {
   id: number
@@ -61,15 +61,25 @@ const getScoresWithAllRecords = async (): Promise<Scores> => {
   }
 }
 
-export const getScores = async (user: string): Promise<Scores> => {
+export const getScoresToDisplay = async (user: string): Promise<Scores> => {
   const scoresWithAllRecords = await getScoresWithAllRecords()
   return Object.fromEntries(
     Object.entries(scoresWithAllRecords).map(([key, value]: [string, any]) => {
-      const { record: _, ...valueWithoutRecord } = value
+      const { record, ...valueWithoutRecord } = value
       const newValue = user === key ? value : valueWithoutRecord
+      newValue.mostRecentlyPlayed = getMostRecentDay(record)
       return [key, newValue]
     })
   ) as Scores
+}
+
+const getMostRecentDay = (record: Record<string, unknown>): number | null => {
+  const sortedKeys = Object.keys(record)
+    .map(k => parseInt(k))
+    .filter(n => Number.isSafeInteger(n))
+    .sort((a, b) => b - a)
+  if (sortedKeys.length === 0) return null
+  return sortedKeys[0]
 }
 
 const SetScoreSchema = types.objectWithOnlyTheseProperties({
@@ -77,7 +87,7 @@ const SetScoreSchema = types.objectWithOnlyTheseProperties({
   data: types.intersection(
     ScoreSchema,
     types.partialObjectWithProperties({
-      history: types.record(types.string, types.or(types.string, types.number)),
+      record: types.record(types.string, types.or(types.string, types.number)),
     })
   ),
 })
@@ -91,7 +101,7 @@ export const setScore = async (body: unknown): Promise<boolean> => {
   if (body.data.daysPlayed === 0) {
     delete current[body.user]
   } else {
-    current[body.user] = body.data
+    current[body.user] = body.data as any
   }
 
   const { error } = await supabase
