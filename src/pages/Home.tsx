@@ -121,7 +121,7 @@ const ScoreHistory: Component = () => {
             onClick={toggle}
             block
             classList={{
-              'sticky bottom-6': showAll(),
+              'sticky bottom-10': showAll(),
             }}
           >
             {showAll() ? `Show Top ${NUM_RECORDS_BEFORE_HIDING}` : `Show All (${recordsLength()})`}
