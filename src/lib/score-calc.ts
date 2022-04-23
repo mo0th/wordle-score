@@ -1,16 +1,6 @@
-import { AccessorRecord, PersonScore, ScoreRecord, ScoreRecordTuple, SingleDayScore } from '~/types'
+import { PersonScore, ScoreRecord, SingleDayScore } from '~/types'
 import { minmax } from '~/utils/misc'
 
-export type ScoreAccessors = AccessorRecord<{
-  score: PersonScore
-  record: ScoreRecord
-  recordArray: ScoreRecordTuple[]
-}>
-export type ScoreSetters = {
-  setTodayScore(score: SingleDayScore): void
-  setDayScore(day: number, score: SingleDayScore): void
-  deleteDayScore(day: number): void
-}
 export const scores: SingleDayScore[] = [1, 2, 3, 4, 5, 6, 'X']
 
 export const calculateCumulativeScores = (record: ScoreRecord): PersonScore => {

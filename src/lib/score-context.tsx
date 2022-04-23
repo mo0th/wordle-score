@@ -11,6 +11,9 @@ import {
   Setter,
   onCleanup,
   mergeProps,
+  Accessor,
+  createRenderEffect,
+  on,
 } from 'solid-js'
 import * as types from 'pheno'
 import {
@@ -23,7 +26,7 @@ import {
 } from '~/types'
 import { debounce, getHistoryDiffs } from '~/utils/misc'
 import { useLocalStorage } from '~/utils/use-local-storage'
-import { calculateCumulativeScores, ScoreAccessors, scores, ScoreSetters } from './score-calc'
+import { calculateCumulativeScores, scores } from './score-calc'
 import { getCurrentDayOffset } from './wordle-stuff'
 import { useSettings } from './settings'
 import { plausible } from './plausible'
@@ -43,16 +46,21 @@ export type SyncDetails = {
   password: string
 }
 export type ScoreContextValue = [
-  ScoreAccessors &
-    AccessorRecord<{
-      syncDetails: SyncDetails
-      canSync: boolean
-      syncStatus: SyncStatus
-      canRestore: boolean
-    }> & {
-      allScores: Resource<AllScores | undefined>
-    },
-  ScoreSetters & {
+  AccessorRecord<{
+    score: PersonScore
+    record: ScoreRecord
+    recordArray: readonly ScoreRecordTuple[]
+    syncDetails: SyncDetails
+    canSync: boolean
+    syncStatus: SyncStatus
+    canRestore: boolean
+  }> & {
+    allScores: Resource<AllScores | undefined>
+  },
+  {
+    setTodayScore(score: SingleDayScore): void
+    setDayScore(day: number, score: SingleDayScore): void
+    deleteDayScore(day: number): void
     setSyncDetails: Setter<SyncDetails>
     refetchAllScores: () => void
     getJsonBackup: () => string
@@ -61,9 +69,62 @@ export type ScoreContextValue = [
   }
 ]
 
+type Getters = ScoreContextValue[0]
+type Setters = ScoreContextValue[1]
+
 const ScoreContext = createContext<ScoreContextValue | null>(null)
 
 let lastFetchedAt: number | null = null
+
+const useScoreRecordArray = (record: Getters['record']) => {
+  const getEntries = (r: ScoreRecord) =>
+    Object.entries(r)
+      .map(([k, v]) => [parseInt(k), v] as ScoreRecordTuple)
+      .filter(t => !Number.isNaN(t[0]))
+
+  const sortEntries = (arr: ScoreRecordTuple[]) => arr.sort(([a], [b]) => a - b)
+
+  let prevRecord = record()
+  const [array, setArray] = createSignal<ScoreRecordTuple[]>(sortEntries(getEntries(record())))
+
+  createRenderEffect(
+    on(record, newRecord => {
+      const newEntries = getEntries(newRecord)
+      const prevEntries = array()
+      const result: ScoreRecordTuple[] = []
+
+      // copy over elements from previous render
+      for (const entry of prevEntries) {
+        const [day, score] = entry
+
+        if (!newRecord[day]) {
+          // if not in updated data, don't add it
+          continue
+        } else if (score !== newRecord[day]) {
+          // if existing doesn't match updated, replace entry with new tuple
+          result.push([day, newRecord[day]])
+        } else {
+          // if match, then re-use exisitng
+          result.push(entry)
+        }
+      }
+
+      for (const entry of newEntries) {
+        const [day] = entry
+        // if new day in updated data, add entry
+        if (!prevRecord[day]) {
+          result.push(entry)
+        }
+      }
+
+      const entries = sortEntries(result)
+      setArray(entries)
+      prevRecord = newRecord
+    })
+  )
+
+  return array
+}
 
 export type ScoreProviderProps = {
   focusRevalidate?: boolean
@@ -115,25 +176,27 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   }
   const [record, setRecord] = useLocalStorage<ScoreRecord>('mooth:wordle-score', {})
 
-  const recordArray = createMemo(() =>
-    Object.entries(record())
-      .map(([k, v]) => [parseInt(k), v] as ScoreRecordTuple)
-      .filter(t => !Number.isNaN(t[0]))
-      .sort(([a], [b]) => a - b)
-  )
+  // const recordArray = createMemo(() =>
+  //   Object.entries(record())
+  //     .map(([k, v]) => [parseInt(k), v] as ScoreRecordTuple)
+  //     .filter(t => !Number.isNaN(t[0]))
+  //     .sort(([a], [b]) => a - b)
+  // )
+
+  const recordArray = useScoreRecordArray(record)
   const score = createMemo(() => {
     return calculateCumulativeScores(record())
   })
 
-  const setDayScore: ScoreSetters['setDayScore'] = (day, score) => {
+  const setDayScore: Setters['setDayScore'] = (day, score) => {
     setRecord(record => ({ ...record, [day]: score }))
   }
 
-  const setTodayScore: ScoreSetters['setTodayScore'] = score => {
+  const setTodayScore: Setters['setTodayScore'] = score => {
     setDayScore(getCurrentDayOffset(), score)
   }
 
-  const deleteDayScore: ScoreSetters['deleteDayScore'] = day => {
+  const deleteDayScore: Setters['deleteDayScore'] = day => {
     setRecord(record => {
       delete record[day]
       return { ...record }
