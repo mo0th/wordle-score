@@ -50,6 +50,25 @@ const DevOverlay: Component = () => {
             onChild="On"
             offChild="Off"
           />
+
+          <div class="space-y-4">
+            <SettingsToggle
+              label="Dev Stuff"
+              value={settings.devStuff}
+              onToggle={() => setSettings('devStuff', toggle)}
+              onChild="Disable"
+              offChild="Enable"
+            />
+            <p class="text-sm">Disabling will hide this overlay</p>
+          </div>
+
+          <SettingsToggle
+            label="Dev Stuff"
+            value={settings.devStuff}
+            onToggle={() => setSettings('devStuff', toggle)}
+            onChild="Disable"
+            offChild="Enable"
+          />
         </div>
       </Container>
     </div>
