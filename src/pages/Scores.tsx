@@ -107,7 +107,7 @@ const Scores: Component = () => {
                         >
                           {`${
                             syncUser() === user ? "You've" : `${user} has`
-                          } completed today (day ${currDay})`}
+                          } completed today (day ${record.mostRecentlyPlayed})`}
                         </span>
                       </span>
                     </Show>
