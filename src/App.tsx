@@ -1,5 +1,14 @@
 import { Link, Navigate, Route, Router, Routes } from 'solid-app-router'
-import { Component, createEffect, createSignal, lazy, onCleanup, Show, Suspense } from 'solid-js'
+import {
+  Component,
+  createEffect,
+  createSignal,
+  ErrorBoundary,
+  lazy,
+  onCleanup,
+  Show,
+  Suspense,
+} from 'solid-js'
 import Container from './components/Container'
 import Footer from './components/Footer'
 import { StuffAndSettings } from './components/settings/StuffAndSettings'
@@ -78,7 +87,11 @@ const App: Component = () => {
         </Container>
       </div>
       <Show when={settings.devStuff}>
-        <DevOverlay />
+        <ErrorBoundary fallback={[]}>
+          <Suspense>
+            <DevOverlay />
+          </Suspense>
+        </ErrorBoundary>
       </Show>
     </Router>
   )
