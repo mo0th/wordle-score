@@ -42,21 +42,29 @@ const DevOverlay: Component = () => {
             label="Plausible"
             value={settings.plausible}
             onToggle={() => setSettings('plausible', toggle)}
-            onChild="On"
-            offChild="Off"
           />
 
           <SettingsToggle
             label="Show testing users"
             value={settings.showTestingUsers}
             onToggle={() => setSettings('showTestingUsers', toggle)}
-            onChild="On"
-            offChild="Off"
           />
+
+          <div class="space-y-2">
+            <SettingsToggle
+              label="Sandbox Mode"
+              value={settings.sandboxMode}
+              onToggle={() => setSettings('sandboxMode', true)}
+              disabled={settings.sandboxMode}
+            />
+            <p class="text-sm">
+              Make a backup before playing around, and reload the page to disable sandbox mode
+            </p>
+          </div>
 
           <Explode />
 
-          <div class="space-y-4">
+          <div class="space-y-2">
             <SettingsToggle
               label="Dev Stuff"
               value={settings.devStuff}

@@ -15,6 +15,7 @@ export type Settings = {
   shortenBigNumbers: boolean
   showTestingUsers: boolean
   showDoneCheckmark: boolean
+  sandboxMode: boolean
 }
 
 const SettingsContext = createContext<[Store<Settings>, SetStoreFunction<Settings>]>()
@@ -29,6 +30,7 @@ const DEFAULTS: Settings = {
   shortenBigNumbers: true,
   showTestingUsers: false,
   showDoneCheckmark: true,
+  sandboxMode: false,
 }
 
 const [settings, setSettings] = useLocalStorageStore<Settings>(
@@ -44,6 +46,9 @@ const [settings, setSettings] = useLocalStorageStore<Settings>(
     return true
   }
 )
+
+const EPHEMERAL_SETTINGS: (keyof Settings)[] = ['sandboxMode']
+setSettings(Object.fromEntries(EPHEMERAL_SETTINGS.map(key => [key, DEFAULTS[key]])))
 
 export { settings }
 export const SettingsProvider: Component = props => {

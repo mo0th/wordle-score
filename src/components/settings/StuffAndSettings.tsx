@@ -1,5 +1,5 @@
 import { dequal } from 'dequal'
-import { Component, JSXElement, Show } from 'solid-js'
+import { Component, JSXElement, mergeProps, Show } from 'solid-js'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { toggle } from '~/utils/misc'
@@ -33,40 +33,30 @@ export const StuffAndSettings: Component = () => {
         label="Shorten Big Numbers"
         value={settings.shortenBigNumbers}
         onToggle={() => setSettings('shortenBigNumbers', toggle)}
-        onChild="On"
-        offChild="Off"
       />
 
       <SettingsToggle
         label="Coloured Scores"
         value={settings.colorScores}
         onToggle={() => setSettings('colorScores', toggle)}
-        onChild="On"
-        offChild="Off"
       />
 
       <SettingsToggle
         label="Glowy Numbers"
         value={settings.glowyNumbers}
         onToggle={() => setSettings('glowyNumbers', toggle)}
-        onChild="On"
-        offChild="Off"
       />
 
       <SettingsToggle
         label="Show Done Today Checkmark"
         value={settings.showDoneCheckmark}
         onToggle={() => setSettings('showDoneCheckmark', toggle)}
-        onChild="On"
-        offChild="Off"
       />
 
       <SettingsToggle
         label="Sync Indicators"
         value={settings.showSyncIndicators}
         onToggle={() => setSettings('showSyncIndicators', toggle)}
-        onChild="On"
-        offChild="Off"
       />
 
       <div class="space-y-4">
@@ -136,13 +126,15 @@ export const SettingsToggle: Component<{
   value: boolean
   onToggle: () => void
   label: string
-  onChild: JSXElement
-  offChild: JSXElement
-}> = props => {
+  onChild?: JSXElement
+  offChild?: JSXElement
+  disabled?: boolean
+}> = _props => {
+  const props = mergeProps({ onChild: 'On', offChild: 'Off' }, _props)
   return (
     <div class="flex items-center justify-between">
       <p>{props.label}</p>
-      <Button onClick={() => props.onToggle()}>
+      <Button onClick={() => !props.disabled && props.onToggle()} disabled={props.disabled}>
         <Show when={props.value} fallback={props.offChild}>
           {props.onChild}
         </Show>

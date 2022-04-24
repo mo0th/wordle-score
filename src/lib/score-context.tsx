@@ -217,13 +217,14 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       currentScores: AllScores | undefined,
       record: ScoreRecord
     ) => {
+      if (settings.sandboxMode) return
+      if (!navigator.onLine) return
       if (!canSync) return
       if (!currentScores) return
       const dataToSync = { ...score, record }
       const current = currentScores[syncDetails.user]
       delete current.mostRecentlyPlayed
       if (dequal(current, dataToSync)) return
-      if (!navigator.onLine) return
 
       const diffs = current?.record ? getHistoryDiffs(current.record, record) : 0
       if (diffs > 1) {

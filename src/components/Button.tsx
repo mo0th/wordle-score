@@ -13,9 +13,12 @@ const Button: Component<ComponentProps<'button'> & { block?: boolean; as?: strin
       component={local.as}
       class={cx(
         'focus-outline focus-within-ouline cursor-pointer rounded px-2 py-1 text-center transition-colors',
-        'bg-gray-300 hover:bg-purple-200 active:bg-purple-300 dark:bg-gray-600 dark:hover:bg-purple-600 dark:active:bg-purple-700',
-        local.class,
-        local.block && 'block w-full'
+        'bg-gray-300 dark:bg-gray-600',
+        delegated.disabled
+          ? 'cursor-not-allowed text-gray-600 dark:text-gray-300'
+          : 'hover:bg-purple-200 active:bg-purple-300 dark:hover:bg-purple-600 dark:active:bg-purple-700',
+        local.block && 'block w-full',
+        local.class
       )}
       {...delegated}
     />
