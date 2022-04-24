@@ -35,22 +35,19 @@
       src="https://mooth.tech/js/potato.js"
     ></script>
     <script>
-      try {
-        const theme = JSON.parse(localStorage.getItem('mooth:wordle-score-theme'))
-        if (theme === 'light') document.documentElement.classList.remove('dark')
-      } catch (_) {}
+      let t = JSON.parse(localStorage.getItem('mooth:wordle-score-theme'))
+      t == 'light' && document.documentElement.classList.remove('dark')
     </script>
     <script>
       window.onerror = (msg, url, line, col, error) => {
-        console.log(msg, url, line, col, error)
-        const root = document.getElementById('root')
+        let root = document.getElementById('root')
         if (!root.textContent) {
-          const pre = document.createElement('pre')
+          let pre = document.createElement('pre')
           pre.textContent = [msg, url, error.stack, `L${line}C${col}`].join('\n\n')
           root.append(pre)
           root.insertAdjacentHTML(
             'beforeend',
-            `<br><button style="display:block" id="reset" onclick="localStorage.clear(); window.location.reload()">reset</button>`
+            `<br><button style="display:block"id="reset"onclick="localStorage.clear();window.location.reload()">reset</button>`
           )
         }
       }

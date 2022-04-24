@@ -1,0 +1,14 @@
+diff --git a/node_modules/vite-plugin-html/dist/index.cjs b/node_modules/vite-plugin-html/dist/index.cjs
+index 704d055..224930b 100644
+--- a/node_modules/vite-plugin-html/dist/index.cjs
++++ b/node_modules/vite-plugin-html/dist/index.cjs
+@@ -310,7 +310,8 @@ function getOptions(minify) {
+     removeScriptTypeAttributes: minify,
+     removeStyleLinkTypeAttributes: minify,
+     useShortDoctype: minify,
+-    minifyCSS: minify
++    minifyCSS: minify,
++    minifyJS: minify
+   };
+ }
+ async function minifyHtml(html, minify) {
