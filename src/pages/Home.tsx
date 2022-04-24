@@ -10,7 +10,7 @@ import { personScoreToRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { settings, useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
-import { cx, formatScoreNumber, toggle as _toggle } from '~/utils/misc'
+import { formatScoreNumber, toggle as _toggle } from '~/utils/misc'
 
 const NUM_RECORDS_BEFORE_HIDING = 3
 

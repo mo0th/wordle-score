@@ -3,12 +3,13 @@ import { useScoreContext } from '~/lib/score-context'
 import { toggle } from '~/utils/misc'
 import Button from '~/components/Button'
 import Container from '~/components/Container'
+import '~/styles/confetti.css'
 
 const Particles = lazy(() => import('./Particles'))
 
 let done = false
 const Confetti: Component = () => {
-  const [{ syncDetails, canSync }] = useScoreContext()
+  const [{ syncDetails }] = useScoreContext()
   const [show, setShow] = createSignal(false)
   const [shouldConfetti, setShouldConfetti] = createSignal(true)
   const [shouldShowApi] = createResource<boolean, ReturnType<typeof syncDetails>>(

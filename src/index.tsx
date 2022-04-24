@@ -1,16 +1,11 @@
 /* @refresh reload */
 import { render } from 'solid-js/web'
-import App from './App'
-import DefaultErrorBoundary from './components/DefaultErrorBoundary'
+import DefaultErrorBoundary from '~/components/DefaultErrorBoundary'
+import { ScoreProvider } from '~/lib/score-context'
+import { SettingsProvider } from '~/lib/settings'
 
-import { ScoreProvider } from './lib/score-context'
-import { SettingsProvider } from './lib/settings'
-
-import './index.css'
-
-// ;(() => {
-//   throw new Error('test')
-// })()
+import '~/styles/index.css'
+import App from '~/App'
 
 render(
   () => (

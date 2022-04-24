@@ -5,8 +5,8 @@ import { useScoreContext } from '~/lib/score-context'
 import { ScoreRecord } from '~/types'
 import { cx, scrollToHash } from '~/utils/misc'
 import { useCopy } from '~/utils/use-copy'
-import Button from '../Button'
-import Collapse from '../Collapse'
+import Button from '~/components/Button'
+import Collapse from '~/components/Collapse'
 
 type ModifiedScoreRecord = Record<keyof ScoreRecord, ScoreRecord[keyof ScoreRecord] | 'N/A'>
 

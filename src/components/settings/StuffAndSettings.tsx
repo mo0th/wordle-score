@@ -3,8 +3,8 @@ import { Component, JSXElement, mergeProps, Show } from 'solid-js'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { toggle } from '~/utils/misc'
-import Button from '../Button'
-import Collapse from '../Collapse'
+import Button from '~/components/Button'
+import Collapse from '~/components/Collapse'
 import BackupRestore from './BackupRestore'
 
 export const StuffAndSettings: Component = () => {
