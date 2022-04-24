@@ -9,7 +9,7 @@ const ScoresPullIndicator: Component = () => {
   return (
     <Show when={settings.showSyncIndicators || true}>
       <div
-        class="fixed left-4 top-4 transition-transform"
+        class="fixed left-2 top-0 z-50 rounded-b-full bg-gray-50 p-3 transition-transform dark:bg-gray-900"
         style={{
           transform: `translateY(${allScores.loading ? 0 : '-3rem'})`,
         }}

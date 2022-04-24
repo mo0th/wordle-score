@@ -217,7 +217,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       currentScores: AllScores | undefined,
       record: ScoreRecord
     ) => {
-      if (settings.sandboxMode) return
+      // if (settings.sandboxMode) return
       if (!navigator.onLine) return
       if (!canSync) return
       if (!currentScores) return

@@ -47,7 +47,7 @@
           root.append(pre)
           root.insertAdjacentHTML(
             'beforeend',
-            `<br><button style="display:block"id="reset"onclick="localStorage.clear();window.location.reload()">reset</button>`
+            `<br><button style="display:block"id="reset"onclick="localStorage.removeItem('mooth:wordle-score-settings');window.location.reload()">reset</button>`
           )
         }
       }
