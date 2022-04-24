@@ -27,7 +27,7 @@ export const calculateCumulativeScores = (record: ScoreRecord): PersonScore => {
         uncountedFails = 0
       }
     } else {
-      score *= 3
+      uncountedFails++
     }
   }
 

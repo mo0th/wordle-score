@@ -46,7 +46,7 @@ const DefaultErrorBoundary: Component<DefaultErrorBoundaryProps> = props => {
                 {copied() ? 'Copied' : 'Copy Error Message'}
               </Button>
 
-              <Collapse summary="Error Details">
+              <Collapse summary="Error Details" defaultOpen>
                 <pre class="whitespace-pre-wrap break-all">{errorMessage}</pre>
               </Collapse>
 

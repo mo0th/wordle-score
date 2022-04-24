@@ -29,8 +29,15 @@ export const getValidIntKeysAsNumbers = <T extends Record<string, unknown>>(
 }
 
 export const getHistoryDiffs = (a: ScoreRecord, b: ScoreRecord): number => {
-  const [minA, maxA] = minmax(getValidIntKeysAsNumbers(a))
-  const [minB, maxB] = minmax(getValidIntKeysAsNumbers(b))
+  const keysA = getValidIntKeysAsNumbers(a)
+  const keysB = getValidIntKeysAsNumbers(b)
+
+  if (keysA.length < 1 || keysB.length < 1) {
+    return Math.abs(keysA.length - keysB.length)
+  }
+
+  const [minA, maxA] = minmax(keysA)
+  const [minB, maxB] = minmax(keysB)
   const min = Math.min(minA, minB)
   const max = Math.min(maxA, maxB)
 

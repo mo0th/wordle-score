@@ -175,13 +175,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   }
   const [record, setRecord] = useLocalStorage<ScoreRecord>('mooth:wordle-score', {})
 
-  // const recordArray = createMemo(() =>
-  //   Object.entries(record())
-  //     .map(([k, v]) => [parseInt(k), v] as ScoreRecordTuple)
-  //     .filter(t => !Number.isNaN(t[0]))
-  //     .sort(([a], [b]) => a - b)
-  // )
-
   const recordArray = useScoreRecordArray(record)
   const score = createMemo(() => {
     return calculateCumulativeScores(record())
@@ -228,6 +221,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       if (!currentScores) return
       const dataToSync = { ...score, record }
       const current = currentScores[syncDetails.user]
+      delete current.mostRecentlyPlayed
       if (dequal(current, dataToSync)) return
       if (!navigator.onLine) return
 

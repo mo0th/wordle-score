@@ -8,6 +8,10 @@ import { SettingsProvider } from './lib/settings'
 
 import './index.css'
 
+// ;(() => {
+//   throw new Error('test')
+// })()
+
 render(
   () => (
     <DefaultErrorBoundary>
@@ -20,5 +24,3 @@ render(
   ),
   document.getElementById('root') as HTMLElement
 )
-
-document.getElementById('reset')?.remove()

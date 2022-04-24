@@ -25,8 +25,8 @@ const Home: Component = () => {
 
   return (
     <>
-      <div class="space-y-2 text-center">
-        <Show when={score().daysPlayed > 0}>
+      <Show when={score().daysPlayed > 0}>
+        <div class="space-y-2 text-center">
           <h2 className="text-xl">Your score so far</h2>
           <p class="font-mono">
             <CountUp to={score().score}>
@@ -56,8 +56,8 @@ const Home: Component = () => {
               </Link>
             </p>
           </Show>
-        </Show>
-      </div>
+        </div>
+      </Show>
 
       <Show when={isTodayPending()}>
         <div id={CURRENT_DAY_INPUT_ID} class="scroll-m-8 space-y-6">
@@ -103,12 +103,7 @@ const ScoreHistory: Component = () => {
     <div class="space-y-8">
       <h2 class="text-2xl">History</h2>
       <div class="space-y-4">
-        <div
-          class="-mx-4 divide-y-2 divide-gray-300 overflow-y-hidden overflow-x-visible px-4 ease-in-out dark:divide-gray-700"
-          style={{
-            'transition-property': 'height',
-          }}
-        >
+        <div class="-mx-4 divide-y-2 divide-gray-300 overflow-x-visible px-4 ease-in-out dark:divide-gray-700">
           <For
             each={recordsToShow()}
             fallback={<p>Record a day's score to see your history here</p>}
