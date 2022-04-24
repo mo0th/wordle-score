@@ -131,10 +131,17 @@ export type ScoreProviderProps = {
 export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   const props = mergeProps({ focusRevalidate: true }, _props)
   const [settings] = useSettings()
-  const [syncDetails, setSyncDetails] = useLocalStorage('mooth:wordle-sync-details', {
-    user: '',
-    password: '',
-  })
+  const isNotSandbox = createMemo(() => !settings.sandboxMode)
+  const [syncDetails, setSyncDetails] = useLocalStorage(
+    'mooth:wordle-sync-details',
+    {
+      user: '',
+      password: '',
+    },
+    undefined,
+    isNotSandbox
+  )
+
   const canSync = createMemo(() => {
     const d = syncDetails()
     return Boolean(d.user) && Boolean(d.password)
@@ -173,7 +180,12 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     lastFetchedAt = 0
     refetch()
   }
-  const [record, setRecord] = useLocalStorage<ScoreRecord>('mooth:wordle-score', {})
+  const [record, setRecord] = useLocalStorage<ScoreRecord>(
+    'mooth:wordle-score',
+    {},
+    undefined,
+    isNotSandbox
+  )
 
   const recordArray = useScoreRecordArray(record)
   const score = createMemo(() => {
@@ -217,7 +229,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       currentScores: AllScores | undefined,
       record: ScoreRecord
     ) => {
-      // if (settings.sandboxMode) return
+      if (settings.sandboxMode) return
       if (!navigator.onLine) return
       if (!canSync) return
       if (!currentScores) return

@@ -22,11 +22,12 @@ const getInitialValue = <T>(
 export const useLocalStorage = <T>(
   key: string,
   initial: T,
-  validate?: TypeValidator<T>
+  validate?: TypeValidator<T>,
+  shouldSync = () => true
 ): [Accessor<T>, Setter<T>] => {
   const [state, setState] = createSignal<T>(getInitialValue(key, initial, validate))
   createEffect(() => {
-    localStorage.setItem(key, JSON.stringify(state()))
+    if (shouldSync()) localStorage.setItem(key, JSON.stringify(state()))
   })
   return [state, setState]
 }
@@ -34,11 +35,12 @@ export const useLocalStorage = <T>(
 export const useLocalStorageStore = <T>(
   key: string,
   initial: T,
-  validate?: TypeValidator<T>
+  validate?: TypeValidator<T>,
+  shouldSync = () => true
 ): [Store<T>, SetStoreFunction<T>] => {
   const [store, setStore] = createStore<T>(getInitialValue(key, initial, validate))
   createEffect(() => {
-    localStorage.setItem(key, JSON.stringify(store))
+    if (shouldSync()) localStorage.setItem(key, JSON.stringify(store))
   })
   return [store, setStore]
 }

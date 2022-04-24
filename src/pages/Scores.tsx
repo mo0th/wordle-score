@@ -5,13 +5,12 @@ import CountUp from '~/components/CountUp'
 import { CheckCircleIcon } from '~/components/icons'
 import SecondaryScoreDetails from '~/components/SecondaryScoreDetails'
 import NotHomePageLayout from '~/layouts/NotHomePageLayout'
-import { scoreGoodnessTextColors } from '~/lib/colors'
 import { personScoreToRenderData, ScoreRenderData } from '~/lib/score-calc'
 import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import { PersonScore } from '~/types'
-import { cx, formatScoreNumber, toggle } from '~/utils/misc'
+import { formatScoreNumber, toggle } from '~/utils/misc'
 import { useLocalStorageStore } from '~/utils/use-local-storage'
 
 const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
@@ -73,7 +72,7 @@ const Scores: Component = () => {
         <div class="space-y-4">
           <Show
             when={Boolean(allScores())}
-            fallback={Array.from({ length: 4 }, () => (
+            fallback={Array.from({ length: 5 }, () => (
               <ScoreLoader />
             ))}
           >

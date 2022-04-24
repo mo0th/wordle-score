@@ -17,6 +17,7 @@ import Scores from './pages/Scores'
 import SyncIndicator from './components/sync/SyncIndicator'
 import { useSettings } from './lib/settings'
 import { isDynamicImportError } from './utils/misc'
+import SandboxModeIndicator from './components/settings/SandboxModeIndicator'
 
 const Confetti = lazy(() => import('./components/confetti/Confetti'))
 const Stats = lazy(() => import('./pages/Stats'))
@@ -60,11 +61,7 @@ const App: Component = () => {
       <SyncIndicator />
       <Confetti />
       <div class="flex h-full flex-col">
-        <Show when={settings.sandboxMode}>
-          <div class="fixed inset-x-0 top-0 z-40 bg-yellow-300 py-2 font-bold text-black">
-            <Container>Sandbox mode enabled - changes won't be saved</Container>
-          </div>
-        </Show>
+        <SandboxModeIndicator />
         <Heading />
         <Container class="relative flex-1 space-y-24 pb-24">
           <Routes>
