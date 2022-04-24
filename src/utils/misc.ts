@@ -120,3 +120,9 @@ export const scrollToHash = (hash: string, top = true) => {
 export const cond = <T>(c: boolean, a: T, b: T): T => (c ? a : b)
 
 export const sum = (arr: number[]): number => arr.reduce((a, c) => a + c, 0)
+
+export const isDynamicImportError = (err: unknown): err is TypeError =>
+  err instanceof TypeError &&
+  Boolean(
+    err.message.match(/failed to (fetch dynamically imported module|resolve module specifier)/i)
+  )

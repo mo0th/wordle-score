@@ -16,6 +16,7 @@ import Home from './pages/Home'
 import Scores from './pages/Scores'
 import SyncIndicator from './components/sync/SyncIndicator'
 import { useSettings } from './lib/settings'
+import { isDynamicImportError } from './utils/misc'
 
 const Confetti = lazy(() => import('./components/confetti/Confetti'))
 const Stats = lazy(() => import('./pages/Stats'))
@@ -53,7 +54,7 @@ const Heading: Component = () => {
 }
 
 const App: Component = () => {
-  const [settings] = useSettings()
+  const [settings, setSettings] = useSettings()
   return (
     <Router>
       <SyncIndicator />
@@ -87,7 +88,15 @@ const App: Component = () => {
         </Container>
       </div>
       <Show when={settings.devStuff}>
-        <ErrorBoundary fallback={[]}>
+        <ErrorBoundary
+          fallback={err => {
+            if (isDynamicImportError(err)) {
+              setSettings('devStuff', false)
+              return 'hello'
+            }
+            throw err
+          }}
+        >
           <Suspense>
             <DevOverlay />
           </Suspense>

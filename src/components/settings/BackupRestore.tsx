@@ -4,6 +4,7 @@ import { getClassesForScore } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
 import { ScoreRecord } from '~/types'
 import { cx, scrollToHash } from '~/utils/misc'
+import { useCopy } from '~/utils/use-copy'
 import Button from '../Button'
 import Collapse from '../Collapse'
 
@@ -53,6 +54,8 @@ const BackupRestore: Component = () => {
     { getJsonBackup, importJsonBackup, isBackupValid },
   ] = useScoreContext()
 
+  const [copy, copied] = useCopy()
+
   const [state, setState] = createStore({
     status: 'idle' as RestoreStatus,
     backup: null as ScoreRecord | null,
@@ -67,7 +70,7 @@ const BackupRestore: Component = () => {
 
   const toClipboard = async () => {
     const backup = getJsonBackup()
-    await navigator.clipboard.writeText(backup)
+    await copy(backup)
   }
 
   const toFile = async () => {
@@ -211,7 +214,7 @@ const BackupRestore: Component = () => {
           <p>Backup</p>
           <div class="grid grid-cols-2 gap-2">
             <Button onClick={toClipboard} block>
-              To Clipboard
+              {copied() ? 'Copied' : 'To Clipboard'}
             </Button>
             <Button onClick={toFile} block>
               Download

@@ -11,6 +11,7 @@ const classes = {
 const DevOverlay: Component = () => {
   const [show, setShow] = createSignal(false)
   const [settings, setSettings] = useSettings()
+
   return (
     <div
       class="fixed inset-x-0 bottom-0 !m-0 motion-safe:transition-transform"
@@ -51,6 +52,8 @@ const DevOverlay: Component = () => {
             offChild="Off"
           />
 
+          <Explode />
+
           <div class="space-y-4">
             <SettingsToggle
               label="Dev Stuff"
@@ -86,6 +89,26 @@ const WindowSize = () => {
         {size().width} x {size().height}
       </p>
     </div>
+  )
+}
+
+const Explode = () => {
+  const label = 'Explosion! 🔥 💣'
+  const [exploded, setExploded] = createSignal(false)
+
+  createEffect(() => {
+    console.log('asdf')
+    if (exploded()) throw new Error(label)
+  })
+
+  return (
+    <SettingsToggle
+      label={label}
+      value
+      onToggle={() => setExploded(true)}
+      onChild="Booom"
+      offChild={null}
+    />
   )
 }
 
