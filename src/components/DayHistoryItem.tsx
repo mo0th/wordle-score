@@ -1,7 +1,6 @@
 import { Component, createMemo, createSignal, Show } from 'solid-js'
 import { getClassesForScore } from '~/lib/colors'
 import { useScoreContext } from '~/lib/score-context'
-import { useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import { SingleDayScore } from '~/types'
 import { cx } from '~/utils/misc'
@@ -24,7 +23,7 @@ const DayHistoryItem: Component<{
   const [, { setDayScore, deleteDayScore }] = useScoreContext()
   const [showEdit, setShowEdit] = createSignal(false)
   const [currentScore, setCurrentScore] = createSignal(props.dayScore)
-  const [settings] = useSettings()
+  const [isDelete, setIsDelete] = createSignal(false)
 
   const open = () => {
     setShowEdit(true)
@@ -35,7 +34,7 @@ const DayHistoryItem: Component<{
     setCurrentScore(props.dayScore as any)
   }
 
-  const showSaveButton = createMemo(() => currentScore() !== props.dayScore)
+  const showSaveEditButton = createMemo(() => !isDelete() && currentScore() !== props.dayScore)
 
   return (
     <div id={getDayHistoryItemId(props.day)} class="space-y-4 py-4">
@@ -58,12 +57,15 @@ const DayHistoryItem: Component<{
           value={currentScore()}
           onScoreSelect={score => setCurrentScore(score as any)}
           onDelete={() => {
-            if (confirm(`Are you sure you want to delete Day ${props.day}?`)) {
-              deleteDayScore(props.day)
-            }
+            setIsDelete(true)
           }}
         />
-        <Show when={showSaveButton()}>
+        <Show when={isDelete()}>
+          <Button block onClick={() => deleteDayScore(props.day)}>
+            Delete Day {props.day}
+          </Button>
+        </Show>
+        <Show when={showSaveEditButton()}>
           <Button block onClick={() => setDayScore(props.day, currentScore())}>
             Save Change ({props.dayScore} &rightarrow; {currentScore()})
           </Button>
