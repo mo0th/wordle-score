@@ -16,7 +16,7 @@ const Confetti: Component = () => {
     async details => {
       if (!details.user || !details.password) return false
       try {
-        const { ok } = await fetch('/api/bday', {
+        const { ok, headers } = await fetch('/api/bday', {
           method: 'POST',
           body: JSON.stringify({
             user: details.user,
@@ -26,8 +26,8 @@ const Confetti: Component = () => {
             'Content-Type': 'application/json',
           },
         })
-        if (ok) Particles.preload()
-        return ok
+
+        return ok && !headers.get('content-type')?.includes('html')
       } catch (err) {
         return false
       }

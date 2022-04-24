@@ -99,7 +99,6 @@ const Explode = () => {
   const [exploded, setExploded] = createSignal(false)
 
   createEffect(() => {
-    console.log('asdf')
     if (exploded()) throw new Error(label)
   })
 
