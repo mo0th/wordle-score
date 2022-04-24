@@ -14,22 +14,24 @@ const DevOverlay: Component = () => {
 
   return (
     <div
-      class="fixed inset-x-0 bottom-0 !m-0 motion-safe:transition-transform"
-      style={{ transform: show() ? '' : 'translateY(calc(100% - 2rem))' }}
+      class="fixed inset-x-0 bottom-0 !m-0 drop-shadow-md transition motion-reduce:transition-opacity"
+      classList={{
+        'opacity-50 translate-y-full': !show(),
+        'opacity-100': show(),
+      }}
     >
-      <Container>
-        <div class="">
-          <button
-            class={cx(
-              classes.bg,
+      <Container class="relative">
+        <button
+          class={cx(
+            classes.bg,
+            'absolute top-0 left-8 -translate-y-full rounded-t px-2 py-1 font-mono hover:bg-purple-300 dark:hover:bg-purple-700'
+          )}
+          onClick={() => setShow(toggle)}
+        >
+          {'</>'}
+          <span class="sr-only">Open / Close Dev Overlay</span>
+        </button>
 
-              'rounded-t px-2 py-1 font-mono'
-            )}
-            onClick={() => setShow(toggle)}
-          >
-            {'</>'}
-          </button>
-        </div>
         <div
           class={cx(classes.bg, 'space-y-6 overflow-y-auto p-4')}
           style="max-height: 80vh; min-height: 30vh"
