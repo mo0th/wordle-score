@@ -5,7 +5,6 @@ import SummaryStats from '~/components/stats/SummaryStats'
 
 import '~/styles/stats.css'
 import { useScoreContext } from '~/lib/score-context'
-import { createMemoObject } from 'solid-app-router/dist/utils'
 import StatsSectionWrapper from '~/components/stats/StatsSectionWrapper'
 import Button from '~/components/Button'
 
@@ -25,9 +24,12 @@ const Stats: Component = () => {
   return (
     <NotHomePageLayout title="Stats">
       <StatsSectionWrapper title="Timeframe">
-        <div class="grid grid-cols-2">
+        <div class="grid grid-cols-2 gap-2">
           <Button block onClick={() => setNRecords(7)}>
             Last 7 Days
+          </Button>
+          <Button block onClick={() => setNRecords(28)}>
+            Last Month
           </Button>
           <Button block onClick={() => setNRecords(null)}>
             All Time
