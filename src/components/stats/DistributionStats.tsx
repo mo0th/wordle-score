@@ -103,7 +103,7 @@ const DistributionStats: Component<{ records: ScoreRecordTuple[] }> = props => {
   })
 
   return (
-    <StatsSectionWrapper title="Distribution">
+    <StatsSectionWrapper title="Score Distribution">
       <table class={cx('stat-table w-full table-fixed overflow-x-auto font-mono')}>
         <thead>
           <tr>

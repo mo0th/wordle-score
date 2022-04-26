@@ -30,6 +30,9 @@ const SummaryStats: Component<{ records: ScoreRecordTuple[] }> = props => {
   })
 
   const summary = createMemo(() => {
+    const days = props.records.map(([d]) => d)
+    const daysPlayed = days.length
+    const [minDay, maxDay] = minmax(days)
     const dayScores = props.records.map(([_, s]) => scoreToNumber(s))
     const [min, max] = minmax(dayScores)
       .map(n => numberToScore(n))
@@ -81,6 +84,9 @@ const SummaryStats: Component<{ records: ScoreRecordTuple[] }> = props => {
       ],
       ['Minimum', min],
       ['Maximum', max],
+      ['First Day Played', minDay],
+      ['Last Day Played', maxDay],
+      ['Days Played', daysPlayed],
       [
         <>
           Variance, {sigma}

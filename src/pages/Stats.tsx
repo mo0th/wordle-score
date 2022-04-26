@@ -1,4 +1,4 @@
-import { Component, createMemo, createSignal, For } from 'solid-js'
+import { Component, createMemo, createSignal, For, Show } from 'solid-js'
 import NotHomePageLayout from '~/layouts/NotHomePageLayout'
 import DistributionStats from '~/components/stats/DistributionStats'
 import SummaryStats from '~/components/stats/SummaryStats'
@@ -13,15 +13,18 @@ const Stats: Component = () => {
   const [{ recordArray }] = useScoreContext()
   const [nRecords, setNRecords] = createSignal<number | null>(null)
 
-  const records = createMemo(() => {
-    const array = recordArray()
+  const earliest = createMemo(() => {
     const nToShow = nRecords()
     if (nToShow === null) {
-      return array
+      return 0
     }
     const currentDay = getCurrentDayOffset()
     const earliest = currentDay - nToShow + 1
-    return array.filter(([day]) => day >= earliest)
+    return earliest
+  })
+  const records = createMemo(() => {
+    const earliestDay = earliest()
+    return recordArray().filter(([day]) => day >= earliestDay)
   })
 
   const timeframes: [string, number | null][] = [
@@ -32,23 +35,25 @@ const Stats: Component = () => {
 
   return (
     <NotHomePageLayout title="Stats">
-      <StatsSectionWrapper title="Timeframe">
-        <div class="grid grid-cols-3 gap-2">
-          <For each={timeframes}>
-            {([title, timeframe]) => (
-              <Button
-                block
-                active={timeframe === nRecords()}
-                onClick={() => setNRecords(timeframe)}
-              >
-                {title}
-              </Button>
-            )}
-          </For>
-        </div>
-      </StatsSectionWrapper>
-      <DistributionStats records={records()} />
-      <SummaryStats records={records()} />
+      <Show when={recordArray().length > 0} fallback={<p>You don't have any data yet</p>}>
+        <StatsSectionWrapper title="Timeframe">
+          <div class="grid grid-cols-3 gap-2">
+            <For each={timeframes}>
+              {([title, timeframe]) => (
+                <Button
+                  block
+                  active={timeframe === nRecords()}
+                  onClick={() => setNRecords(timeframe)}
+                >
+                  {title}
+                </Button>
+              )}
+            </For>
+          </div>
+        </StatsSectionWrapper>
+        <DistributionStats records={records()} />
+        <SummaryStats records={records()} />
+      </Show>
     </NotHomePageLayout>
   )
 }
