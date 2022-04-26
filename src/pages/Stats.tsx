@@ -18,7 +18,7 @@ const Stats: Component = () => {
     if (nToShow === null) {
       return array
     }
-    return array.slice(0, nToShow)
+    return array.slice(-nToShow)
   })
 
   return (
