@@ -1,4 +1,4 @@
-import { cx, lessThanOrEqualWithError } from '~/utils/misc'
+import { cx } from '~/utils/misc'
 import { settings } from './settings'
 
 export const scoreGoodnessTextColors = {
@@ -12,8 +12,8 @@ const E = 0.001
 const getColorForDayScore = (s: string | number): string => {
   if (s === 'X') return scoreGoodnessTextColors.bad
   if (typeof s === 'string') return ''
-  if (Math.round(s) <= 3) return scoreGoodnessTextColors.good
-  if (Math.round(s) < 5) return scoreGoodnessTextColors.ok
+  if (s <= 3) return scoreGoodnessTextColors.good
+  if (s <= 5) return scoreGoodnessTextColors.ok
   return scoreGoodnessTextColors.bad
 }
 
