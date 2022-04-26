@@ -1,9 +1,8 @@
 import { Component, createMemo, For, JSXElement } from 'solid-js'
 import { getClassesForScore } from '~/lib/colors'
 import { scores } from '~/lib/score-calc'
-import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
-import { SingleDayScore } from '~/types'
+import { ScoreRecordTuple, SingleDayScore } from '~/types'
 import { formatScoreNumber, jsxJoin, minmax, plural, sum } from '~/utils/misc'
 import StatsSectionWrapper from './StatsSectionWrapper'
 
@@ -16,23 +15,22 @@ const sigma = 'σ'
 const gamma = 'γ'
 const kappa = 'κ'
 
-const SummaryStats: Component = () => {
+const SummaryStats: Component<{ records: ScoreRecordTuple[] }> = props => {
   const [settings] = useSettings()
-  const [{ recordArray }] = useScoreContext()
 
   const counts = createMemo(() => {
     const results = Object.fromEntries(scores.map(s => [s, 0] as const)) as Record<
       SingleDayScore,
       number
     >
-    recordArray().forEach(([_, score]) => {
+    props.records.forEach(([_, score]) => {
       results[score]++
     })
     return scores.map(s => [s, results[s]] as const)
   })
 
   const summary = createMemo(() => {
-    const dayScores = recordArray().map(([_, s]) => scoreToNumber(s))
+    const dayScores = props.records.map(([_, s]) => scoreToNumber(s))
     const [min, max] = minmax(dayScores)
       .map(n => numberToScore(n))
       .map(s => <span class={getClassesForScore(s)}>{s}</span>)

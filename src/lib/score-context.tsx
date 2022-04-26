@@ -48,7 +48,7 @@ export type ScoreContextValue = [
   AccessorRecord<{
     score: PersonScore
     record: ScoreRecord
-    recordArray: readonly ScoreRecordTuple[]
+    recordArray: ScoreRecordTuple[]
     syncDetails: SyncDetails
     canSync: boolean
     syncStatus: SyncStatus
