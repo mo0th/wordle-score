@@ -24,7 +24,7 @@ const Stats: Component = () => {
   return (
     <NotHomePageLayout title="Stats">
       <StatsSectionWrapper title="Timeframe">
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-3 gap-2">
           <Button block onClick={() => setNRecords(7)}>
             Last 7 Days
           </Button>
