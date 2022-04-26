@@ -1,4 +1,4 @@
-import { Component, createMemo, createSignal } from 'solid-js'
+import { Component, createMemo, createSignal, For } from 'solid-js'
 import NotHomePageLayout from '~/layouts/NotHomePageLayout'
 import DistributionStats from '~/components/stats/DistributionStats'
 import SummaryStats from '~/components/stats/SummaryStats'
@@ -7,6 +7,7 @@ import '~/styles/stats.css'
 import { useScoreContext } from '~/lib/score-context'
 import StatsSectionWrapper from '~/components/stats/StatsSectionWrapper'
 import Button from '~/components/Button'
+import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 
 const Stats: Component = () => {
   const [{ recordArray }] = useScoreContext()
@@ -18,22 +19,32 @@ const Stats: Component = () => {
     if (nToShow === null) {
       return array
     }
-    return array.slice(-nToShow)
+    const currentDay = getCurrentDayOffset()
+    const earliest = currentDay - nToShow + 1
+    return array.filter(([day]) => day >= earliest)
   })
+
+  const timeframes: [string, number | null][] = [
+    ['Last 7 Days', 7],
+    ['Last Month', 28],
+    ['All Time', null],
+  ]
 
   return (
     <NotHomePageLayout title="Stats">
       <StatsSectionWrapper title="Timeframe">
         <div class="grid grid-cols-3 gap-2">
-          <Button block onClick={() => setNRecords(7)}>
-            Last 7 Days
-          </Button>
-          <Button block onClick={() => setNRecords(28)}>
-            Last Month
-          </Button>
-          <Button block onClick={() => setNRecords(null)}>
-            All Time
-          </Button>
+          <For each={timeframes}>
+            {([title, timeframe]) => (
+              <Button
+                block
+                active={timeframe === nRecords()}
+                onClick={() => setNRecords(timeframe)}
+              >
+                {title}
+              </Button>
+            )}
+          </For>
         </div>
       </StatsSectionWrapper>
       <DistributionStats records={records()} />

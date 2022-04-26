@@ -30,6 +30,7 @@ module.exports = {
       addVariant('hocus', ['&:hover', '&:focus'])
       addVariant('hocus-within', ['&:hover', '&:focus-within'])
       addVariant('group-hocus', [':merge(.group):hover &', ':merge(.group):focus &'])
+      addVariant('active', ['&[data-active]', '&:active'])
     }),
   ],
 }
