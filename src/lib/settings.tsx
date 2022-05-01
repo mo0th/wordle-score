@@ -2,6 +2,7 @@ import * as types from 'pheno'
 import { createContext, Component, useContext, createEffect } from 'solid-js'
 import { SetStoreFunction, Store } from 'solid-js/store'
 import { useLocalStorageStore } from '~/utils/use-local-storage'
+import { addSyncCondition } from './should-sync'
 import { Theme, updateThemeInDocument } from './theme'
 
 export type Settings = {
@@ -49,6 +50,8 @@ const [settings, setSettings] = useLocalStorageStore<Settings>(
 
 const EPHEMERAL_SETTINGS: (keyof Settings)[] = ['sandboxMode']
 setSettings(Object.fromEntries(EPHEMERAL_SETTINGS.map(key => [key, DEFAULTS[key]])))
+
+addSyncCondition(() => !settings.sandboxMode)
 
 export { settings }
 export const SettingsProvider: Component = props => {

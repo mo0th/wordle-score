@@ -1,18 +1,17 @@
-import { TypeValidator } from 'pheno'
 import { Accessor, createEffect, createSignal, Setter } from 'solid-js'
 import { createStore, SetStoreFunction, Store } from 'solid-js/store'
+import { shouldSync } from '~/lib/should-sync'
 
-const acceptAllValidator = (() => true) as unknown as TypeValidator<any>
-const getInitialValue = <T>(
-  key: string,
-  fallback: T,
-  validate: TypeValidator<T> = acceptAllValidator
-): T => {
+type Validate<T> = (obj: unknown) => obj is T
+
+const getInitialValue = <T>(key: string, fallback: T, validate?: Validate<T>): T => {
   try {
     const cachedString = localStorage.getItem(key)
     if (!cachedString) return fallback
     const parsed = JSON.parse(cachedString)
-    if (!validate(parsed)) return fallback
+    if (validate && !validate(parsed)) {
+      return fallback
+    }
     return parsed
   } catch (err) {
     return fallback
@@ -22,8 +21,7 @@ const getInitialValue = <T>(
 export const useLocalStorage = <T>(
   key: string,
   initial: T,
-  validate?: TypeValidator<T>,
-  shouldSync = () => true
+  validate?: Validate<T>
 ): [Accessor<T>, Setter<T>] => {
   const [state, setState] = createSignal<T>(getInitialValue(key, initial, validate))
   createEffect(() => {
@@ -35,8 +33,7 @@ export const useLocalStorage = <T>(
 export const useLocalStorageStore = <T>(
   key: string,
   initial: T,
-  validate?: TypeValidator<T>,
-  shouldSync = () => true
+  validate?: Validate<T>
 ): [Store<T>, SetStoreFunction<T>] => {
   const [store, setStore] = createStore<T>(getInitialValue(key, initial, validate))
   createEffect(() => {
