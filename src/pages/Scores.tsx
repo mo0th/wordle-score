@@ -10,15 +10,15 @@ import { useScoreContext } from '~/lib/score-context'
 import { useSettings } from '~/lib/settings'
 import { getCurrentDayOffset } from '~/lib/wordle-stuff'
 import { PersonScore } from '~/types'
-import { formatScoreNumber, toggle } from '~/utils/misc'
-import { useLocalStorageStore } from '~/utils/use-local-storage'
+import { cx, formatScoreNumber, toggle } from '~/utils/misc'
+import { createLocalStore } from '~/utils/local-storage'
 
 const scoreLoaderClassCommon = 'mx-auto bg-gray-400 dark:bg-gray-500 rounded animate-pulse'
 const ScoreLoader: Component = () => (
   <div class="space-y-1 rounded-lg bg-gray-200 p-4 dark:bg-gray-700">
-    <div class={`h-7 ${scoreLoaderClassCommon}`} style="width:100px" />
-    <div class={`h-8 ${scoreLoaderClassCommon}`} style="width: 150px" />
-    <div class={`h-5 ${scoreLoaderClassCommon}`} style="width: 250px" />
+    <div class={cx(scoreLoaderClassCommon, 'h-7')} style="width:100px" />
+    <div class={cx(scoreLoaderClassCommon, 'h-8')} style="width:150px" />
+    <div class={cx(scoreLoaderClassCommon, 'h-5')} style="width:250px" />
   </div>
 )
 
@@ -35,7 +35,7 @@ const sortFields: Record<
 const Scores: Component = () => {
   const [settings] = useSettings()
   const [{ canSync, allScores, syncDetails }, { refetchAllScores }] = useScoreContext()
-  const [sortOptions, setSortOptions] = useLocalStorageStore<{
+  const [sortOptions, setSortOptions] = createLocalStore<{
     asc: boolean
     by: keyof typeof sortFields
   }>('mooth:wordle-score-sorting', { asc: true, by: 'scorePerDay' })
@@ -101,7 +101,7 @@ const Scores: Component = () => {
                       <span class="group absolute top-4 right-4 !mt-0 text-purple-700 dark:text-purple-300">
                         <CheckCircleIcon class="h-5 w-5" />
                         <span
-                          class={`pointer-events-none absolute -right-2 block w-64 -translate-y-4 rounded bg-gray-300 p-2 text-left opacity-0 shadow-md transition group-hover:translate-y-0 group-hover:opacity-100 dark:bg-gray-600`}
+                          class="pointer-events-none absolute -right-2 block w-64 -translate-y-4 rounded bg-gray-300 p-2 text-left opacity-0 shadow-md transition group-hover:translate-y-0 group-hover:opacity-100 dark:bg-gray-600"
                           style="max-width: calc(100vw-4rem); top: 1.5rem"
                         >
                           {`${

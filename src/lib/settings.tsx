@@ -1,7 +1,7 @@
 import * as types from 'pheno'
 import { createContext, Component, useContext, createEffect } from 'solid-js'
 import { SetStoreFunction, Store } from 'solid-js/store'
-import { useLocalStorageStore } from '~/utils/use-local-storage'
+import { createLocalStore } from '~/utils/local-storage'
 import { addSyncCondition } from './should-sync'
 import { Theme, updateThemeInDocument } from './theme'
 
@@ -34,7 +34,7 @@ const DEFAULTS: Settings = {
   sandboxMode: false,
 }
 
-const [settings, setSettings] = useLocalStorageStore<Settings>(
+const [settings, setSettings] = createLocalStore<Settings>(
   'mooth:wordle-score-settings',
   DEFAULTS,
   (val: unknown): val is Settings => {

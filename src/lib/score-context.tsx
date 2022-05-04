@@ -24,7 +24,7 @@ import {
   SingleDayScore,
 } from '~/types'
 import { debounce, getHistoryDiffs } from '~/utils/misc'
-import { useLocalStorage } from '~/utils/use-local-storage'
+import { createLocalSignal } from '~/utils/local-storage'
 import { calculateCumulativeScores, scores } from './score-calc'
 import { getCurrentDayOffset } from './wordle-stuff'
 import { useSettings } from './settings'
@@ -132,7 +132,7 @@ export type ScoreProviderProps = {
 export const ScoreProvider: Component<ScoreProviderProps> = _props => {
   const props = mergeProps({ focusRevalidate: true }, _props)
   const [settings] = useSettings()
-  const [syncDetails, setSyncDetails] = useLocalStorage(
+  const [syncDetails, setSyncDetails] = createLocalSignal(
     'mooth:wordle-sync-details',
     {
       user: '',
@@ -179,7 +179,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     lastFetchedAt = 0
     refetch()
   }
-  const [record, setRecord] = useLocalStorage<ScoreRecord>('mooth:wordle-score', {}, undefined)
+  const [record, setRecord] = createLocalSignal<ScoreRecord>('mooth:wordle-score', {}, undefined)
 
   const recordArray = useScoreRecordArray(record)
   const score = createMemo(() => {
@@ -228,7 +228,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       if (!canSync) return
       if (!currentScores) return
       const dataToSync = { ...score, record }
-      const current = currentScores[syncDetails.user]
+      const current = { ...currentScores[syncDetails.user] }
       delete current.mostRecentlyPlayed
       if (dequal(current, dataToSync)) return
 
