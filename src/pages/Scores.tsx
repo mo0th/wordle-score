@@ -101,7 +101,7 @@ const Scores: Component = () => {
                       <span class="group absolute top-4 right-4 !mt-0 text-purple-700 dark:text-purple-300">
                         <CheckCircleIcon class="h-5 w-5" />
                         <span
-                          class="pointer-events-none absolute -right-2 block w-64 -translate-y-4 rounded bg-gray-300 p-2 text-left opacity-0 shadow-md transition group-hover:translate-y-0 group-hover:opacity-100 dark:bg-gray-600"
+                          class="pointer-events-none absolute -right-2 block w-56 -translate-y-4 rounded bg-gray-300 p-2 text-left opacity-0 shadow-md transition group-hover:translate-y-0 group-hover:opacity-100 dark:bg-gray-600"
                           style="max-width: calc(100vw-4rem); top: 1.5rem"
                         >
                           {`${syncUser() === user ? 'You' : user} scored ${
