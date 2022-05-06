@@ -23,7 +23,7 @@ const ScoreLoader: Component = () => (
 )
 
 const sortFields: Record<
-  Exclude<keyof ScoreRenderData, 'record' | 'mostRecentlyPlayed'>,
+  Exclude<keyof ScoreRenderData, 'record' | 'mostRecentlyPlayed' | 'mostRecentScore'>,
   string
 > = {
   daysPlayed: 'Days Played',
@@ -104,9 +104,9 @@ const Scores: Component = () => {
                           class="pointer-events-none absolute -right-2 block w-64 -translate-y-4 rounded bg-gray-300 p-2 text-left opacity-0 shadow-md transition group-hover:translate-y-0 group-hover:opacity-100 dark:bg-gray-600"
                           style="max-width: calc(100vw-4rem); top: 1.5rem"
                         >
-                          {`${
-                            syncUser() === user ? "You've" : `${user} has`
-                          } completed today (day ${record.mostRecentlyPlayed})`}
+                          {`${syncUser() === user ? 'You' : user} scored ${
+                            record.mostRecentScore
+                          } today (day ${record.mostRecentlyPlayed})`}
                         </span>
                       </span>
                     </Show>

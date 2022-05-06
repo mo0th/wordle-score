@@ -67,19 +67,21 @@ export const getScoresToDisplay = async (user: string): Promise<Scores> => {
     Object.entries(scoresWithAllRecords).map(([key, value]: [string, any]) => {
       const { record, ...valueWithoutRecord } = value
       const newValue = user === key ? value : valueWithoutRecord
-      newValue.mostRecentlyPlayed = getMostRecentDay(record)
+      const [day, score] = getMostRecent(record)
+      newValue.mostRecentlyPlayed = day
+      newValue.mostRecentScore = score
       return [key, newValue]
     })
   ) as Scores
 }
 
-const getMostRecentDay = (record: Record<string, unknown>): number | null => {
-  const sortedKeys = Object.keys(record)
-    .map(k => parseInt(k))
-    .filter(n => Number.isSafeInteger(n))
-    .sort((a, b) => b - a)
-  if (sortedKeys.length === 0) return null
-  return sortedKeys[0]
+const getMostRecent = <V>(record: Record<string, V>): [number, V] | [null, null] => {
+  const sortedEntries = Object.entries(record)
+    .map(([k, v]) => [parseInt(k), v] as [number, V])
+    .filter(([n]) => Number.isSafeInteger(n))
+    .sort((a, b) => b[0] - a[0])
+  if (sortedEntries.length === 0) return [null, null]
+  return sortedEntries[0]
 }
 
 const SetScoreSchema = types.objectWithOnlyTheseProperties({
