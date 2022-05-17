@@ -10,7 +10,7 @@ import Collapse from '~/components/Collapse'
 
 type ModifiedScoreRecord = Record<keyof ScoreRecord, ScoreRecord[keyof ScoreRecord] | 'N/A'>
 
-const Comparison: Component<{
+export const Comparison: Component<{
   left: ModifiedScoreRecord
   leftTitle: JSXElement
   right: ModifiedScoreRecord
@@ -159,7 +159,7 @@ const BackupRestore: Component = () => {
 
     const days = new Set(
       Object.keys(current)
-        .concat(Object.keys(state.backup))
+        .concat(Object.keys(backup))
         .map(n => parseInt(n))
     )
 

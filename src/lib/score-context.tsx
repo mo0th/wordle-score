@@ -66,6 +66,7 @@ export type ScoreContextValue = [
     getJsonBackup: () => string
     importJsonBackup: (json: unknown) => void
     isBackupValid: (obj: unknown) => obj is ScoreRecord
+    forceSync: () => Promise<void>
   }
 ]
 
@@ -215,62 +216,113 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
 
   const [syncStatus, setSyncStatus] = createSignal<SyncStatus>('idle')
 
-  const sync = debounce(
-    async (
-      canSync: boolean,
-      syncDetails: SyncDetails,
-      score: PersonScore,
-      currentScores: AllScores | undefined,
+  const syncImpl = async (
+    {
+      canSync,
+      syncDetails,
+      score,
+      currentScores,
+      record,
+    }: {
+      canSync: boolean
+      syncDetails: SyncDetails
+      score: PersonScore
+      currentScores: AllScores | undefined
       record: ScoreRecord
-    ) => {
-      if (!shouldSync()) return
-      if (!navigator.onLine) return
-      if (!canSync) return
-      if (!currentScores) return
-      const dataToSync = { ...score, record }
-      const current = { ...currentScores[syncDetails.user] }
-      delete current.mostRecentlyPlayed
-      if (dequal(current, dataToSync)) return
+    },
+    force = false
+  ) => {
+    if (!force && !shouldSync()) return
+    if (!navigator.onLine) return
+    if (!canSync) return
+    if (!currentScores) return
+    const dataToSync = { ...score, record }
+    const current = { ...currentScores[syncDetails.user] }
+    delete current.mostRecentlyPlayed
+    if (!force && dequal(current, dataToSync)) return
 
-      const diffs = current?.record ? getHistoryDiffs(current.record, record) : 0
-      if (diffs > 1) {
-        if (
-          !confirm(
-            `There are ${diffs} differences between your local data and your saved data. Are you sure you want to push changes? This WILL override any data on the server and may not be recoverable. Consider making a backup (in settings) first.`
-          )
-        ) {
-          return
-        }
-      }
+    const diffs = current?.record ? getHistoryDiffs(current.record, record) : 0
+    console.log({ diffs, force })
+    if (!force && diffs > 1) {
+      console.log(1)
+      alert(
+        [
+          `There are ${diffs} differences between your local data and your saved data.`,
+          "If you're sure you want to sync these changes, you need to force sync in Settings.",
+          'This WILL override any data on the server and may not be recoverable.',
+          'Consider making a backup (in settings) first.',
+        ].join(' ')
+      )
+      return
+    }
+    console.log(2)
 
-      setSyncStatus('loading')
-      try {
-        const response = await fetch('/api/set-score', {
-          method: 'POST',
-          headers: {
-            authorization: `Bearer ${syncDetails.password}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            user: syncDetails.user,
-            data: dataToSync,
-          }),
-        })
-        const json = await response.json()
-        if (json.success === true) {
-          forceRefetch()
-          setSyncStatus('success')
-        } else {
-          setSyncStatus('failed')
-        }
-      } catch (err) {
+    setSyncStatus('loading')
+    try {
+      const response = await fetch('/api/set-score', {
+        method: 'POST',
+        headers: {
+          authorization: `Bearer ${syncDetails.password}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: syncDetails.user,
+          data: dataToSync,
+        }),
+      })
+      const json = await response.json()
+      if (json.success === true) {
+        forceRefetch()
+        setSyncStatus('success')
+      } else {
         setSyncStatus('failed')
       }
-    },
-    500
-  )
+    } catch (err) {
+      setSyncStatus('failed')
+    }
+  }
+  const sync = debounce(syncImpl, 500)
 
-  createEffect(() => sync(canSync(), syncDetails(), score(), allScores(), record()))
+  const forceSync = async () => {
+    const all = allScores()
+    if (!all) return
+    const current = { ...all[syncDetails().user] }
+    const diffs = current?.record ? getHistoryDiffs(current.record, record()) : 0
+    console.log({ diffs })
+    if (
+      confirm(
+        [
+          `There are ${diffs} differences between your local data and your saved data.`,
+          'Are you sure you want to push changes?',
+          'This WILL override any data on the server and may not be recoverable.',
+          'Consider making a backup (in settings) first.',
+        ].join(' ')
+      )
+    ) {
+      console.log(10)
+      await syncImpl(
+        {
+          canSync: canSync(),
+          syncDetails: syncDetails(),
+          score: score(),
+          currentScores: allScores(),
+          record: record(),
+        },
+        true
+      )
+    }
+    console.log(11)
+  }
+
+  createEffect(() =>
+    sync({
+      canSync: canSync(),
+      syncDetails: syncDetails(),
+      score: score(),
+      currentScores: allScores(),
+      record: record(),
+    })
+  )
 
   createEffect(() => {
     if (props.focusRevalidate) {
@@ -327,6 +379,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       getJsonBackup,
       importJsonBackup,
       isBackupValid,
+      forceSync,
     },
   ]
 

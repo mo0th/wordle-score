@@ -6,6 +6,7 @@ import { toggle } from '~/utils/misc'
 import Button from '~/components/Button'
 import Collapse from '~/components/Collapse'
 import BackupRestore from './BackupRestore'
+import ForceSync from './ForceSync'
 
 export const StuffAndSettings: Component = () => {
   const [{ syncDetails }, { setSyncDetails }] = useScoreContext()
@@ -118,6 +119,10 @@ export const StuffAndSettings: Component = () => {
       </form>
 
       <BackupRestore />
+
+      <hr class="border-gray-300 dark:border-gray-600" />
+
+      <ForceSync />
     </Collapse>
   )
 }
