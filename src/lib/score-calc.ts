@@ -18,7 +18,7 @@ export const calculateCumulativeScores = (record: ScoreRecord): PersonScore => {
 
   for (let i = minDay; i < maxDay + 1; ++i) {
     if (i in record) {
-      const dayScore = record[i]
+      const dayScore = record[i]!
 
       if (dayScore === 'X') {
         uncountedFails++

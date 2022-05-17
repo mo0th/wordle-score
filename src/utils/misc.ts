@@ -6,8 +6,8 @@ export const minmax = <T>(arr: T[]): [min: T, max: T] => {
     throw new Error('Array must have at least 1 item')
   }
 
-  let min = arr[0]
-  let max = arr[0]
+  let min = arr[0] as T
+  let max = arr[0] as T
 
   for (const it of arr) {
     if (it < min) {
@@ -118,7 +118,7 @@ export const lessThanOrEqualWithError = (a: number, b: number, err: number) =>
 
 export const random = (n: number) => Math.floor(Math.random() * n)
 
-export const randomItem = <T>(arr: T[]): T => arr[random(arr.length)]
+export const randomItem = <T>(arr: T[]): T => arr[random(arr.length)]!
 
 export const scrollToHash = (hash: string, top = true) => {
   document.getElementById(hash)?.scrollIntoView(top)

@@ -42,7 +42,7 @@ const SummaryStats: Component<{ records: ScoreRecordTuple[] }> = props => {
 
     const countsSortedByCountDesc = counts().sort(([_, a], [__, b]) => b - a)
     const modes = countsSortedByCountDesc
-      .filter(([_, c]) => c === countsSortedByCountDesc[0][1])
+      .filter(([_, c]) => c === countsSortedByCountDesc[0]![1])
       .map(([s, _]) => s)
 
     const total = sum(dayScores)
@@ -50,10 +50,10 @@ const SummaryStats: Component<{ records: ScoreRecordTuple[] }> = props => {
     const median = (() => {
       const sorted = [...dayScores].sort((a, b) => a - b)
       if (sorted.length % 2 === 1) {
-        return sorted[(sorted.length - 1) / 2]
+        return sorted[(sorted.length - 1) / 2]!
       }
       const mid = sorted.length / 2
-      return (sorted[mid - 1] + sorted[mid]) / 2
+      return (sorted[mid - 1]! + sorted[mid]!) / 2
     })()
 
     const variance = sum(dayScores.map(s => Math.pow(s - mean, 2))) / nDays

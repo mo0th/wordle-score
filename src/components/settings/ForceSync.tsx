@@ -19,7 +19,7 @@ const ForceSync: Component = () => {
   })
 
   const remoteData = createMemo(
-    () => (allScores() || {})[syncDetails().user].record || {},
+    () => (allScores() || {})[syncDetails().user]?.record || {},
     undefined,
     {
       equals: dequal,

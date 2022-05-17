@@ -124,7 +124,7 @@ const BackupRestore: Component = () => {
   const fromServerData = async () => {
     const all = allScores()
     if (!all) return
-    const serverDataForUser = all[syncDetails().user].record
+    const serverDataForUser = all[syncDetails().user]?.record
     if (!serverDataForUser || !isBackupValid(serverDataForUser)) {
       setState({
         status: 'failed',

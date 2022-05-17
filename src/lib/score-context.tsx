@@ -103,7 +103,7 @@ const useScoreRecordArray = (record: Getters['record']) => {
           continue
         } else if (score !== newRecord[day]) {
           // if existing doesn't match updated, replace entry with new tuple
-          result.push([day, newRecord[day]])
+          result.push([day, newRecord[day]!])
         } else {
           // if match, then re-use exisitng
           result.push(entry)
@@ -242,9 +242,7 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     if (!force && dequal(current, dataToSync)) return
 
     const diffs = current?.record ? getHistoryDiffs(current.record, record) : 0
-    console.log({ diffs, force })
     if (!force && diffs > 1) {
-      console.log(1)
       alert(
         [
           `There are ${diffs} differences between your local data and your saved data.`,
@@ -255,7 +253,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
       )
       return
     }
-    console.log(2)
 
     setSyncStatus('loading')
     try {
@@ -288,7 +285,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
     if (!all) return
     const current = { ...all[syncDetails().user] }
     const diffs = current?.record ? getHistoryDiffs(current.record, record()) : 0
-    console.log({ diffs })
     if (
       confirm(
         [
@@ -299,7 +295,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
         ].join(' ')
       )
     ) {
-      console.log(10)
       await syncImpl(
         {
           canSync: canSync(),
@@ -311,7 +306,6 @@ export const ScoreProvider: Component<ScoreProviderProps> = _props => {
         true
       )
     }
-    console.log(11)
   }
 
   createEffect(() =>

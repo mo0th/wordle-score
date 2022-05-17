@@ -11,7 +11,7 @@ const ReadScoreFromClipboard: Component = () => {
       block
       onClick={async () => {
         const text = (await navigator.clipboard.readText()).trim()
-        const firstLine = text.split('\n')[0]
+        const firstLine = text.split('\n')[0] || ''
 
         const today = getCurrentDayOffset()
 

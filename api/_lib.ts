@@ -81,7 +81,7 @@ const getMostRecent = <V>(record: Record<string, V>): [number, V] | [null, null]
     .filter(([n]) => Number.isSafeInteger(n))
     .sort((a, b) => b[0] - a[0])
   if (sortedEntries.length === 0) return [null, null]
-  return sortedEntries[0]
+  return sortedEntries[0]!
 }
 
 const SetScoreSchema = types.objectWithOnlyTheseProperties({
@@ -140,8 +140,8 @@ export const isBday = async (name: string): Promise<boolean> => {
   if (!dateStr) return false
 
   const [_d, _m] = dateStr.split('/')
-  const d = parseInt(_d)
-  const m = parseInt(_m)
+  const d = parseInt(_d!)
+  const m = parseInt(_m!)
   const dateInAus = utcToZonedTime(new Date(), 'Australia/Sydney')
   return dateInAus.getDate() === d && dateInAus.getMonth() === m - 1
 }

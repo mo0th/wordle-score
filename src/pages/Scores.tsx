@@ -123,7 +123,7 @@ const Scores: Component = () => {
                   const fields = Object.keys(sortFields) as (keyof typeof sortFields)[]
                   const currIndex = fields.indexOf(sortOptions.by)
                   const nextIndex = (currIndex + 1) % fields.length
-                  setSortOptions('by', fields[nextIndex])
+                  setSortOptions('by', fields[nextIndex]!)
                 }}
               >
                 {sortFields[sortOptions.by]}

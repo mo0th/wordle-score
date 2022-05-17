@@ -15,7 +15,8 @@
     "paths": {
       "~/*": ["./src/*"]
     },
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "noUncheckedIndexedAccess": true
   },
   "exclude": ["./node_modules"]
 }
